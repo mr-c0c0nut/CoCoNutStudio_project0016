@@ -6,7 +6,7 @@ import threading
 from flask import Flask, render_template, request, session, jsonify
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "doi-key-nay-truoc-khi-deploy-that")
+app.secret_key = os.environ.get("SECRET_KEY", "02492ea345371c11fee2cdabdaaca0c09efb29dd5f4097d0abe1c6e57057bdb6")
 
 BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
