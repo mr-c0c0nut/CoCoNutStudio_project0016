@@ -10,7 +10,6 @@ app.secret_key = os.environ.get("SECRET_KEY", "doi-key-nay-truoc-khi-deploy-that
 
 BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
-PLAYERS_PATH = os.path.join(DATA_DIR, "players.json")
 VISITS_PATH = os.path.join(DATA_DIR, "visit_counter.json")
 
 # ==========================================
@@ -74,42 +73,52 @@ def _count_online():
 
 
 # ==========================================
-# BỘ NHỚ LƯU PLAYER (RAM + FILE JSON BACKUP)
+# BỘ NHỚ LƯU PLAYER (CHỈ TRONG RAM)
 # ==========================================
 _players_lock = threading.Lock()
-_PLAYERS_CACHE = []
+_PLAYERS = {}
+
+TIER_POINTS = {
+    "LT5": 10,
+    "HT5": 15,
+    "LT4": 20,
+    "HT4": 25,
+    "LT3": 30,
+    "HT3": 40,
+    "LT2": 50,
+    "HT2": 60,
+    "LT1": 70,
+    "HT1": 80
+}
 
 
-def _init_players_cache():
-    global _PLAYERS_CACHE
-    try:
-        if os.path.exists(PLAYERS_PATH):
-            with open(PLAYERS_PATH, "r", encoding="utf-8") as f:
-                _PLAYERS_CACHE = json.load(f)
-    except Exception:
-        _PLAYERS_CACHE = []
+def normalize_player(player_data):
+    if not isinstance(player_data, dict):
+        return None
+    
+    name = str(player_data.get("name") or "").strip()
+    if not name:
+        return None
+        
+    avatar = str(player_data.get("avatar") or "").strip()
+    
+    tier = str(player_data.get("tier") or "").strip()
+    if tier not in TIER_POINTS:
+        tier = "LT5"
+        
+    point = TIER_POINTS[tier]
+    
+    return {
+        "name": name,
+        "avatar": avatar,
+        "tier": tier,
+        "point": point
+    }
 
 
 def get_all_players():
     with _players_lock:
-        return list(_PLAYERS_CACHE)
-
-
-def save_all_players(players_list):
-    global _PLAYERS_CACHE
-    with _players_lock:
-        _PLAYERS_CACHE = players_list
-        # Đồng bộ ra file JSON nếu ổ đĩa cho phép
-        try:
-            _ensure_data_dir()
-            with open(PLAYERS_PATH, "w", encoding="utf-8") as f:
-                json.dump(_PLAYERS_CACHE, f, ensure_ascii=False, indent=2)
-        except Exception:
-            pass  # Nếu ổ đĩa bị khóa/xóa, RAM vẫn giữ dữ liệu an toàn
-
-
-# Nạp dữ liệu vào RAM ngay khi khởi chạy app
-_init_players_cache()
+        return list(_PLAYERS.values())
 
 
 def get_system_stats():
@@ -191,7 +200,6 @@ def set_players():
 
     data = request.get_json(silent=True)
 
-    # Xử lý linh hoạt cả 2 kiểu gửi từ Frontend: [...] hoặc {"players": [...]}
     if isinstance(data, list):
         players = data
     elif isinstance(data, dict):
@@ -202,8 +210,14 @@ def set_players():
     if not isinstance(players, list):
         return jsonify({"ok": False, "error": "invalid_payload"}), 400
 
-    save_all_players(players)
-    return jsonify({"ok": True, "count": len(players)})
+    with _players_lock:
+        _PLAYERS.clear()
+        for raw_player in players:
+            normalized = normalize_player(raw_player)
+            if normalized:
+                _PLAYERS[normalized["name"]] = normalized
+
+    return jsonify({"ok": True, "count": len(_PLAYERS)})
 
 
 @app.route("/api/admin/stats")
