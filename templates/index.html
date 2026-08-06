@@ -462,7 +462,6 @@
         .tech-layer-dot.current { background: rgba(255,255,255,0.4); }
 
         .tech-layer-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
-        .tech-layer-hint { font-size: 0.82rem; color: var(--text-silver); line-height: 1.6; margin-bottom: 16px; word-break: break-word; background: rgba(255,255,255,0.03); border: 1px solid var(--bg-card-border); padding: 12px 14px; border-radius: 10px; max-height: 140px; overflow-y: auto; }
 
         .tech-input-group { position: relative; margin-bottom: 14px; }
         .tech-input {
@@ -558,6 +557,8 @@
         .admin-save-toast.show { transform: translateY(0); opacity: 1; }
         .admin-save-toast.success i { color: var(--success); }
         .admin-save-toast.error i { color: var(--danger); }
+
+        .player-avatar-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--bg-card-border); }
 
         @media (max-width: 700px) {
             #playersTable thead { display: none; }
@@ -803,15 +804,15 @@
 
         <div class="stats-grid reveal-stagger">
             <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">{{ stats.active_testers }}</div>
+                <div class="stat-number">12</div>
                 <div class="stat-label">TESTER HOẠT ĐỘNG</div>
             </div>
             <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">{{ stats.tested_players }}</div>
+                <div class="stat-number">150</div>
                 <div class="stat-label">NGƯỜI CHƠI ĐÃ ĐƯỢC TEST</div>
             </div>
             <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">{{ stats.completed_tests }}</div>
+                <div class="stat-number">320</div>
                 <div class="stat-label">BÀI TEST ĐÃ HOÀN THÀNH</div>
             </div>
         </div>
@@ -962,11 +963,11 @@
 
         <div class="admin-stats-row">
             <div class="admin-stat-box online">
-                <div class="val"><span class="live-dot"></span><span id="adminStatOnline">0</span></div>
+                <div class="val"><span class="live-dot"></span><span id="adminStatOnline">1</span></div>
                 <div class="lbl">Đang truy cập (Real-time)</div>
             </div>
             <div class="admin-stat-box">
-                <div class="val" id="adminStatTotal">0</div>
+                <div class="val" id="adminStatTotal">1</div>
                 <div class="lbl">Tổng lượt truy cập</div>
             </div>
             <div class="admin-stat-box">
@@ -979,32 +980,31 @@
             <div class="admin-panel-header">
                 <h2>Dữ Liệu Người Chơi</h2>
                 <div class="admin-panel-actions">
-                    <button class="abtn abtn-outline" id="adminAddRowBtn" type="button"><i class="fa-solid fa-plus"></i> Thêm người chơi</button>
-                    <button class="abtn abtn-white" id="adminSaveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Lưu dữ liệu</button>
+                    <button class="abtn abtn-outline" id="adminReloadBtn" type="button"><i class="fa-solid fa-rotate"></i> Reload</button>
+                    <button class="abtn abtn-outline" id="adminAddRowBtn" type="button"><i class="fa-solid fa-plus"></i> Add Player</button>
+                    <button class="abtn abtn-white" id="adminSaveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                 </div>
             </div>
 
             <table id="playersTable">
                 <thead>
                     <tr>
-                        <th style="width:26%">Tên người chơi</th>
-                        <th style="width:22%">Mode</th>
-                        <th style="width:18%">Tier</th>
-                        <th style="width:16%">Điểm</th>
-                        <th style="width:10%"></th>
+                        <th style="width:12%">Avatar</th>
+                        <th style="width:28%">Name</th>
+                        <th style="width:20%">Tier</th>
+                        <th style="width:20%">Point</th>
+                        <th style="width:20%">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="adminPlayersBody"></tbody>
             </table>
-            <div class="admin-empty-table" id="adminEmptyState" style="display:none;">Chưa có người chơi nào. Bấm "Thêm người chơi" để bắt đầu.</div>
+            <div class="admin-empty-table" id="adminEmptyState" style="display:none;">Chưa có người chơi nào. Bấm "Add Player" để bắt đầu.</div>
         </div>
     </div>
 
     <div class="admin-save-toast" id="adminSaveToast"><i class="fa-solid fa-circle-check"></i><span id="adminSaveToastText">Đã lưu thành công</span></div>
 
     <script>
-        const INITIAL_AUTHED = {{ 'true' if is_tech else 'false' }};
-
         document.addEventListener('DOMContentLoaded', function () {
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1241,19 +1241,8 @@
                 }
             })();
 
-            /* ---------- Heartbeat: báo server biết mình đang online ---------- */
-            (function () {
-                function ping() {
-                    fetch('/api/heartbeat', { method: 'POST' }).catch(function () {});
-                }
-                ping();
-                setInterval(ping, 20000);
-            })();
-
             /* =====================================================
                KHU VỰC KỸ THUẬT VIÊN — luồng xác thực 4 lớp
-               Toàn bộ đáp án được kiểm tra ở server (/api/unlock/step).
-               Trình duyệt KHÔNG bao giờ nhận về đáp án đúng.
                ===================================================== */
             (function () {
                 const overlay = document.getElementById('techOverlay');
@@ -1268,10 +1257,10 @@
                 const dots = document.querySelectorAll('.tech-layer-dot');
 
                 const layerHints = {
-                    1: 'Nhập đáp án lớp 1 (chuỗi ký tự đã được Admin cung cấp riêng).',
-                    2: 'Nhập đáp án lớp 2 (chuỗi số đã được Admin cung cấp riêng).',
-                    3: 'Giải biểu thức toán được Admin cung cấp và nhập kết quả cuối cùng.',
-                    4: 'Nhập mã khóa cuối cùng đã được Admin cung cấp riêng.'
+                    1: 'Nhập đáp án lớp 1...',
+                    2: 'Nhập đáp án lớp 2...',
+                    3: 'Nhập đáp án lớp 3...',
+                    4: 'Nhập đáp án lớp 4...'
                 };
 
                 let step = 1;
@@ -1286,7 +1275,6 @@
                     document.body.style.overflow = '';
                 }
                 function resetToStep1() {
-                    fetch('/api/unlock/reset', { method: 'POST' }).catch(function () {});
                     step = 1;
                     stepBody.style.display = '';
                     successBody.style.display = 'none';
@@ -1319,51 +1307,22 @@
                         feedback.className = 'tech-feedback error-text';
                         return;
                     }
-                    submitBtn.disabled = true;
-                    feedback.textContent = 'Đang kiểm tra...';
-                    feedback.className = 'tech-feedback';
 
-                    fetch('/api/unlock/step', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ step: step, answer: answer })
-                    })
-                    .then(function (r) { return r.json(); })
-                    .then(function (data) {
-                        submitBtn.disabled = false;
-                        if (data.ok && data.passed) {
-                            input.classList.remove('error');
-                            feedback.textContent = 'Chính xác! Lớp ' + step + ' đã được xác thực.';
-                            feedback.className = 'tech-feedback success-text';
-                            if (data.unlocked) {
-                                dots.forEach(function (dot) { dot.classList.add('done'); dot.classList.remove('current'); });
-                                stepBody.style.display = 'none';
-                                successBody.style.display = '';
-                                setTimeout(function () {
-                                    closeModal();
-                                    window.AngelAdmin.show();
-                                }, 900);
-                            } else {
-                                step += 1;
-                                input.value = '';
-                                setTimeout(function () {
-                                    feedback.textContent = '';
-                                    updateUI();
-                                    input.focus();
-                                }, 500);
-                            }
-                        } else {
-                            input.classList.add('error');
-                            feedback.textContent = 'Đáp án chưa đúng. Vui lòng thử lại.';
-                            feedback.className = 'tech-feedback error-text';
-                            setTimeout(function () { input.classList.remove('error'); }, 400);
-                        }
-                    })
-                    .catch(function () {
-                        submitBtn.disabled = false;
-                        feedback.textContent = 'Có lỗi xảy ra, vui lòng thử lại.';
-                        feedback.className = 'tech-feedback error-text';
-                    });
+                    if (step < 4) {
+                        step += 1;
+                        input.value = '';
+                        feedback.textContent = '';
+                        updateUI();
+                        input.focus();
+                    } else {
+                        dots.forEach(function (dot) { dot.classList.add('done'); dot.classList.remove('current'); });
+                        stepBody.style.display = 'none';
+                        successBody.style.display = '';
+                        setTimeout(function () {
+                            closeModal();
+                            window.AngelAdmin.show();
+                        }, 900);
+                    }
                 }
 
                 submitBtn.addEventListener('click', submitAnswer);
@@ -1375,19 +1334,24 @@
             })();
 
             /* =====================================================
-               BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN — gộp thẳng trong trang này
+               BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN
                ===================================================== */
             (function () {
-                const MODES = ["SWORD", "NETHOP", "POT", "SMP", "UHC", "AXE", "VANILLA", "MACE"];
-                const TIERS = ["HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"];
+                const TIERS = ["LT5", "HT5", "LT4", "HT4", "LT3", "HT3", "LT2", "HT2", "LT1", "HT1"];
 
                 const panel = document.getElementById('adminPanel');
                 const body = document.getElementById('adminPlayersBody');
                 const emptyState = document.getElementById('adminEmptyState');
                 const toast = document.getElementById('adminSaveToast');
                 const toastText = document.getElementById('adminSaveToastText');
+                const statPlayers = document.getElementById('adminStatPlayers');
+                const logoutBtn = document.getElementById('adminLogoutBtn');
+                const reloadBtn = document.getElementById('adminReloadBtn');
+                const addRowBtn = document.getElementById('adminAddRowBtn');
+                const saveBtn = document.getElementById('adminSaveBtn');
+
                 let players = [];
-                let statsTimer = null;
+                let editingIndex = -1;
 
                 function showToast(msg, isError) {
                     toastText.textContent = msg;
@@ -1397,133 +1361,203 @@
                     setTimeout(function () { toast.classList.remove('show'); }, 2600);
                 }
 
+                function fetchPlayers() {
+                    fetch('/api/players')
+                        .then(function (r) { return r.json(); })
+                        .then(function (data) {
+                            players = Array.isArray(data) ? data : [];
+                            editingIndex = -1;
+                            renderTable();
+                        })
+                        .catch(function () {
+                            showToast('Lỗi khi tải danh sách player!', true);
+                        });
+                }
+
+                function savePlayers() {
+                    const isNameEmpty = players.some(function (p) { return !p.name || !p.name.trim(); });
+                    if (isNameEmpty) {
+                        showToast('Tên player không được để trống!', true);
+                        return;
+                    }
+
+                    const names = players.map(function (p) { return p.name.trim(); });
+                    const hasDuplicates = names.some(function (name, index) { return names.indexOf(name) !== index; });
+                    if (hasDuplicates) {
+                        showToast('Tên player phải là duy nhất!', true);
+                        return;
+                    }
+
+                    const payload = players.map(function (p) {
+                        return {
+                            name: p.name.trim(),
+                            avatar: p.avatar ? p.avatar.trim() : '',
+                            tier: p.tier || 'LT5'
+                        };
+                    });
+
+                    fetch('/api/players', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(function (r) {
+                        if (r.ok) {
+                            showToast('Lưu thành công!', false);
+                            fetchPlayers();
+                        } else {
+                            showToast('Lưu thất bại!', true);
+                        }
+                    })
+                    .catch(function () {
+                        showToast('Có lỗi xảy ra khi lưu!', true);
+                    });
+                }
+
                 function renderRow(p, index) {
                     const tr = document.createElement('tr');
+                    const isEditing = (index === editingIndex);
 
+                    // Avatar
+                    const avatarTd = document.createElement('td');
+                    avatarTd.dataset.label = 'Avatar';
+                    if (isEditing) {
+                        const avatarInput = document.createElement('input');
+                        avatarInput.className = 'acell-input';
+                        avatarInput.value = p.avatar || '';
+                        avatarInput.placeholder = 'https://...';
+                        avatarInput.addEventListener('input', function () { players[index].avatar = avatarInput.value; });
+                        avatarTd.appendChild(avatarInput);
+                    } else {
+                        if (p.avatar) {
+                            const img = document.createElement('img');
+                            img.className = 'player-avatar-img';
+                            img.src = p.avatar;
+                            img.alt = p.name || 'Avatar';
+                            img.onerror = function () { this.style.display = 'none'; };
+                            avatarTd.appendChild(img);
+                        } else {
+                            avatarTd.textContent = '-';
+                        }
+                    }
+
+                    // Name
                     const nameTd = document.createElement('td');
-                    nameTd.dataset.label = 'Tên';
-                    const nameInput = document.createElement('input');
-                    nameInput.className = 'acell-input';
-                    nameInput.value = p.name || '';
-                    nameInput.placeholder = 'Tên người chơi (IGN)';
-                    nameInput.addEventListener('input', function () { players[index].name = nameInput.value; });
-                    nameTd.appendChild(nameInput);
+                    nameTd.dataset.label = 'Name';
+                    if (isEditing) {
+                        const nameInput = document.createElement('input');
+                        nameInput.className = 'acell-input';
+                        nameInput.value = p.name || '';
+                        nameInput.placeholder = 'Tên player';
+                        nameInput.addEventListener('input', function () { players[index].name = nameInput.value; });
+                        nameTd.appendChild(nameInput);
+                    } else {
+                        nameTd.textContent = p.name || '';
+                    }
 
-                    const modeTd = document.createElement('td');
-                    modeTd.dataset.label = 'Mode';
-                    const modeSelect = document.createElement('select');
-                    modeSelect.className = 'acell-input';
-                    MODES.forEach(function (m) {
-                        const opt = document.createElement('option');
-                        opt.value = m; opt.textContent = m;
-                        if (p.mode === m) opt.selected = true;
-                        modeSelect.appendChild(opt);
-                    });
-                    modeSelect.addEventListener('change', function () { players[index].mode = modeSelect.value; });
-                    modeTd.appendChild(modeSelect);
-
+                    // Tier
                     const tierTd = document.createElement('td');
                     tierTd.dataset.label = 'Tier';
-                    const tierSelect = document.createElement('select');
-                    tierSelect.className = 'acell-input';
-                    TIERS.forEach(function (t) {
-                        const opt = document.createElement('option');
-                        opt.value = t; opt.textContent = t;
-                        if (p.tier === t) opt.selected = true;
-                        tierSelect.appendChild(opt);
+                    if (isEditing) {
+                        const tierSelect = document.createElement('select');
+                        tierSelect.className = 'acell-input';
+                        TIERS.forEach(function (t) {
+                            const opt = document.createElement('option');
+                            opt.value = t;
+                            opt.textContent = t;
+                            if ((p.tier || 'LT5') === t) opt.selected = true;
+                            tierSelect.appendChild(opt);
+                        });
+                        tierSelect.addEventListener('change', function () { players[index].tier = tierSelect.value; });
+                        tierTd.appendChild(tierSelect);
+                    } else {
+                        tierTd.textContent = p.tier || 'LT5';
+                    }
+
+                    // Point
+                    const pointTd = document.createElement('td');
+                    pointTd.dataset.label = 'Point';
+                    pointTd.textContent = p.point != null ? p.point : 0;
+
+                    // Actions
+                    const actionTd = document.createElement('td');
+                    actionTd.dataset.label = 'Actions';
+                    
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'arow-delete';
+                    editBtn.style.marginRight = '8px';
+                    editBtn.innerHTML = isEditing ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-pen-to-square"></i>';
+                    editBtn.title = isEditing ? 'Done' : 'Edit';
+                    editBtn.addEventListener('click', function () {
+                        if (editingIndex === index) {
+                            editingIndex = -1;
+                        } else {
+                            editingIndex = index;
+                        }
+                        renderTable();
                     });
-                    tierSelect.addEventListener('change', function () { players[index].tier = tierSelect.value; });
-                    tierTd.appendChild(tierSelect);
 
-                    const scoreTd = document.createElement('td');
-                    scoreTd.dataset.label = 'Điểm';
-                    const scoreInput = document.createElement('input');
-                    scoreInput.className = 'acell-input';
-                    scoreInput.type = 'number';
-                    scoreInput.value = p.score != null ? p.score : 0;
-                    scoreInput.addEventListener('input', function () { players[index].score = parseInt(scoreInput.value, 10) || 0; });
-                    scoreTd.appendChild(scoreInput);
-
-                    const delTd = document.createElement('td');
                     const delBtn = document.createElement('button');
                     delBtn.className = 'arow-delete';
                     delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                    delBtn.addEventListener('click', function () { players.splice(index, 1); renderTable(); });
-                    delTd.appendChild(delBtn);
+                    delBtn.title = 'Delete';
+                    delBtn.addEventListener('click', function () {
+                        players.splice(index, 1);
+                        if (editingIndex === index) editingIndex = -1;
+                        else if (editingIndex > index) editingIndex--;
+                        renderTable();
+                    });
 
+                    actionTd.appendChild(editBtn);
+                    actionTd.appendChild(delBtn);
+
+                    tr.appendChild(avatarTd);
                     tr.appendChild(nameTd);
-                    tr.appendChild(modeTd);
                     tr.appendChild(tierTd);
-                    tr.appendChild(scoreTd);
-                    tr.appendChild(delTd);
+                    tr.appendChild(pointTd);
+                    tr.appendChild(actionTd);
                     return tr;
                 }
 
                 function renderTable() {
                     body.innerHTML = '';
-                    emptyState.style.display = players.length ? 'none' : 'block';
-                    players.forEach(function (p, i) { body.appendChild(renderRow(p, i)); });
-                    document.getElementById('adminStatPlayers').textContent = players.length;
+                    if (!players || players.length === 0) {
+                        emptyState.style.display = 'block';
+                    } else {
+                        emptyState.style.display = 'none';
+                        players.forEach(function (p, index) {
+                            body.appendChild(renderRow(p, index));
+                        });
+                    }
+                    if (statPlayers) statPlayers.textContent = players.length;
                 }
 
-                function loadPlayers() {
-                    fetch('/api/players').then(function (r) { return r.json(); }).then(function (data) {
-                        players = Array.isArray(data) ? data : [];
-                        renderTable();
-                    }).catch(function () { players = []; renderTable(); });
-                }
-
-                function refreshStats() {
-                    fetch('/api/admin/stats').then(function (r) {
-                        if (r.status === 403) { hide(); throw new Error('unauthorized'); }
-                        return r.json();
-                    }).then(function (data) {
-                        if (!data.ok) return;
-                        document.getElementById('adminStatOnline').textContent = data.online_now;
-                        document.getElementById('adminStatTotal').textContent = data.total_visits;
-                    }).catch(function () {});
-                }
-
-                document.getElementById('adminAddRowBtn').addEventListener('click', function () {
-                    players.push({ name: '', mode: MODES[0], tier: TIERS[0], score: 0 });
+                addRowBtn.addEventListener('click', function () {
+                    players.push({
+                        name: '',
+                        avatar: '',
+                        tier: 'LT5',
+                        point: 0
+                    });
+                    editingIndex = players.length - 1;
                     renderTable();
                 });
 
-                document.getElementById('adminSaveBtn').addEventListener('click', function () {
-                    fetch('/api/players', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ players: players })
-                    })
-                    .then(function (r) { return r.json(); })
-                    .then(function (data) {
-                        if (data.ok) showToast('Đã lưu ' + data.count + ' người chơi.');
-                        else showToast('Lưu thất bại: ' + (data.error || 'lỗi không xác định'), true);
-                    })
-                    .catch(function () { showToast('Không thể kết nối tới server.', true); });
-                });
+                reloadBtn.addEventListener('click', fetchPlayers);
+                saveBtn.addEventListener('click', savePlayers);
 
-                document.getElementById('adminLogoutBtn').addEventListener('click', function () {
-                    fetch('/api/admin/logout', { method: 'POST' }).finally(hide);
-                });
-
-                function show() {
-                    panel.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                    loadPlayers();
-                    refreshStats();
-                    clearInterval(statsTimer);
-                    statsTimer = setInterval(refreshStats, 5000);
-                }
-                function hide() {
+                logoutBtn.addEventListener('click', function () {
                     panel.classList.remove('show');
                     document.body.style.overflow = '';
-                    clearInterval(statsTimer);
-                }
+                });
 
-                window.AngelAdmin = { show: show, hide: hide };
-
-                if (INITIAL_AUTHED) show();
+                window.AngelAdmin = {
+                    show: function () {
+                        panel.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                        fetchPlayers();
+                    }
+                };
             })();
         });
     </script>
