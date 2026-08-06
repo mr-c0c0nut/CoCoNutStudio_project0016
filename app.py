@@ -14,13 +14,8 @@ PLAYERS_PATH = os.path.join(DATA_DIR, "players.json")
 VISITS_PATH = os.path.join(DATA_DIR, "visit_counter.json")
 
 # ==========================================
-# CẤU HÌNH BẢO MẬT (server-side only — KHÔNG bao giờ gửi các giá trị này ra frontend)
+# CẤU HÌNH BẢO MẬT
 # ==========================================
-# Đáp án của từng lớp được kiểm tra ở server. Trình duyệt chỉ nhận biết
-# "đúng"/"sai" cho từng bước, không bao giờ thấy được đáp án thật.
-# NÊN đặt qua biến môi trường khi deploy thật (Render > Environment),
-# đừng để đáp án thật nằm cứng trong code commit lên git công khai —
-# đặc biệt là LAYER4_ANSWER vì nó là link webhook Discord.
 LAYER_ANSWERS = {
     1: os.environ.get("LAYER1_ANSWER", "doi-dap-an-lop-1-qua-bien-moi-truong"),
     2: os.environ.get("LAYER2_ANSWER", "doi-dap-an-lop-2-qua-bien-moi-truong"),
@@ -30,11 +25,11 @@ LAYER_ANSWERS = {
 TOTAL_LAYERS = 4
 
 # ==========================================
-# THEO DÕI LƯỢT TRUY CẬP THEO THỜI GIAN THỰC (RAM, không cần file riêng cho "online")
+# THEO DÕI LƯỢT TRUY CẬP & ONLINE
 # ==========================================
 _visitors_lock = threading.Lock()
 _active_visitors = {}
-ONLINE_WINDOW_SECONDS = 45  # coi là "đang online" nếu ping trong khoảng này
+ONLINE_WINDOW_SECONDS = 45
 
 _stats_lock = threading.Lock()
 
@@ -52,9 +47,12 @@ def _load_total_visits():
 
 
 def _save_total_visits(value):
-    _ensure_data_dir()
-    with open(VISITS_PATH, "w", encoding="utf-8") as f:
-        json.dump({"total_visits": value}, f)
+    try:
+        _ensure_data_dir()
+        with open(VISITS_PATH, "w", encoding="utf-8") as f:
+            json.dump({"total_visits": value}, f)
+    except Exception:
+        pass
 
 
 def _touch_visitor():
@@ -76,29 +74,44 @@ def _count_online():
 
 
 # ==========================================
-# DỮ LIỆU NGƯỜI CHƠI (lưu ra file JSON)
+# BỘ NHỚ LƯU PLAYER (RAM + FILE JSON BACKUP)
 # ==========================================
-# LƯU Ý: trên Render free tier, ổ đĩa là "ephemeral" — mỗi lần deploy lại
-# hoặc service ngủ/thức dậy, file này có thể bị xoá sạch. Muốn dữ liệu bền
-# thật sự (sống sót qua các lần deploy) cần Postgres/DB ngoài (vd. Supabase,
-# Neon) hoặc Render Persistent Disk (gói trả phí), không phải file JSON.
-def load_players():
+_players_lock = threading.Lock()
+_PLAYERS_CACHE = []
+
+
+def _init_players_cache():
+    global _PLAYERS_CACHE
     try:
-        with open(PLAYERS_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
+        if os.path.exists(PLAYERS_PATH):
+            with open(PLAYERS_PATH, "r", encoding="utf-8") as f:
+                _PLAYERS_CACHE = json.load(f)
+    except Exception:
+        _PLAYERS_CACHE = []
 
 
-def save_players(players):
-    _ensure_data_dir()
-    with open(PLAYERS_PATH, "w", encoding="utf-8") as f:
-        json.dump(players, f, ensure_ascii=False, indent=2)
+def get_all_players():
+    with _players_lock:
+        return list(_PLAYERS_CACHE)
 
 
-# ==========================================
-# HÀM THỐNG KÊ HỆ THỐNG (giữ nguyên như bản gốc)
-# ==========================================
+def save_all_players(players_list):
+    global _PLAYERS_CACHE
+    with _players_lock:
+        _PLAYERS_CACHE = players_list
+        # Đồng bộ ra file JSON nếu ổ đĩa cho phép
+        try:
+            _ensure_data_dir()
+            with open(PLAYERS_PATH, "w", encoding="utf-8") as f:
+                json.dump(_PLAYERS_CACHE, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass  # Nếu ổ đĩa bị khóa/xóa, RAM vẫn giữ dữ liệu an toàn
+
+
+# Nạp dữ liệu vào RAM ngay khi khởi chạy app
+_init_players_cache()
+
+
 def get_system_stats():
     return {
         "active_testers": "30+",
@@ -114,8 +127,6 @@ def get_system_stats():
 def home():
     _touch_visitor()
     stats = get_system_stats()
-    # is_tech seed vào template để nếu đã đăng nhập từ trước (session còn),
-    # trang tự mở sẵn bảng điều khiển mà không cần gọi thêm API rồi mới hiện.
     return render_template("index.html", stats=stats, is_tech=bool(session.get("is_tech")))
 
 
@@ -129,7 +140,7 @@ def heartbeat():
 def unlock_step():
     data = request.get_json(silent=True) or {}
     step = data.get("step")
-    answer = (data.get("answer") or "").strip()
+    answer = str(data.get("answer") or "").strip()
 
     if step not in (1, 2, 3, 4):
         return jsonify({"ok": False, "error": "invalid_step"}), 400
@@ -170,18 +181,28 @@ def admin_logout():
 def get_players():
     if not session.get("is_tech"):
         return jsonify({"ok": False, "error": "unauthorized"}), 403
-    return jsonify(load_players())
+    return jsonify(get_all_players())
 
 
 @app.route("/api/players", methods=["POST"])
 def set_players():
     if not session.get("is_tech"):
         return jsonify({"ok": False, "error": "unauthorized"}), 403
-    data = request.get_json(silent=True) or {}
-    players = data.get("players")
+
+    data = request.get_json(silent=True)
+
+    # Xử lý linh hoạt cả 2 kiểu gửi từ Frontend: [...] hoặc {"players": [...]}
+    if isinstance(data, list):
+        players = data
+    elif isinstance(data, dict):
+        players = data.get("players")
+    else:
+        players = None
+
     if not isinstance(players, list):
         return jsonify({"ok": False, "error": "invalid_payload"}), 400
-    save_players(players)
+
+    save_all_players(players)
     return jsonify({"ok": True, "count": len(players)})
 
 
@@ -193,7 +214,7 @@ def admin_stats():
         "ok": True,
         "online_now": _count_online(),
         "total_visits": _load_total_visits(),
-        "players_count": len(load_players()),
+        "players_count": len(get_all_players()),
     })
 
 
