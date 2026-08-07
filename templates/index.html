@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="ANGEL TIER - Bảng xếp hạng PvP Minecraft Việt Nam. Đăng ký Test Tier, leo hạng và khẳng định đẳng cấp của bạn.">
     <meta name="theme-color" content="#030304">
-    <title>ANGEL TIER - Bảng Xếp Hạng PvP Việt Nam</title>
+    <title>ANGEL TIER - Trang Chủ</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +74,7 @@
         }
         ::-webkit-scrollbar-thumb:hover { background: var(--pure-white); }
 
-        /* ---------------- INTRO LOADER ---------------- */
+        /* INTRO LOADER */
         #loader { position: fixed; inset: 0; z-index: 9999; }
         .curtain {
             position: absolute; top: 0; bottom: 0; width: 50%;
@@ -100,7 +100,7 @@
             50% { opacity: 1; letter-spacing: 11px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.7); }
         }
 
-        /* ---------------- AURORA + PARTICLES ---------------- */
+        /* AURORA + PARTICLES */
         .aurora-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .aurora-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.4; mix-blend-mode: screen; animation: auroraDrift 30s ease-in-out infinite; }
         .aurora-blob.b1 { width: 480px; height: 480px; top: -12%; left: 4%; background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 70%); animation-duration: 32s; }
@@ -122,7 +122,7 @@
             100% { transform: translateY(110vh) translateX(40px) rotate(200deg); opacity: 0; }
         }
 
-        /* ---------------- NAVBAR ---------------- */
+        /* NAVBAR */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 18px 8%;
@@ -150,8 +150,8 @@
             background: linear-gradient(90deg, transparent, var(--pure-white), transparent);
             transition: width 0.35s var(--ease-soft);
         }
-        .nav-link:hover { color: var(--pure-white); }
-        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--pure-white); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
         .btn-discord {
             background: #ffffff; color: #000000; padding: 10px 22px; border-radius: 10px;
@@ -210,7 +210,7 @@
             .btn-tech { align-self: flex-start; }
         }
 
-        /* ---------------- HERO ---------------- */
+        /* HERO */
         .hero-container { max-width: 1280px; margin: 56px auto 0; padding: 0 24px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; }
         .hero-left { display: flex; flex-direction: column; gap: 26px; }
 
@@ -268,12 +268,15 @@
         .final-node-group { transform-box: fill-box; transform-origin: center; animation: finalPulse 1.8s ease-in-out infinite; }
         @keyframes finalPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
+        /* LIVE LEADERBOARD CARD */
         .hero-right {
             background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 22px; padding: 30px;
-            display: flex; flex-direction: column; gap: 28px;
+            display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6); backdrop-filter: blur(18px);
             position: relative; overflow: hidden;
+            cursor: pointer; transition: border-color 0.3s ease, transform 0.3s ease;
         }
+        .hero-right:hover { border-color: var(--bg-card-border-strong); transform: translateY(-3px); }
         .hero-right::before {
             content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.05) 8%, transparent 18%);
@@ -281,62 +284,49 @@
         }
         .hero-right > * { position: relative; z-index: 1; }
         @keyframes sheenRotate { to { transform: rotate(360deg); } }
-        .hero-right:hover { border-color: var(--bg-card-border-strong); }
 
-        .lb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .lb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .lb-title-group h3 { font-size: 1.3rem; font-weight: 700; }
         .lb-title-group .live-tag { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
-        .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
-        .overall-btn:hover { background: var(--pure-white); color: #000; }
-
-        .top-players-empty { position: relative; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 46px 20px; text-align: center; color: var(--text-silver); overflow: hidden; }
-        .empty-icon-wrap { width: 62px; height: 62px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%); animation: floatIcon 3.4s ease-in-out infinite; }
-        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .top-players-empty i { font-size: 1.8rem; color: #fff; opacity: 0.85; }
-        .scan-line { position: absolute; left: 0; right: 0; height: 55%; top: -55%; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent); animation: scanSweep 3.2s ease-in-out infinite; }
-        @keyframes scanSweep { 0% { top: -55%; } 100% { top: 100%; } }
-
-        /* ---------- LEADERBOARD PATCH CSS ---------- */
-        .top-players-list { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
-        .lb-player-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; }
-        .lb-player-card:hover { border-color: var(--bg-card-border-strong); background: rgba(255, 255, 255, 0.08); transform: translateY(-2px); }
-        .lb-player-left { display: flex; align-items: center; gap: 14px; }
-        .lb-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; min-width: 28px; color: var(--text-silver); text-align: center; }
-        .lb-rank.rank-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .lb-rank.rank-2 { color: #e0e0e0; text-shadow: 0 0 10px rgba(224,224,224,0.5); }
-        .lb-rank.rank-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205,127,50,0.5); }
-        .lb-username { font-weight: 700; font-size: 1rem; color: #ffffff; }
-        .lb-total-points { font-weight: 800; font-size: 1.1rem; color: var(--gold); }
-
-        .modes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .modes-header span { font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .modes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .mode-item {
-            position: relative; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--bg-card-border); border-radius: 14px;
-            padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
-            transition: transform 0.35s var(--ease-soft), border-color 0.35s ease, box-shadow 0.35s ease; overflow: hidden;
-            text-decoration: none;
+        .view-full-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--pure-white); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
+            text-decoration: none; transition: all 0.3s ease;
         }
-        .mode-item::after {
-            content: ''; position: absolute; inset: 0; border-radius: 14px; padding: 1px;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.35s ease;
+        .view-full-btn:hover { background: #ffffff; color: #000000; }
+
+        /* TOP 3 LIVE LIST */
+        .top3-list { display: flex; flex-direction: column; gap: 12px; }
+        .top3-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border);
+            border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.3s ease;
         }
-        .mode-item:hover, .mode-item.active { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
-        .mode-item:hover::after, .mode-item.active::after { opacity: 1; }
+        .top3-card:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.3); }
+        .top3-card.rank-1 { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), rgba(255, 255, 255, 0.02)); }
+        .top3-card.rank-2 { border-color: rgba(224, 224, 224, 0.4); background: linear-gradient(90deg, rgba(224, 224, 224, 0.08), rgba(255, 255, 255, 0.02)); }
+        .top3-card.rank-3 { border-color: rgba(205, 127, 50, 0.4); background: linear-gradient(90deg, rgba(205, 127, 50, 0.08), rgba(255, 255, 255, 0.02)); }
 
-        .mode-icon-box { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease; }
-        .mode-icon.img-broken { display: none; }
-        .mode-icon-box::after { content: '\f03e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: var(--text-dim); font-size: 1.2rem; }
-        .mode-icon-box:has(.mode-icon.img-broken)::after { display: flex; }
-        .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); }
-        .mode-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-silver); }
-        .mode-item:hover .mode-name { color: var(--pure-white); }
+        .top3-left { display: flex; align-items: center; gap: 16px; }
+        .top3-rank-badge {
+            width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem;
+        }
+        .top3-card.rank-1 .top3-rank-badge { background: #ffd700; color: #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+        .top3-card.rank-2 .top3-rank-badge { background: #e0e0e0; color: #000; box-shadow: 0 0 15px rgba(224, 224, 224, 0.5); }
+        .top3-card.rank-3 .top3-rank-badge { background: #cd7f32; color: #000; box-shadow: 0 0 15px rgba(205, 127, 50, 0.5); }
 
-        /* ---------------- STATS ---------------- */
+        .top3-username { font-size: 1.05rem; font-weight: 700; color: #ffffff; }
+        .top3-points { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+
+        .top3-footer-hint {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            color: var(--text-silver); font-size: 0.85rem; margin-top: 10px; font-weight: 600;
+        }
+
+        /* STATS */
         .stats-section { max-width: 1280px; margin: 100px auto; padding: 0 24px; text-align: center; }
         .stats-subtitle { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
         .stats-title { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 54px; }
@@ -346,7 +336,7 @@
         .stat-number { font-family: var(--font-heading); font-size: clamp(2.6rem, 5vw, 3.7rem); font-weight: 800; color: var(--pure-white); text-shadow: 0 0 25px rgba(255, 255, 255, 0.35); margin-bottom: 10px; line-height: 1; }
         .stat-label { font-size: 0.85rem; color: var(--text-silver); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
-        /* ---------------- TESTING FLOW ---------------- */
+        /* FLOW */
         .flow-section { max-width: 1280px; margin: 110px auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
         .flow-card-display { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 20px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
         .flow-card-display:hover { border-color: var(--bg-card-border-strong); }
@@ -374,7 +364,7 @@
         .tag-box-val { font-size: 1.2rem; font-weight: 800; color: var(--pure-white); margin-bottom: 4px; }
         .tag-box-lbl { font-size: 0.7rem; color: var(--text-silver); text-transform: uppercase; font-weight: 700; }
 
-        /* ---------------- FAQ ---------------- */
+        /* FAQ */
         .faq-section { max-width: 900px; margin: 110px auto; padding: 0 24px; }
         .faq-header { text-align: center; margin-bottom: 50px; }
         .faq-header h2 { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; }
@@ -392,11 +382,11 @@
         .faq-icon { transition: transform 0.3s ease; color: var(--text-silver); flex-shrink: 0; margin-left: 12px; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
-        /* ---------------- FOOTER ---------------- */
+        /* FOOTER */
         footer { position: relative; border-top: 1px solid var(--bg-card-border); padding: 44px 8%; text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 110px; }
         footer::before { content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 140px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); }
 
-        /* ---------------- SCROLL REVEAL ---------------- */
+        /* SCROLL REVEAL */
         .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s var(--ease-cinema), transform 0.9s var(--ease-cinema); }
         .reveal.in-view { opacity: 1; transform: translateY(0); }
         .reveal-stagger > * { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease-cinema), transform 0.7s var(--ease-cinema); }
@@ -404,205 +394,11 @@
         .reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0.05s; }
         .reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.15s; }
         .reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.25s; }
-        .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.35s; }
-        .reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.45s; }
-        .reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.55s; }
-        .reveal-stagger.in-view > *:nth-child(7) { transition-delay: 0.65s; }
-        .reveal-stagger.in-view > *:nth-child(8) { transition-delay: 0.75s; }
-
-        /* MODAL TECH */
-        .tech-modal-overlay {
-            position: fixed; inset: 0; z-index: 500;
-            background: rgba(2, 2, 3, 0.82);
-            backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.35s ease;
-            padding: 20px;
-        }
-        .tech-modal-overlay.show { opacity: 1; pointer-events: auto; }
-
-        .tech-modal {
-            width: min(480px, 100%);
-            background: var(--bg-card-solid);
-            border: 1px solid var(--bg-card-border-strong);
-            border-radius: 20px;
-            padding: 32px;
-            position: relative;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(255, 255, 255, 0.06);
-            transform: translateY(24px) scale(0.97);
-            transition: transform 0.4s var(--ease-cinema);
-        }
-        .tech-modal-overlay.show .tech-modal { transform: translateY(0) scale(1); }
-
-        .tech-modal-close {
-            position: absolute; top: 18px; right: 18px;
-            width: 32px; height: 32px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06); border: 1px solid var(--bg-card-border);
-            color: var(--text-silver); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.25s ease;
-        }
-        .tech-modal-close:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
-
-        .tech-modal-header { text-align: center; margin-bottom: 22px; }
-        .tech-modal-icon {
-            width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
-            border: 1px solid var(--bg-card-border-strong);
-            font-size: 1.4rem;
-            animation: haloPulse 2.4s ease-in-out infinite;
-        }
-        @keyframes haloPulse {
-            0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0.0); }
-            50% { box-shadow: 0 0 24px rgba(255,255,255,0.25); }
-        }
-        .tech-modal-header h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
-        .tech-modal-header p { color: var(--text-silver); font-size: 0.85rem; }
-
-        .tech-layers-progress { display: flex; gap: 8px; margin: 20px 0; }
-        .tech-layer-dot {
-            flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.1);
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-        }
-        .tech-layer-dot.done { background: var(--pure-white); box-shadow: 0 0 10px rgba(255,255,255,0.7); }
-        .tech-layer-dot.current { background: rgba(255,255,255,0.4); }
-
-        .tech-layer-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
-
-        .tech-input-group { position: relative; margin-bottom: 14px; }
-        .tech-input {
-            width: 100%; padding: 14px 16px; border-radius: 12px;
-            background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border);
-            color: #fff; font-size: 0.95rem; outline: none;
-            transition: border-color 0.3s ease, background 0.3s ease;
-        }
-        .tech-input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.07); }
-        .tech-input.error { border-color: var(--danger); animation: shakeInput 0.35s ease; }
-        @keyframes shakeInput { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-
-        .tech-feedback { min-height: 20px; font-size: 0.82rem; margin-bottom: 10px; }
-        .tech-feedback.error-text { color: var(--danger); }
-        .tech-feedback.success-text { color: var(--success); }
-
-        .tech-modal-actions { display: flex; gap: 12px; margin-top: 8px; }
-        .tech-btn-submit {
-            flex: 1; padding: 14px; border-radius: 12px; border: none; cursor: pointer;
-            background: #fff; color: #000; font-weight: 700; font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        .tech-btn-submit:hover { background: #e6e6e6; transform: translateY(-2px); }
-        .tech-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .tech-success-state { text-align: center; padding: 10px 0 4px; }
-        .tech-success-state i { font-size: 2.4rem; color: #fff; margin-bottom: 14px; animation: haloPulse 1.6s ease-in-out infinite; }
-        .tech-success-state p { color: var(--text-silver); font-size: 0.9rem; margin-bottom: 20px; }
-
-        /* ADMIN PANEL */
-        #adminPanel {
-            position: fixed; inset: 0; z-index: 600;
-            background: var(--bg-void);
-            overflow-y: auto;
-            padding: 28px 5%;
-            display: none;
-        }
-        #adminPanel.show { display: block; }
-
-        .admin-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-            margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bg-card-border);
-        }
-        .admin-title { display: flex; align-items: center; gap: 12px; }
-        .admin-title i { font-size: 1.6rem; }
-        .admin-title h1 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; }
-        .admin-title p { color: var(--text-silver); font-size: 0.8rem; }
-
-        .btn-logout {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border); color: var(--pure-white);
-            padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 8px; transition: all 0.25s ease;
-        }
-        .btn-logout:hover { background: rgba(255,80,80,0.15); border-color: rgba(255,80,80,0.4); color: var(--danger); }
-
-        .admin-stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
-        .admin-stat-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 20px; text-align: center; }
-        .admin-stat-box .val { font-family: var(--font-heading); font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; }
-        .admin-stat-box .lbl { font-size: 0.72rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .admin-stat-box.online .val { color: var(--success); }
-        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: adminPulse 1.6s infinite; }
-        @keyframes adminPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-        .admin-panel-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-        .admin-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
-        .admin-panel-header h2 { font-size: 1.1rem; font-weight: 800; }
-        .admin-panel-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .abtn { border: none; border-radius: 10px; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; }
-        .abtn-white { background: #fff; color: #000; }
-        .abtn-white:hover { background: #e6e6e6; transform: translateY(-1px); }
-        .abtn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--bg-card-border); color: #fff; }
-        .abtn-outline:hover { background: rgba(255,255,255,0.12); }
-
-        #playersTable { width: 100%; border-collapse: collapse; }
-        #playersTable thead th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-silver); padding: 10px 12px; border-bottom: 1px solid var(--bg-card-border); }
-        #playersTable tbody td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        #playersTable tbody tr:hover { background: rgba(255,255,255,0.02); }
-        .acell-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border); color: #fff; padding: 8px 10px; border-radius: 8px; font-size: 0.88rem; outline: none; }
-        .acell-input:focus { border-color: rgba(255,255,255,0.4); }
-        select.acell-input { appearance: none; cursor: pointer; }
-        .arow-delete { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; padding: 6px; }
-        .arow-delete:hover { color: var(--danger); }
-        .admin-empty-table { text-align: center; padding: 30px; color: var(--text-silver); font-size: 0.9rem; }
-
-        .admin-save-toast {
-            position: fixed; bottom: 24px; right: 24px; background: #111219; border: 1px solid rgba(255,255,255,0.2);
-            padding: 14px 20px; border-radius: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
-            transform: translateY(20px); opacity: 0; transition: all 0.35s ease; pointer-events: none; z-index: 610;
-        }
-        .admin-save-toast.show { transform: translateY(0); opacity: 1; }
-        .admin-save-toast.success i { color: var(--success); }
-        .admin-save-toast.error i { color: var(--danger); }
-
-        .player-avatar-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--bg-card-border); }
-
-        @media (max-width: 700px) {
-            #playersTable thead { display: none; }
-            #playersTable, #playersTable tbody, #playersTable tr, #playersTable td { display: block; width: 100%; }
-            #playersTable tbody tr { border: 1px solid var(--bg-card-border); border-radius: 10px; margin-bottom: 12px; padding: 8px; }
-            #playersTable tbody td { border: none; padding: 6px 4px; }
-            #playersTable tbody td::before { content: attr(data-label); display: block; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; }
-        }
 
         @media (max-width: 992px) {
             .hero-container, .flow-section { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr; }
             .hero-container { margin-top: 36px; }
-        }
-
-        @media (max-width: 640px) {
-            header { padding: 16px 6%; }
-            header.scrolled { padding: 10px 6%; }
-            .hero-container { padding: 0 18px; gap: 26px; }
-            .hero-right, .tier-journey-card, .flow-card-display { padding: 22px; }
-            .stats-section, .flow-section, .faq-section { margin-top: 76px; margin-bottom: 76px; }
-            .flow-step-desc { max-width: 95%; }
-            .tech-modal { padding: 24px; }
-        }
-
-        @media (max-width: 480px) {
-            .modes-grid { grid-template-columns: repeat(2, 1fr); }
-            .btn-primary, .btn-secondary { padding: 13px 22px; font-size: 0.92rem; }
-            .flow-tags-grid { gap: 10px; }
-            .tag-box { padding: 12px 8px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
-            }
         }
     </style>
 </head>
@@ -620,7 +416,6 @@
         <div class="aurora-blob b3"></div>
     </div>
     <canvas id="particles" aria-hidden="true"></canvas>
-    <div class="feather-layer" id="featherLayer" aria-hidden="true"></div>
 
     <header>
         <a href="/" class="logo-wrapper">
@@ -629,15 +424,13 @@
         </a>
 
         <nav class="nav-links" id="navLinks">
+            <a href="/" class="nav-link active">Trang Chủ</a>
             <a href="/ranking" class="nav-link">Bảng Xếp Hạng</a>
             <a href="#flow" class="nav-link">Quy Trình Test</a>
             <a href="#faq" class="nav-link">FAQ</a>
             <a href="https://discord.gg" target="_blank" rel="noopener" class="btn-discord">
                 <i class="fa-brands fa-discord" aria-hidden="true"></i> Discord
             </a>
-            <button class="btn-tech" id="techOpenBtn" type="button" title="Khu vực Kỹ thuật viên" aria-label="Khu vực Kỹ thuật viên">
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            </button>
         </nav>
 
         <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">
@@ -647,7 +440,7 @@
         <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
-    <section class="hero-container" id="leaderboard">
+    <section class="hero-container">
         <div class="hero-left">
             <div class="badge-tag hero-anim" data-delay="100">
                 <span class="badge-dot"></span>
@@ -655,7 +448,7 @@
             </div>
 
             <h1 class="hero-title">
-                <span class="title-line hero-anim" data-delay="220">Bảng Xếp Hạng</span>
+                <span class="title-line hero-anim" data-delay="220">Hệ Thống Rank</span>
                 <span class="title-line gradient-text hero-anim" data-delay="380">ANGEL TIER</span>
             </h1>
 
@@ -665,14 +458,14 @@
 
             <div class="hero-actions hero-anim" data-delay="650">
                 <a href="/ranking" class="btn-primary">
-                    <i class="fa-solid fa-trophy" aria-hidden="true"></i> Bảng Xếp Hạng
+                    <i class="fa-solid fa-trophy" aria-hidden="true"></i> Xem BXH Đầy Đủ
                 </a>
                 <a href="#flow" class="btn-secondary">
                     <i class="fa-solid fa-khanda" aria-hidden="true"></i> Tham gia ngay!
                 </a>
             </div>
 
-            <div class="tier-journey-card tilt hero-anim" data-delay="780" data-tilt-strength="8">
+            <div class="tier-journey-card hero-anim" data-delay="780">
                 <div class="journey-header">
                     <div>
                         <div class="journey-subtitle">HỆ THỐNG TIER</div>
@@ -717,91 +510,29 @@
                         <text x="362" y="38" fill="#ffffff" font-size="10" font-weight="bold">HT1</text>
                     </svg>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 15px;">
-                    Mỗi Mode có Tier riêng. Tier càng cao thì điểm tổng cộng tăng trên bảng xếp hạng.
-                </p>
             </div>
         </div>
 
-        <div class="hero-right tilt hero-anim" data-delay="500" data-tilt-strength="5">
+        <!-- CLICKABLE LIVE LEADERBOARD CONTAINER -->
+        <div class="hero-right hero-anim" data-delay="500" onclick="window.location.href='/ranking';">
             <div>
                 <div class="lb-header">
                     <div class="lb-title-group">
                         <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
-                        <h3 id="lbModeTitle">Top 3 Players</h3>
+                        <h3>TOP 3 BẢNG XẾP HẠNG</h3>
                     </div>
-                    <a href="/ranking" class="overall-btn" id="overallBtn">Xem tất cả</a>
+                    <a href="/ranking" class="view-full-btn" onclick="event.stopPropagation();">
+                        Xem Tất Cả <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
 
-                <!-- LEADERBOARD DATA CONTAINER (ONLY TOP 3) -->
-                <div id="leaderboardContent">
-                    <div class="top-players-empty">
-                        <div class="scan-line"></div>
-                        <div class="empty-icon-wrap">
-                            <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
-                        </div>
-                        <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Chưa có dữ liệu người chơi</p>
-                        <p style="font-size: 0.85rem;">Danh sách xếp hạng sẽ được cập nhật sau đợt Test tới.</p>
-                    </div>
+                <div id="top3Container" class="top3-list">
+                    <!-- Top 3 dynamic content -->
                 </div>
             </div>
 
-            <div>
-                <div class="modes-header">
-                    <span>MODES LEADERBOARD</span>
-                    <span>8 Chế Độ</span>
-                </div>
-
-                <div class="modes-grid">
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/yFmTKyXC/1533764260486844488.webp" alt="Sword" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SWORD</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/G349PxWx/1533764316262826025.webp" alt="Nethop" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">NETHOP</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/ynR4j8kp/1533764426941993140.webp" alt="Pot" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">POT</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/C3RjZR8v/1533764288055873638.webp" alt="SMP" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SMP</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/nMSsgPcv/1533764468876771448.webp" alt="UHC" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">UHC</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/zW8WcJKh/1533764227607560233.webp" alt="Axe" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">AXE</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/5hPZXd0S/1533764503161012344.webp" alt="Vanilla" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">VANILLA</span>
-                    </a>
-                    <a href="/ranking" class="mode-item">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/cXcHtW5c/1533764190723113050.webp" alt="Mace" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">MACE</span>
-                    </a>
-                </div>
+            <div class="top3-footer-hint">
+                <i class="fa-solid fa-mouse-pointer"></i> Click để xem chi tiết Bảng Xếp Hạng
             </div>
         </div>
     </section>
@@ -811,15 +542,15 @@
         <h2 class="stats-title reveal">Thống kê hệ thống</h2>
 
         <div class="stats-grid reveal-stagger">
-            <div class="stat-card tilt" data-tilt-strength="7">
+            <div class="stat-card">
                 <div class="stat-number">12</div>
                 <div class="stat-label">TESTER HOẠT ĐỘNG</div>
             </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
+            <div class="stat-card">
                 <div class="stat-number">150</div>
                 <div class="stat-label">NGƯỜI CHƠI ĐÃ ĐƯỢC TEST</div>
             </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
+            <div class="stat-card">
                 <div class="stat-number">320</div>
                 <div class="stat-label">BÀI TEST ĐÃ HOÀN THÀNH</div>
             </div>
@@ -827,7 +558,7 @@
     </section>
 
     <section class="flow-section" id="flow">
-        <div class="flow-card-display tilt reveal" data-tilt-strength="7">
+        <div class="flow-card-display reveal">
             <div class="flow-card-header">
                 <span class="flow-badge">TESTING FLOW</span>
                 <span class="flow-counter" id="stepCounter">1/4</span>
@@ -899,17 +630,6 @@
                     </div>
                 </div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Bao lâu thì bảng xếp hạng được cập nhật?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Bảng xếp hạng được cập nhật ngay lập tức sau khi trận Test hoàn tất và được Tester xác nhận kết quả.
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -917,231 +637,72 @@
         &copy; 2026 ANGEL TIER. Powered by Community. All rights reserved.
     </footer>
 
-    <!-- MODAL KHU VỰC KỸ THUẬT VIÊN -->
-    <div class="tech-modal-overlay" id="techOverlay">
-        <div class="tech-modal">
-            <button class="tech-modal-close" id="techCloseBtn" type="button" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
-
-            <div class="tech-modal-header">
-                <div class="tech-modal-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
-                <h3>Khu Vực Kỹ Thuật Viên</h3>
-                <p>Vượt qua 4 lớp xác thực để vào bảng điều khiển</p>
-            </div>
-
-            <div class="tech-layers-progress" id="techProgress">
-                <div class="tech-layer-dot current" data-layer="1"></div>
-                <div class="tech-layer-dot" data-layer="2"></div>
-                <div class="tech-layer-dot" data-layer="3"></div>
-                <div class="tech-layer-dot" data-layer="4"></div>
-            </div>
-
-            <div id="techStepBody">
-                <div class="tech-layer-label" id="techLayerLabel">LỚP 1 / 4</div>
-                <div class="tech-input-group">
-                    <input type="text" class="tech-input" id="techAnswerInput" placeholder="Nhập đáp án lớp 1..." autocomplete="off" autocapitalize="off" spellcheck="false">
-                </div>
-                <div class="tech-feedback" id="techFeedback"></div>
-                <div class="tech-modal-actions">
-                    <button class="tech-btn-submit" id="techSubmitBtn" type="button">Xác nhận</button>
-                </div>
-            </div>
-
-            <div id="techSuccessBody" style="display:none;">
-                <div class="tech-success-state">
-                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                    <p style="color:#fff;font-weight:700;">Xác thực thành công!</p>
-                    <p>Đang chuyển đến bảng điều khiển kỹ thuật viên...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN -->
-    <div id="adminPanel">
-        <div class="admin-header">
-            <div class="admin-title">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                    <h1>Bảng Điều Khiển Kỹ Thuật Viên</h1>
-                    <p>ANGEL TIER — Quản lý dữ liệu & theo dõi truy cập</p>
-                </div>
-            </div>
-            <button class="btn-logout" id="adminLogoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-        </div>
-
-        <div class="admin-stats-row">
-            <div class="admin-stat-box online">
-                <div class="val"><span class="live-dot"></span><span id="adminStatOnline">1</span></div>
-                <div class="lbl">Đang truy cập (Real-time)</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatTotal">1</div>
-                <div class="lbl">Tổng lượt truy cập</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatPlayers">0</div>
-                <div class="lbl">Người chơi trong hệ thống</div>
-            </div>
-        </div>
-
-        <div class="admin-panel-box">
-            <div class="admin-panel-header">
-                <h2>Dữ Liệu Người Chơi</h2>
-                <div class="admin-panel-actions">
-                    <button class="abtn abtn-outline" id="adminReloadBtn" type="button"><i class="fa-solid fa-rotate"></i> Reload</button>
-                    <button class="abtn abtn-outline" id="adminAddRowBtn" type="button"><i class="fa-solid fa-plus"></i> Add Player</button>
-                    <button class="abtn abtn-white" id="adminSaveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-                </div>
-            </div>
-
-            <table id="playersTable">
-                <thead>
-                    <tr>
-                        <th style="width:12%">Avatar</th>
-                        <th style="width:28%">Name</th>
-                        <th style="width:20%">Tier</th>
-                        <th style="width:20%">Point</th>
-                        <th style="width:20%">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="adminPlayersBody"></tbody>
-            </table>
-            <div class="admin-empty-table" id="adminEmptyState" style="display:none;">Chưa có người chơi nào. Bấm "Add Player" để bắt đầu.</div>
-        </div>
-    </div>
-
-    <div class="admin-save-toast" id="adminSaveToast"><i class="fa-solid fa-circle-check"></i><span id="adminSaveToastText">Đã lưu thành công</span></div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            let globalPlayers = [];
-
-            function calculateAndSortPlayers(playersList) {
-                let processed = playersList.map(p => {
-                    let modes = p.modes || [];
-                    let totalPts = modes.reduce((sum, m) => sum + (parseInt(m.points, 10) || 0), 0);
-                    return {
-                        username: p.username || p.name || "Unknown",
-                        totalPoints: totalPts
-                    };
-                });
-
-                processed.sort((a, b) => b.totalPoints - a.totalPoints);
-
-                let currentRank = 1;
-                for (let i = 0; i < processed.length; i++) {
-                    if (i > 0 && processed[i].totalPoints === processed[i - 1].totalPoints) {
-                        processed[i].rank = processed[i - 1].rank;
-                    } else {
-                        processed[i].rank = i + 1;
-                    }
-                }
-
-                return processed;
-            }
-
-            function renderLiveTop3(playersList) {
-                const container = document.getElementById('leaderboardContent');
-                const ranked = calculateAndSortPlayers(playersList);
-                const top3 = ranked.slice(0, 3);
-
-                if (!top3 || top3.length === 0) {
-                    container.innerHTML = `
-                        <div class="top-players-empty">
-                            <div class="scan-line"></div>
-                            <div class="empty-icon-wrap">
-                                <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
-                            </div>
-                            <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Chưa có dữ liệu người chơi</p>
-                            <p style="font-size: 0.85rem;">Danh sách xếp hạng sẽ được cập nhật sau đợt Test tới.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '<div class="top-players-list" onclick="window.location.href=\'/ranking\'">';
-                top3.forEach(p => {
-                    let rankClass = `rank-${p.rank}`;
-                    html += `
-                        <div class="lb-player-card">
-                            <div class="lb-player-left">
-                                <span class="lb-rank ${rankClass}">#${p.rank}</span>
-                                <span class="lb-username">${p.username}</span>
-                            </div>
-                            <span class="lb-total-points">${p.totalPoints} pts</span>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-
-                container.innerHTML = html;
-            }
-
-            function loadLeaderboard() {
-                fetch('/api/players')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (Array.isArray(data)) {
-                            globalPlayers = data;
-                            renderLiveTop3(globalPlayers);
-                            document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
-                        }
-                    })
-                    .catch(() => {});
-            }
-
-            loadLeaderboard();
-
-            /* ---------- UI HANDLERS ---------- */
+            // Loader Animation
             const loader = document.getElementById('loader');
             if (loader) {
-                if (reduceMotion) {
-                    loader.style.display = 'none';
-                } else {
-                    setTimeout(function () {
-                        loader.classList.add('hide');
-                        setTimeout(function () { loader.style.display = 'none'; }, 900);
-                    }, 350);
-                }
+                setTimeout(function () {
+                    loader.classList.add('hide');
+                    setTimeout(function () { loader.style.display = 'none'; }, 900);
+                }, 350);
             }
 
+            // Hero Anim
             document.querySelectorAll('.hero-anim').forEach(function (el) {
                 const delay = parseInt(el.dataset.delay || '0', 10);
                 setTimeout(function () { el.classList.add('visible'); }, delay);
             });
 
-            const header = document.querySelector('header');
-            window.addEventListener('scroll', function () {
-                if (window.scrollY > 40) header.classList.add('scrolled');
-                else header.classList.remove('scrolled');
-            }, { passive: true });
+            // Fetch Top 3 Only from Backend API
+            fetch('/api/players')
+                .then(res => res.json())
+                .then(players => {
+                    const top3Container = document.getElementById('top3Container');
+                    const top3 = players.slice(0, 3);
+                    
+                    if (!top3 || top3.length === 0) {
+                        top3Container.innerHTML = '<p style="text-align:center; color: var(--text-silver);">Chưa có dữ liệu người chơi.</p>';
+                        return;
+                    }
 
+                    top3Container.innerHTML = top3.map(p => `
+                        <div class="top3-card rank-${p.rank}">
+                            <div class="top3-left">
+                                <div class="top3-rank-badge">#${p.rank}</div>
+                                <div class="top3-username">${p.username}</div>
+                            </div>
+                            <div class="top3-points">${p.totalPoints} PTS</div>
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    document.getElementById('top3Container').innerHTML = '<p style="text-align:center; color: var(--text-silver);">Lỗi tải dữ liệu top 3.</p>';
+                });
+
+            // Mobile Menu
             const menuToggle = document.getElementById('menuToggle');
             const navLinks = document.getElementById('navLinks');
             const navOverlay = document.getElementById('navOverlay');
-            function closeMenu() {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('open');
-                navOverlay.classList.remove('show');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-            function openMenu() {
-                menuToggle.classList.add('active');
-                navLinks.classList.add('open');
-                navOverlay.classList.add('show');
-                menuToggle.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            }
             if (menuToggle && navLinks && navOverlay) {
                 menuToggle.addEventListener('click', function () {
-                    if (navLinks.classList.contains('open')) closeMenu(); else openMenu();
+                    menuToggle.classList.toggle('active');
+                    navLinks.classList.toggle('open');
+                    navOverlay.classList.toggle('show');
                 });
-                navOverlay.addEventListener('click', closeMenu);
-                navLinks.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
+                navOverlay.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('open');
+                    navOverlay.classList.remove('show');
+                });
             }
 
+            // FAQ Accordion
+            document.querySelectorAll(".faq-item").forEach(function (item) {
+                item.querySelector(".faq-question").addEventListener("click", function () { item.classList.toggle("active"); });
+            });
+
+            // Scroll Reveal
             const revealObserver = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
@@ -1149,161 +710,8 @@
                         revealObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+            }, { threshold: 0.15 });
             document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) { revealObserver.observe(el); });
-
-            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                document.querySelectorAll('.tilt').forEach(function (el) {
-                    const strength = parseFloat(el.dataset.tiltStrength) || 8;
-                    let rect = null;
-                    el.addEventListener('mouseenter', function () { rect = el.getBoundingClientRect(); el.style.transition = 'transform 0.1s ease'; });
-                    el.addEventListener('mousemove', function (e) {
-                        if (!rect) rect = el.getBoundingClientRect();
-                        const px = (e.clientX - rect.left) / rect.width;
-                        const py = (e.clientY - rect.top) / rect.height;
-                        const rx = (py - 0.5) * -strength;
-                        const ry = (px - 0.5) * strength;
-                        el.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
-                    });
-                    el.addEventListener('mouseleave', function () {
-                        el.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-                        el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
-                    });
-                });
-            }
-
-            function formatVN(num) { return num.toLocaleString('vi-VN'); }
-            function animateCounter(el) {
-                const raw = el.textContent.trim();
-                const numeric = parseInt(raw.replace(/[^\d]/g, ''), 10) || 0;
-                const suffix = raw.replace(/[\d.,]/g, '');
-                const duration = 1600;
-                let start = null;
-                function step(ts) {
-                    if (!start) start = ts;
-                    const progress = Math.min((ts - start) / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const current = Math.floor(eased * numeric);
-                    el.textContent = formatVN(current) + suffix;
-                    if (progress < 1) requestAnimationFrame(step);
-                    else el.textContent = formatVN(numeric) + suffix;
-                }
-                if (reduceMotion) { el.textContent = formatVN(numeric) + suffix; }
-                else requestAnimationFrame(step);
-            }
-            const counterObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); }
-                });
-            }, { threshold: 0.5 });
-            document.querySelectorAll('.stat-number').forEach(function (el) { counterObserver.observe(el); });
-
-            const flowSteps = [
-                { num: "BƯỚC 01", title: "Đăng Ký Test", desc: "Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.", icon: "fa-solid fa-gamepad" },
-                { num: "BƯỚC 02", title: "Xếp Lịch Với Tester", desc: "Đội ngũ Tester sẽ xác nhận thông tin và hẹn thời gian thi đấu phù hợp.", icon: "fa-solid fa-calendar-check" },
-                { num: "BƯỚC 03", title: "Thi Đấu & Đánh Giá", desc: "Thực hiện các trận solo ở Gamemode bạn đã chọn dưới sự giám sát trực tiếp.", icon: "fa-solid fa-swords" },
-                { num: "BƯỚC 04", title: "Nhận Tier & Cập Nhật BXH", desc: "Kết quả được chấm ngay lập tức và cấp Rank chính thức trên Bảng Xếp Hạng.", icon: "fa-solid fa-trophy" }
-            ];
-            let currentStep = 0;
-            let flowTimer = null;
-            const flowContent = document.querySelector('.flow-main-content');
-
-            function setStep(index) {
-                currentStep = index;
-                function apply() {
-                    document.getElementById("stepCounter").innerText = (index + 1) + "/" + flowSteps.length;
-                    document.getElementById("flowStepNum").innerText = flowSteps[index].num;
-                    document.getElementById("flowStepTitle").innerText = flowSteps[index].title;
-                    document.getElementById("flowStepDesc").innerText = flowSteps[index].desc;
-                    document.getElementById("flowIcon").className = flowSteps[index].icon + " flow-icon";
-                    if (flowContent) { flowContent.style.opacity = '1'; flowContent.style.transform = 'translateY(0)'; }
-                }
-                if (flowContent && !reduceMotion) {
-                    flowContent.style.opacity = '0';
-                    flowContent.style.transform = 'translateY(10px)';
-                    setTimeout(apply, 220);
-                } else { apply(); }
-                document.querySelectorAll(".progress-segment").forEach(function (seg, i) { seg.classList.toggle('active', i === index); });
-            }
-            function startFlowAutoplay() {
-                clearInterval(flowTimer);
-                if (reduceMotion) return;
-                flowTimer = setInterval(function () { setStep((currentStep + 1) % flowSteps.length); }, 4500);
-            }
-            document.querySelectorAll('.progress-segment').forEach(function (seg) {
-                seg.addEventListener('click', function () { setStep(parseInt(seg.dataset.index, 10)); startFlowAutoplay(); });
-            });
-            startFlowAutoplay();
-
-            document.querySelectorAll(".faq-item").forEach(function (item) {
-                item.querySelector(".faq-question").addEventListener("click", function () { item.classList.toggle("active"); });
-            });
-
-            /* ---------- TECH MODAL ---------- */
-            const overlay = document.getElementById('techOverlay');
-            const openBtn = document.getElementById('techOpenBtn');
-            const closeBtn = document.getElementById('techCloseBtn');
-            const input = document.getElementById('techAnswerInput');
-            const submitBtn = document.getElementById('techSubmitBtn');
-            const feedback = document.getElementById('techFeedback');
-            const layerLabel = document.getElementById('techLayerLabel');
-            const stepBody = document.getElementById('techStepBody');
-            const successBody = document.getElementById('techSuccessBody');
-            const dots = document.querySelectorAll('.tech-layer-dot');
-
-            let step = 1;
-
-            function openModal() { overlay.classList.add('show'); document.body.style.overflow = 'hidden'; setTimeout(() => input.focus(), 150); }
-            function closeModal() { overlay.classList.remove('show'); document.body.style.overflow = ''; }
-            function resetToStep1() {
-                step = 1; stepBody.style.display = ''; successBody.style.display = 'none'; input.value = '';
-                input.classList.remove('error'); feedback.textContent = ''; updateUI();
-            }
-            function updateUI() {
-                layerLabel.textContent = 'LỚP ' + step + ' / 4';
-                dots.forEach(dot => {
-                    const n = parseInt(dot.dataset.layer, 10);
-                    dot.classList.remove('done', 'current');
-                    if (n < step) dot.classList.add('done');
-                    else if (n === step) dot.classList.add('current');
-                });
-            }
-
-            if (openBtn) openBtn.addEventListener('click', () => { resetToStep1(); openModal(); });
-            if (closeBtn) closeBtn.addEventListener('click', closeModal);
-            if (overlay) overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-
-            function submitAnswer() {
-                const val = input.value.trim();
-                if (!val) {
-                    input.classList.add('error');
-                    feedback.textContent = 'Vui lòng nhập đáp án.';
-                    feedback.className = 'tech-feedback error-text';
-                    return;
-                }
-                if (step < 4) {
-                    step++; input.value = ''; updateUI(); input.focus();
-                } else {
-                    dots.forEach(dot => dot.classList.add('done'));
-                    stepBody.style.display = 'none';
-                    successBody.style.display = '';
-                    setTimeout(() => {
-                        closeModal();
-                        document.getElementById('adminPanel').classList.add('show');
-                    }, 800);
-                }
-            }
-
-            if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
-            if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAnswer(); });
-
-            /* Admin Panel Exit */
-            const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-            if (adminLogoutBtn) {
-                adminLogoutBtn.addEventListener('click', () => {
-                    document.getElementById('adminPanel').classList.remove('show');
-                });
-            }
         });
     </script>
 </body>
