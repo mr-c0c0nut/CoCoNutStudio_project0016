@@ -287,7 +287,7 @@
         .lb-title-group h3 { font-size: 1.3rem; font-weight: 700; }
         .lb-title-group .live-tag { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
-        .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; }
         .overall-btn:hover { background: var(--pure-white); color: #000; }
 
         .top-players-empty { position: relative; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 46px 20px; text-align: center; color: var(--text-silver); overflow: hidden; }
@@ -298,22 +298,16 @@
         @keyframes scanSweep { 0% { top: -55%; } 100% { top: 100%; } }
 
         /* ---------- LEADERBOARD PATCH CSS ---------- */
-        .top-players-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; padding-right: 4px; }
-        .lb-player-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.3s ease; }
-        .lb-player-card:hover { border-color: var(--bg-card-border-strong); background: rgba(255, 255, 255, 0.06); }
-        .lb-player-main { display: flex; align-items: center; justify-content: space-between; }
-        .lb-player-left { display: flex; align-items: center; gap: 12px; }
-        .lb-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1rem; min-width: 28px; color: var(--text-silver); text-align: center; }
+        .top-players-list { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+        .lb-player-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; }
+        .lb-player-card:hover { border-color: var(--bg-card-border-strong); background: rgba(255, 255, 255, 0.08); transform: translateY(-2px); }
+        .lb-player-left { display: flex; align-items: center; gap: 14px; }
+        .lb-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; min-width: 28px; color: var(--text-silver); text-align: center; }
         .lb-rank.rank-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
         .lb-rank.rank-2 { color: #e0e0e0; text-shadow: 0 0 10px rgba(224,224,224,0.5); }
         .lb-rank.rank-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205,127,50,0.5); }
-        .lb-username { font-weight: 700; font-size: 0.95rem; color: #ffffff; }
-        .lb-total-points { font-weight: 800; font-size: 1rem; color: var(--gold); }
-        .lb-modes-list { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .lb-mode-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; }
-        .lb-mode-icon { width: 15px; height: 15px; object-fit: contain; }
-        .lb-tier-tag { font-weight: 700; color: #ffffff; }
-        .lb-pts-tag { color: var(--text-silver); }
+        .lb-username { font-weight: 700; font-size: 1rem; color: #ffffff; }
+        .lb-total-points { font-weight: 800; font-size: 1.1rem; color: var(--gold); }
 
         .modes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .modes-header span { font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
@@ -322,6 +316,7 @@
             position: relative; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--bg-card-border); border-radius: 14px;
             padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
             transition: transform 0.35s var(--ease-soft), border-color 0.35s ease, box-shadow 0.35s ease; overflow: hidden;
+            text-decoration: none;
         }
         .mode-item::after {
             content: ''; position: absolute; inset: 0; border-radius: 14px; padding: 1px;
@@ -331,8 +326,6 @@
         }
         .mode-item:hover, .mode-item.active { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
         .mode-item:hover::after, .mode-item.active::after { opacity: 1; }
-        .mode-item.pulse-select { animation: modeSelectPulse 0.5s ease; }
-        @keyframes modeSelectPulse { 0% { box-shadow: 0 0 0 rgba(255, 255, 255, 0.6); } 50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.5); } 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); } }
 
         .mode-icon-box { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
         .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease; }
@@ -341,7 +334,7 @@
         .mode-icon-box:has(.mode-icon.img-broken)::after { display: flex; }
         .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); }
         .mode-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-silver); }
-        .mode-item.active .mode-name { color: var(--pure-white); }
+        .mode-item:hover .mode-name { color: var(--pure-white); }
 
         /* ---------------- STATS ---------------- */
         .stats-section { max-width: 1280px; margin: 100px auto; padding: 0 24px; text-align: center; }
@@ -630,13 +623,13 @@
     <div class="feather-layer" id="featherLayer" aria-hidden="true"></div>
 
     <header>
-        <a href="#" class="logo-wrapper">
+        <a href="/" class="logo-wrapper">
             <img class="logo-img" src="https://media.discordapp.net/attachments/1517832164979245117/1534765652017942670/1785585857892-removebg-preview.png?ex=6a755166&is=6a73ffe6&hm=ae33067e09d4d7cfc23d136b8e77527637b87ec336088f650843da76a0abdf4b&=&format=webp&quality=lossless" alt="ANGEL TIER Logo" onerror="this.classList.add('img-broken')">
             <span class="logo-fallback-text">ANGEL TIER</span>
         </a>
 
         <nav class="nav-links" id="navLinks">
-            <a href="#leaderboard" class="nav-link">Bảng Xếp Hạng</a>
+            <a href="/ranking" class="nav-link">Bảng Xếp Hạng</a>
             <a href="#flow" class="nav-link">Quy Trình Test</a>
             <a href="#faq" class="nav-link">FAQ</a>
             <a href="https://discord.gg" target="_blank" rel="noopener" class="btn-discord">
@@ -671,7 +664,7 @@
             </p>
 
             <div class="hero-actions hero-anim" data-delay="650">
-                <a href="#leaderboard" class="btn-primary">
+                <a href="/ranking" class="btn-primary">
                     <i class="fa-solid fa-trophy" aria-hidden="true"></i> Bảng Xếp Hạng
                 </a>
                 <a href="#flow" class="btn-secondary">
@@ -735,12 +728,12 @@
                 <div class="lb-header">
                     <div class="lb-title-group">
                         <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
-                        <h3 id="lbModeTitle">Top Players</h3>
+                        <h3 id="lbModeTitle">Top 3 Players</h3>
                     </div>
-                    <button class="overall-btn" id="overallBtn" type="button">Overall</button>
+                    <a href="/ranking" class="overall-btn" id="overallBtn">Xem tất cả</a>
                 </div>
 
-                <!-- LEADERBOARD DATA CONTAINER -->
+                <!-- LEADERBOARD DATA CONTAINER (ONLY TOP 3) -->
                 <div id="leaderboardContent">
                     <div class="top-players-empty">
                         <div class="scan-line"></div>
@@ -760,54 +753,54 @@
                 </div>
 
                 <div class="modes-grid">
-                    <div class="mode-item" data-mode="Sword">
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/yFmTKyXC/1533764260486844488.webp" alt="Sword" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">SWORD</span>
-                    </div>
-                    <div class="mode-item" data-mode="NethOP">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/G349PxWx/1533764316262826025.webp" alt="Nethop" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">NETHOP</span>
-                    </div>
-                    <div class="mode-item" data-mode="Pot">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/ynR4j8kp/1533764426941993140.webp" alt="Pot" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">POT</span>
-                    </div>
-                    <div class="mode-item" data-mode="SMP">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/C3RjZR8v/1533764288055873638.webp" alt="SMP" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">SMP</span>
-                    </div>
-                    <div class="mode-item" data-mode="UHC">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/nMSsgPcv/1533764468876771448.webp" alt="UHC" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">UHC</span>
-                    </div>
-                    <div class="mode-item" data-mode="Axe">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/zW8WcJKh/1533764227607560233.webp" alt="Axe" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">AXE</span>
-                    </div>
-                    <div class="mode-item" data-mode="Vanilla">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/5hPZXd0S/1533764503161012344.webp" alt="Vanilla" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">VANILLA</span>
-                    </div>
-                    <div class="mode-item" data-mode="Mace">
+                    </a>
+                    <a href="/ranking" class="mode-item">
                         <div class="mode-icon-box">
                             <img class="mode-icon" src="https://i.ibb.co/cXcHtW5c/1533764190723113050.webp" alt="Mace" onerror="this.classList.add('img-broken')">
                         </div>
                         <span class="mode-name">MACE</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1022,56 +1015,17 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            const MODE_ICONS = {
-                'Mace': 'https://i.ibb.co/cXcHtW5c/1533764190723113050.webp',
-                'Axe': 'https://i.ibb.co/zW8WcJKh/1533764227607560233.webp',
-                'Sword': 'https://i.ibb.co/yFmTKyXC/1533764260486844488.webp',
-                'SMP': 'https://i.ibb.co/C3RjZR8v/1533764288055873638.webp',
-                'NethOP': 'https://i.ibb.co/G349PxWx/1533764316262826025.webp',
-                'Nethop': 'https://i.ibb.co/G349PxWx/1533764316262826025.webp',
-                'Pot': 'https://i.ibb.co/ynR4j8kp/1533764426941993140.webp',
-                'UHC': 'https://i.ibb.co/nMSsgPcv/1533764468876771448.webp',
-                'Vanilla': 'https://i.ibb.co/5hPZXd0S/1533764503161012344.webp'
-            };
-
-            const DEFAULT_PLAYERS = [
-                { username: "anh5me27051", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"LT4",points:20},{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "Vandekynang22", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"HT5",points:15},{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "LikedasMC", modes: [{mode:"Sword",tier:"HT5",points:15},{mode:"Axe",tier:"HT5",points:15},{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "CatRista", modes: [{mode:"UHC",tier:"LT4",points:20},{mode:"Axe",tier:"LT4",points:20}] },
-                { username: "Chuyenn", modes: [{mode:"Sword",tier:"LT4",points:20},{mode:"UHC",tier:"HT5",points:15}] },
-                { username: "rautrang3245", modes: [{mode:"Sword",tier:"LT3",points:30}] },
-                { username: "Uchiha_nho", modes: [{mode:"Sword",tier:"HT4",points:25}] },
-                { username: "gbaoz21", modes: [{mode:"Sword",tier:"HT4",points:25}] },
-                { username: "AGL_Mipp", modes: [{mode:"Sword",tier:"LT5",points:10},{mode:"SMP",tier:"LT5",points:10}] },
-                { username: "Wai_VN", modes: [{mode:"Sword",tier:"LT4",points:20}] },
-                { username: "TD4T_", modes: [{mode:"UHC",tier:"LT4",points:20}] },
-                { username: "Lovuongdaide", modes: [{mode:"UHC",tier:"HT5",points:15}] },
-                { username: "Ag_qkhang", modes: [{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "MeoBeo_", modes: [{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "longskibidop_51321", modes: [{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "Khang", modes: [{mode:"Vanilla",tier:"LT5",points:10}] },
-                { username: "mr.c0c0nut._91571", modes: [{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "Lovundaide", modes: [{mode:"UHC",tier:"LT5",points:10}] }
-            ];
-
             let globalPlayers = [];
-            let activeFilterMode = null;
 
-            function calculateAndSortPlayers(playersList, filterMode) {
+            function calculateAndSortPlayers(playersList) {
                 let processed = playersList.map(p => {
                     let modes = p.modes || [];
-                    if (filterMode) {
-                        modes = modes.filter(m => m.mode.toLowerCase() === filterMode.toLowerCase());
-                    }
                     let totalPts = modes.reduce((sum, m) => sum + (parseInt(m.points, 10) || 0), 0);
                     return {
                         username: p.username || p.name || "Unknown",
-                        modes: modes,
                         totalPoints: totalPts
                     };
-                }).filter(p => filterMode ? p.modes.length > 0 : true);
+                });
 
                 processed.sort((a, b) => b.totalPoints - a.totalPoints);
 
@@ -1087,17 +1041,12 @@
                 return processed;
             }
 
-            function renderLeaderboard(playersList, filterMode) {
+            function renderLiveTop3(playersList) {
                 const container = document.getElementById('leaderboardContent');
-                const lbTitle = document.getElementById('lbModeTitle');
+                const ranked = calculateAndSortPlayers(playersList);
+                const top3 = ranked.slice(0, 3);
 
-                if (lbTitle) {
-                    lbTitle.textContent = filterMode ? `Top Players (${filterMode.toUpperCase()})` : "Top Players";
-                }
-
-                const ranked = calculateAndSortPlayers(playersList, filterMode);
-
-                if (!ranked || ranked.length === 0) {
+                if (!top3 || top3.length === 0) {
                     container.innerHTML = `
                         <div class="top-players-empty">
                             <div class="scan-line"></div>
@@ -1111,32 +1060,16 @@
                     return;
                 }
 
-                let html = '<div class="top-players-list">';
-                ranked.forEach(p => {
-                    let rankClass = p.rank <= 3 ? `rank-${p.rank}` : '';
-                    let modesHtml = p.modes.map(m => {
-                        let iconUrl = MODE_ICONS[m.mode] || MODE_ICONS['Sword'];
-                        return `
-                            <div class="lb-mode-badge">
-                                <img class="lb-mode-icon" src="${iconUrl}" alt="${m.mode}">
-                                <span class="lb-tier-tag">${m.mode} ${m.tier}</span>
-                                <span class="lb-pts-tag">(${m.points}đ)</span>
-                            </div>
-                        `;
-                    }).join('');
-
+                let html = '<div class="top-players-list" onclick="window.location.href=\'/ranking\'">';
+                top3.forEach(p => {
+                    let rankClass = `rank-${p.rank}`;
                     html += `
                         <div class="lb-player-card">
-                            <div class="lb-player-main">
-                                <div class="lb-player-left">
-                                    <span class="lb-rank ${rankClass}">#${p.rank}</span>
-                                    <span class="lb-username">${p.username}</span>
-                                </div>
-                                <span class="lb-total-points">${p.totalPoints} pts</span>
+                            <div class="lb-player-left">
+                                <span class="lb-rank ${rankClass}">#${p.rank}</span>
+                                <span class="lb-username">${p.username}</span>
                             </div>
-                            <div class="lb-modes-list">
-                                ${modesHtml}
-                            </div>
+                            <span class="lb-total-points">${p.totalPoints} pts</span>
                         </div>
                     `;
                 });
@@ -1149,41 +1082,14 @@
                 fetch('/api/players')
                     .then(res => res.json())
                     .then(data => {
-                        if (Array.isArray(data) && data.length > 0) {
+                        if (Array.isArray(data)) {
                             globalPlayers = data;
-                        } else {
-                            globalPlayers = DEFAULT_PLAYERS;
+                            renderLiveTop3(globalPlayers);
+                            document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
                         }
-                        renderLeaderboard(globalPlayers, activeFilterMode);
-                        document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
                     })
-                    .catch(() => {
-                        globalPlayers = DEFAULT_PLAYERS;
-                        renderLeaderboard(globalPlayers, activeFilterMode);
-                        document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
-                    });
+                    .catch(() => {});
             }
-
-            const overallBtn = document.getElementById('overallBtn');
-            if (overallBtn) {
-                overallBtn.addEventListener('click', function() {
-                    activeFilterMode = null;
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
-                    renderLeaderboard(globalPlayers, null);
-                });
-            }
-
-            document.querySelectorAll('.mode-item').forEach(function (modeEl) {
-                modeEl.addEventListener('click', function () {
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
-                    modeEl.classList.add('active');
-                    modeEl.classList.add('pulse-select');
-                    setTimeout(() => modeEl.classList.remove('pulse-select'), 500);
-
-                    activeFilterMode = modeEl.dataset.mode || modeEl.querySelector('.mode-name').innerText;
-                    renderLeaderboard(globalPlayers, activeFilterMode);
-                });
-            });
 
             loadLeaderboard();
 
