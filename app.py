@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+import os
+import json
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "coco_secret_key_2026")
 
-# 8 Modes Icon Mapping
 MODE_ICONS = {
     "Mace": "https://i.ibb.co/cXcHtW5c/1533764190723113050.webp",
     "Axe": "https://i.ibb.co/zW8WcJKh/1533764227607560233.webp",
@@ -14,8 +16,8 @@ MODE_ICONS = {
     "Vanilla": "https://i.ibb.co/5hPZXd0S/1533764503161012344.webp"
 }
 
-# Raw Player Data
-RAW_PLAYERS = [
+# Source of Truth - Danh sách 18 Players
+PLAYERS_DATA = [
     {
         "username": "anh5me27051",
         "modes": [
@@ -135,30 +137,83 @@ RAW_PLAYERS = [
     }
 ]
 
-def calculate_rankings(players):
-    # Calculate total points
-    for p in players:
-        p["total_points"] = sum(m["points"] for m in p["modes"])
-    
-    # Sort descending by total points
-    players_sorted = sorted(players, key=lambda x: x["total_points"], reverse=True)
-    
-    # Apply Standard Competition Ranking (1224 ranking)
-    rankings = []
-    current_rank = 1
-    for i, p in enumerate(players_sorted):
-        if i > 0 and p["total_points"] < players_sorted[i - 1]["total_points"]:
-            current_rank = i + 1
-        p_copy = dict(p)
-        p_copy["rank"] = current_rank
-        rankings.append(p_copy)
+def calculate_leaderboard():
+    """Xử lý tính tổng điểm, gắn icon mode và gán hạng (ranking logic)."""
+    processed = []
+    for item in PLAYERS_DATA:
+        modes = item.get("modes", [])
+        # Nếu data cũ dạng phẳng (mode, tier, points trực tiếp)
+        if not modes and "mode" in item:
+            modes = [{"mode": item.get("mode"), "tier": item.get("tier"), "points": item.get("points", 0)}]
+            
+        total_pts = sum(m.get("points", 0) for m in modes)
         
-    return rankings
+        # Gắn icon cho từng mode
+        formatted_modes = []
+        for m in modes:
+            m_name = m.get("mode", "")
+            formatted_modes.append({
+                "mode": m_name,
+                "tier": m.get("tier", ""),
+                "points": m.get("points", 0),
+                "icon": MODE_ICONS.get(m_name, "")
+            })
+
+        processed.append({
+            "username": item.get("username"),
+            "total_points": total_pts,
+            "modes": formatted_modes,
+            # Giữ các trường phẳng cho Admin Panel nếu cần
+            "mode": formatted_modes[0]["mode"] if formatted_modes else "",
+            "tier": formatted_modes[0]["tier"] if formatted_modes else "",
+            "points": total_pts
+        })
+
+    # Sắp xếp giảm dần theo điểm
+    processed.sort(key=lambda x: x["total_points"], reverse=True)
+
+    # Tính toán Rank (55 -> #1, 50 -> #2, 40 -> #3, 40 -> #3, 35 -> #5,...)
+    current_rank = 1
+    for i, player in enumerate(processed):
+        if i > 0 and player["total_points"] < processed[i - 1]["total_points"]:
+            current_rank = i + 1
+        player["rank"] = current_rank
+
+    return processed
 
 @app.route("/")
-def home():
-    rankings = calculate_rankings(RAW_PLAYERS)
-    return render_template("index.html", rankings=rankings, mode_icons=MODE_ICONS)
+def index():
+    leaderboard = calculate_leaderboard()
+    return render_template("index.html", players=leaderboard, mode_icons=MODE_ICONS)
+
+@app.route("/api/players", methods=["GET", "POST", "PUT", "DELETE"])
+def handle_players_api():
+    global PLAYERS_DATA
+    if request.method == "GET":
+        return jsonify(calculate_leaderboard())
+    
+    elif request.method == "POST":
+        data = request.json or {}
+        username = data.get("username")
+        modes = data.get("modes", [])
+        
+        # Hỗ trợ Admin Panel gửi dạng đơn giản
+        if not modes and "mode" in data:
+            modes = [{"mode": data.get("mode"), "tier": data.get("tier"), "points": int(data.get("points", 0))}]
+            
+        if username:
+            PLAYERS_DATA.append({"username": username, "modes": modes})
+            return jsonify({"status": "success", "message": "Player added successfully"}), 201
+        return jsonify({"status": "error", "message": "Invalid data"}), 400
+
+    elif request.method == "DELETE":
+        username = request.args.get("username") or (request.json and request.json.get("username"))
+        if username:
+            PLAYERS_DATA = [p for p in PLAYERS_DATA if p.get("username") != username]
+            return jsonify({"status": "success", "message": "Player deleted"}), 200
+        return jsonify({"status": "error", "message": "Missing username"}), 400
+
+    return jsonify({"status": "error", "message": "Method not allowed"}), 405
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
