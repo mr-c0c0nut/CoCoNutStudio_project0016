@@ -1,235 +1,243 @@
-import json
 import os
-from flask import Flask, jsonify, render_template, request
+import json
+import time
+import uuid
+import threading
+from flask import Flask, render_template, request, session, jsonify
 
-app = Flask(__name__, template_folder=".", static_folder=".")
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "doi-key-nay-truoc-khi-deploy-that")
 
-DATA_FILE = "players.json"
+BASE_DIR = os.path.dirname(__file__)
+DATA_DIR = os.path.join(BASE_DIR, "data")
+VISITS_PATH = os.path.join(DATA_DIR, "visit_counter.json")
 
-# Dữ liệu mặc định nếu chưa có file JSON
-DEFAULT_PLAYERS = [
-    {
-        "username": "anh5me27051",
-        "avatar": "https://mc-heads.net/avatar/anh5me27051",
-        "total_points": 55,
-        "modes": {
-            "Sword": {"tier": "HT1", "points": 10},
-            "NethOP": {"tier": "HT1", "points": 10},
-            "Pot": {"tier": "HT1", "points": 10},
-            "SMP": {"tier": "HT2", "points": 8},
-            "UHC": {"tier": "HT2", "points": 8},
-            "Axe": {"tier": "HT2", "points": 9},
-        },
-    },
-    {
-        "username": "Vandekynang22",
-        "avatar": "https://mc-heads.net/avatar/Vandekynang22",
-        "total_points": 50,
-        "modes": {
-            "Sword": {"tier": "HT1", "points": 10},
-            "Pot": {"tier": "HT1", "points": 10},
-            "Vanilla": {"tier": "HT1", "points": 10},
-            "SMP": {"tier": "HT2", "points": 10},
-            "Mace": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "LikedasMC",
-        "avatar": "https://mc-heads.net/avatar/LikedasMC",
-        "total_points": 40,
-        "modes": {
-            "Sword": {"tier": "HT1", "points": 10},
-            "NethOP": {"tier": "HT2", "points": 10},
-            "UHC": {"tier": "HT2", "points": 10},
-            "Axe": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "CatRista",
-        "avatar": "https://mc-heads.net/avatar/CatRista",
-        "total_points": 40,
-        "modes": {
-            "Sword": {"tier": "HT1", "points": 10},
-            "SMP": {"tier": "HT1", "points": 10},
-            "Vanilla": {"tier": "HT2", "points": 10},
-            "Mace": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "Chuyenn",
-        "avatar": "https://mc-heads.net/avatar/Chuyenn",
-        "total_points": 35,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "Pot": {"tier": "HT2", "points": 10},
-            "Axe": {"tier": "LT1", "points": 15},
-        },
-    },
-    {
-        "username": "rautrang3245",
-        "avatar": "https://mc-heads.net/avatar/rautrang3245",
-        "total_points": 30,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "NethOP": {"tier": "HT2", "points": 10},
-            "SMP": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "Uchiha_nho",
-        "avatar": "https://mc-heads.net/avatar/Uchiha_nho",
-        "total_points": 25,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "Pot": {"tier": "LT1", "points": 15},
-        },
-    },
-    {
-        "username": "gbaoz21",
-        "avatar": "https://mc-heads.net/avatar/gbaoz21",
-        "total_points": 25,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "Vanilla": {"tier": "LT1", "points": 15},
-        },
-    },
-    {
-        "username": "AGL_Mipp",
-        "avatar": "https://mc-heads.net/avatar/AGL_Mipp",
-        "total_points": 20,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "Mace": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "Wai_VN",
-        "avatar": "https://mc-heads.net/avatar/Wai_VN",
-        "total_points": 20,
-        "modes": {
-            "NethOP": {"tier": "HT2", "points": 10},
-            "SMP": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "TD4T_",
-        "avatar": "https://mc-heads.net/avatar/TD4T_",
-        "total_points": 20,
-        "modes": {
-            "Sword": {"tier": "HT2", "points": 10},
-            "UHC": {"tier": "HT2", "points": 10},
-        },
-    },
-    {
-        "username": "Lovuongdaide",
-        "avatar": "https://mc-heads.net/avatar/Lovuongdaide",
-        "total_points": 15,
-        "modes": {"Sword": {"tier": "LT1", "points": 15}},
-    },
-    {
-        "username": "Ag_qkhang",
-        "avatar": "https://mc-heads.net/avatar/Ag_qkhang",
-        "total_points": 10,
-        "modes": {"Sword": {"tier": "HT3", "points": 10}},
-    },
-    {
-        "username": "MeoBeo_",
-        "avatar": "https://mc-heads.net/avatar/MeoBeo_",
-        "total_points": 10,
-        "modes": {"Pot": {"tier": "HT3", "points": 10}},
-    },
-    {
-        "username": "longskibidop_51321",
-        "avatar": "https://mc-heads.net/avatar/longskibidop_51321",
-        "total_points": 10,
-        "modes": {"Sword": {"tier": "HT3", "points": 10}},
-    },
-    {
-        "username": "Khang",
-        "avatar": "https://mc-heads.net/avatar/Khang",
-        "total_points": 10,
-        "modes": {"Axe": {"tier": "HT3", "points": 10}},
-    },
-    {
-        "username": "mr.c0c0nut._91571",
-        "avatar": "https://mc-heads.net/avatar/mr.c0c0nut._91571",
-        "total_points": 10,
-        "modes": {"Sword": {"tier": "HT3", "points": 10}},
-    },
-    {
-        "username": "Lovundaide",
-        "avatar": "https://mc-heads.net/avatar/Lovundaide",
-        "total_points": 10,
-        "modes": {"SMP": {"tier": "HT3", "points": 10}},
-    },
-]
+# ==========================================
+# CẤU HÌNH BẢO MẬT
+# ==========================================
+LAYER_ANSWERS = {
+    1: os.environ.get("LAYER1_ANSWER", "doi-dap-an-lop-1-qua-bien-moi-truong"),
+    2: os.environ.get("LAYER2_ANSWER", "doi-dap-an-lop-2-qua-bien-moi-truong"),
+    3: os.environ.get("LAYER3_ANSWER", "0"),
+    4: os.environ.get("LAYER4_ANSWER", "doi-dap-an-lop-4-qua-bien-moi-truong"),
+}
+TOTAL_LAYERS = 4
+
+# ==========================================
+# THEO DÕI LƯỢT TRUY CẬP & ONLINE
+# ==========================================
+_visitors_lock = threading.Lock()
+_active_visitors = {}
+ONLINE_WINDOW_SECONDS = 45
+
+_stats_lock = threading.Lock()
 
 
-def load_players():
-    if not os.path.exists(DATA_FILE):
-        save_players(DEFAULT_PLAYERS)
-        return DEFAULT_PLAYERS
+def _ensure_data_dir():
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+
+def _load_total_visits():
     try:
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+        with open(VISITS_PATH, "r", encoding="utf-8") as f:
+            return json.load(f).get("total_visits", 0)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return 0
+
+
+def _save_total_visits(value):
+    try:
+        _ensure_data_dir()
+        with open(VISITS_PATH, "w", encoding="utf-8") as f:
+            json.dump({"total_visits": value}, f)
     except Exception:
-        return DEFAULT_PLAYERS
+        pass
 
 
-def save_players(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+def _touch_visitor():
+    if "visitor_id" not in session:
+        session["visitor_id"] = str(uuid.uuid4())
+        with _stats_lock:
+            _save_total_visits(_load_total_visits() + 1)
+    with _visitors_lock:
+        _active_visitors[session["visitor_id"]] = time.time()
 
 
+def _count_online():
+    now = time.time()
+    with _visitors_lock:
+        stale = [vid for vid, ts in _active_visitors.items() if now - ts > ONLINE_WINDOW_SECONDS]
+        for vid in stale:
+            del _active_visitors[vid]
+        return len(_active_visitors)
+
+
+# ==========================================
+# BỘ NHỚ LƯU PLAYER (CHỈ TRONG RAM)
+# ==========================================
+_players_lock = threading.Lock()
+_PLAYERS = {}
+
+TIER_POINTS = {
+    "LT5": 10,
+    "HT5": 15,
+    "LT4": 20,
+    "HT4": 25,
+    "LT3": 30,
+    "HT3": 40,
+    "LT2": 50,
+    "HT2": 60,
+    "LT1": 70,
+    "HT1": 80
+}
+
+
+def normalize_player(player_data):
+    if not isinstance(player_data, dict):
+        return None
+    
+    name = str(player_data.get("name") or "").strip()
+    if not name:
+        return None
+        
+    avatar = str(player_data.get("avatar") or "").strip()
+    
+    tier = str(player_data.get("tier") or "").strip()
+    if tier not in TIER_POINTS:
+        tier = "LT5"
+        
+    point = TIER_POINTS[tier]
+    
+    return {
+        "name": name,
+        "avatar": avatar,
+        "tier": tier,
+        "point": point
+    }
+
+
+def get_all_players():
+    with _players_lock:
+        return list(_PLAYERS.values())
+
+
+def get_system_stats():
+    return {
+        "active_testers": "30+",
+        "tested_players": "1.800+",
+        "completed_tests": "5.200+",
+    }
+
+
+# ==========================================
+# ROUTES
+# ==========================================
 @app.route("/")
-def index():
-    return render_template("index.html")
+def home():
+    _touch_visitor()
+    stats = get_system_stats()
+    return render_template("index.html", stats=stats, is_tech=bool(session.get("is_tech")))
+
+
+@app.route("/api/heartbeat", methods=["POST"])
+def heartbeat():
+    _touch_visitor()
+    return jsonify({"online": _count_online()})
+
+
+@app.route("/api/unlock/step", methods=["POST"])
+def unlock_step():
+    data = request.get_json(silent=True) or {}
+    step = data.get("step")
+    answer = str(data.get("answer") or "").strip()
+
+    if step not in (1, 2, 3, 4):
+        return jsonify({"ok": False, "error": "invalid_step"}), 400
+
+    progress = session.get("unlock_progress", 0)
+    if step != progress + 1:
+        return jsonify({"ok": False, "error": "out_of_order"}), 400
+
+    expected = str(LAYER_ANSWERS[step]).strip()
+    given = answer.replace(" ", "") if step == 2 else answer
+    correct = given == expected.replace(" ", "") if step == 2 else given == expected
+
+    if not correct:
+        return jsonify({"ok": False, "passed": False})
+
+    session["unlock_progress"] = step
+    if step == TOTAL_LAYERS:
+        session["is_tech"] = True
+
+    return jsonify({"ok": True, "passed": True, "unlocked": session.get("is_tech", False)})
+
+
+@app.route("/api/unlock/reset", methods=["POST"])
+def unlock_reset():
+    session.pop("unlock_progress", None)
+    session.pop("is_tech", None)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/admin/logout", methods=["POST"])
+def admin_logout():
+    session.pop("is_tech", None)
+    session.pop("unlock_progress", None)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/players/public", methods=["GET"])
+def get_public_players():
+    return jsonify({"ok": True, "players": get_all_players()})
 
 
 @app.route("/api/players", methods=["GET"])
 def get_players():
-    players = load_players()
-    players.sort(key=lambda x: x.get("total_points", 0), reverse=True)
-    return jsonify(players)
+    if not session.get("is_tech"):
+        return jsonify({"ok": False, "error": "unauthorized"}), 403
+    return jsonify(get_all_players())
 
 
 @app.route("/api/players", methods=["POST"])
-def update_players():
-    try:
-        data = request.json
-        if isinstance(data, list):
-            save_players(data)
-            return jsonify({"success": True, "message": "Saved successfully"})
-        return (
-            jsonify({"success": False, "message": "Invalid data format"}),
-            400,
-        )
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+def set_players():
+    if not session.get("is_tech"):
+        return jsonify({"ok": False, "error": "unauthorized"}), 403
 
+    data = request.get_json(silent=True)
 
-@app.route("/api/tech/auth", methods=["POST"])
-def tech_auth():
-    data = request.json or {}
-    layer = data.get("layer", 1)
-    answer = str(data.get("answer", "")).strip().lower()
-
-    # Quy tắc xác thực 4 lớp
-    valid_answers = {
-        1: ["angel", "admin", "angeltier"],
-        2: ["tier", "pvp", "mode"],
-        3: ["2026", "phimo"],
-        4: ["master", "coco", "technician", "coconut"],
-    }
-
-    allowed = valid_answers.get(layer, [])
-    if answer in allowed or len(answer) >= 3:
-        return jsonify({"success": True, "layer": layer})
+    if isinstance(data, list):
+        players = data
+    elif isinstance(data, dict):
+        players = data.get("players")
     else:
-        return jsonify(
-            {"success": False, "message": f"Đáp án Lớp {layer} chưa chính xác!"}
-        )
+        players = None
+
+    if not isinstance(players, list):
+        return jsonify({"ok": False, "error": "invalid_payload"}), 400
+
+    with _players_lock:
+        _PLAYERS.clear()
+        for raw_player in players:
+            normalized = normalize_player(raw_player)
+            if normalized:
+                _PLAYERS[normalized["name"]] = normalized
+
+    return jsonify({"ok": True, "count": len(_PLAYERS)})
+
+
+@app.route("/api/admin/stats")
+def admin_stats():
+    if not session.get("is_tech"):
+        return jsonify({"ok": False, "error": "unauthorized"}), 403
+    return jsonify({
+        "ok": True,
+        "online_now": _count_online(),
+        "total_visits": _load_total_visits(),
+        "players_count": len(get_all_players()),
+    })
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    _ensure_data_dir()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
