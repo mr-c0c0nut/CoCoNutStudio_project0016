@@ -2,1550 +2,354 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="ANGEL TIER - Bảng xếp hạng PvP Minecraft Việt Nam. Đăng ký Test Tier, leo hạng và khẳng định đẳng cấp của bạn.">
-    <meta name="theme-color" content="#030304">
-    <title>ANGEL TIER - Bảng Xếp Hạng PvP Việt Nam</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft PvP Tier List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-void: #030304;
-            --bg-card: rgba(16, 17, 23, 0.55);
-            --bg-card-solid: #0c0d13;
-            --bg-card-border: rgba(255, 255, 255, 0.1);
-            --bg-card-border-strong: rgba(255, 255, 255, 0.32);
-            --pure-white: #ffffff;
-            --text-silver: #a3a7ba;
-            --text-dim: #5c6076;
-            --gold: #f2d29a;
-            --glow-white: rgba(255, 255, 255, 0.25);
-            --danger: #ff6b6b;
-            --success: #9dffb0;
-            --font-main: 'Plus Jakarta Sans', sans-serif;
-            --font-heading: 'Cinzel', serif;
-            --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+            --bg-main: #0B0F19;
+            --glass-bg: rgba(18, 24, 38, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --accent-green: #10B981;
+            --accent-blue: #3B82F6;
+            --accent-gold: #F59E0B;
+            --accent-silver: #9CA3AF;
+            --accent-bronze: #D97706;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: var(--font-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-
-        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg-void);
-            background-image:
-                radial-gradient(circle at 50% -5%, rgba(255, 255, 255, 0.09) 0%, transparent 50%),
-                radial-gradient(circle at 50% 105%, rgba(255, 255, 255, 0.04) 0%, transparent 40%);
-            color: var(--pure-white);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
-        header, section, footer { position: relative; z-index: 2; }
-
-        body::before {
-            content: '';
-            position: fixed; inset: 0; z-index: 36; pointer-events: none;
-            opacity: 0.035; mix-blend-mode: overlay;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        body::after {
-            content: '';
-            position: fixed; inset: 0; z-index: 40; pointer-events: none;
-            background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.4) 100%);
-        }
-
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-void); }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(var(--text-dim), var(--text-silver));
-            border-radius: 10px; border: 2px solid var(--bg-void);
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--pure-white); }
-
-        /* ---------------- INTRO LOADER ---------------- */
-        #loader { position: fixed; inset: 0; z-index: 9999; }
-        .curtain {
-            position: absolute; top: 0; bottom: 0; width: 50%;
-            background: var(--bg-void);
-            transition: transform 0.9s var(--ease-cinema);
-        }
-        .curtain-left { left: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 55%, 45% 50%, 0 45%); }
-        .curtain-right { right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 100% 45%, 55% 50%, 100% 55%); }
-        #loader.hide .curtain-left { transform: translateX(-100%); }
-        #loader.hide .curtain-right { transform: translateX(100%); }
-        .loader-mark {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-family: var(--font-heading); letter-spacing: 8px;
-            font-size: clamp(0.9rem, 3vw, 1.2rem); color: #fff; opacity: 0.85;
-            animation: loaderPulse 1.2s ease-in-out infinite;
-            transition: opacity 0.35s ease; white-space: nowrap; text-align: center;
-        }
-        .loader-wing { font-size: 1.4rem; display: block; margin-bottom: 8px; opacity: 0.8; animation: wingFloat 2.2s ease-in-out infinite; }
-        @keyframes wingFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        #loader.hide .loader-mark { opacity: 0; }
-        @keyframes loaderPulse {
-            0%, 100% { opacity: 0.35; letter-spacing: 8px; }
-            50% { opacity: 1; letter-spacing: 11px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.7); }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* ---------------- AURORA + PARTICLES ---------------- */
-        .aurora-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-        .aurora-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.4; mix-blend-mode: screen; animation: auroraDrift 30s ease-in-out infinite; }
-        .aurora-blob.b1 { width: 480px; height: 480px; top: -12%; left: 4%; background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 70%); animation-duration: 32s; }
-        .aurora-blob.b2 { width: 540px; height: 540px; top: 18%; right: -12%; background: radial-gradient(circle, rgba(242, 210, 154, 0.32), transparent 70%); animation-duration: 36s; animation-delay: -9s; }
-        .aurora-blob.b3 { width: 420px; height: 420px; bottom: -16%; left: 28%; background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%); animation-duration: 28s; animation-delay: -16s; }
-        @keyframes auroraDrift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(40px, -30px) scale(1.08); }
-            66% { transform: translate(-30px, 22px) scale(0.95); }
-        }
-        #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
-        .feather-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .feather { position: absolute; top: -5%; font-size: 1.1rem; color: rgba(255,255,255,0.35); animation: featherFall linear infinite; }
-        @keyframes featherFall {
-            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(110vh) translateX(40px) rotate(200deg); opacity: 0; }
+        .brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #10B981, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* ---------------- NAVBAR ---------------- */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 18px 8%;
-            background: rgba(3, 3, 4, 0.75);
-            backdrop-filter: blur(16px) saturate(140%);
-            -webkit-backdrop-filter: blur(16px) saturate(140%);
-            border-bottom: 1px solid var(--bg-card-border);
-            position: sticky; top: 0; z-index: 100;
-            transition: padding 0.4s var(--ease-soft), background 0.4s ease, box-shadow 0.4s ease;
-        }
-        header.scrolled { padding: 12px 8%; background: rgba(3, 3, 4, 0.94); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
-
-        .logo-wrapper { display: inline-flex; align-items: center; text-decoration: none; transition: transform 0.3s ease; gap: 10px; cursor: pointer; }
-        .logo-img { height: 44px; width: auto; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)); transition: filter 0.3s ease, opacity 0.3s ease; }
-        .logo-img.img-broken { display: none; }
-        .logo-fallback-text { display: none; font-family: var(--font-heading); font-weight: 800; letter-spacing: 2px; color: #fff; font-size: 1.25rem; }
-        .logo-wrapper:has(.logo-img.img-broken) .logo-fallback-text { display: inline-block; }
-        .logo-wrapper:hover { transform: scale(1.03); }
-        .logo-wrapper:hover .logo-img { filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); }
-
-        .nav-links { display: flex; align-items: center; gap: 24px; }
-        .nav-link { position: relative; color: var(--text-silver); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: color 0.3s ease; cursor: pointer; }
-        .nav-link::after {
-            content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--pure-white), transparent);
-            transition: width 0.35s var(--ease-soft);
-        }
-        .nav-link:hover { color: var(--pure-white); }
-        .nav-link:hover::after { width: 100%; }
-
-        .btn-discord {
-            background: #ffffff; color: #000000; padding: 10px 22px; border-radius: 10px;
-            text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 0 15px var(--glow-white); transition: all 0.3s ease;
-        }
-        .btn-discord:hover { background: #e6e6e6; transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); }
-
-        .btn-tech {
-            position: relative;
-            width: 42px; height: 42px;
-            border-radius: 50%;
+        .nav-links button {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--bg-card-border);
-            color: var(--text-silver);
-            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.35s var(--ease-soft);
-            flex-shrink: 0;
-        }
-        .btn-tech::before {
-            content: '';
-            position: absolute; inset: -6px; border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            opacity: 0;
-            transition: opacity 0.35s ease, transform 0.35s ease;
-        }
-        .btn-tech:hover { color: #fff; border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 18px rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
-        .btn-tech:hover::before { opacity: 1; transform: scale(1.12); }
-
-        .menu-toggle {
-            display: none; position: relative; z-index: 110; flex-direction: column; gap: 5px;
-            background: none; border: none; cursor: pointer; padding: 8px;
-        }
-        .menu-toggle span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.35s var(--ease-soft); }
-        .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .menu-toggle.active span:nth-child(2) { opacity: 0; }
-        .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .nav-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 104; }
-        .nav-overlay.show { opacity: 1; pointer-events: auto; }
-
-        @media (max-width: 900px) {
-            .menu-toggle { display: flex; }
-            .nav-links {
-                position: fixed; top: 0; right: 0; height: 100vh; width: min(78vw, 320px);
-                background: rgba(4, 4, 6, 0.97); backdrop-filter: blur(20px);
-                flex-direction: column; align-items: flex-start; justify-content: center;
-                gap: 26px; padding: 40px;
-                transform: translateX(100%);
-                transition: transform 0.45s var(--ease-cinema);
-                border-left: 1px solid var(--bg-card-border);
-                z-index: 105;
-            }
-            .nav-links.open { transform: translateX(0); }
-            .btn-tech { align-self: flex-start; }
+            transition: all 0.2s ease;
+            margin-left: 0.5rem;
         }
 
-        /* ---------------- HERO ---------------- */
-        .hero-container { max-width: 1280px; margin: 56px auto 0; padding: 0 24px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; }
-        .hero-left { display: flex; flex-direction: column; gap: 26px; }
-
-        .hero-anim {
-            opacity: 0; transform: translateY(28px); filter: blur(6px);
-            transition: opacity 1s var(--ease-cinema), transform 1s var(--ease-cinema), filter 1s var(--ease-cinema), border-color 0.35s ease, box-shadow 0.35s ease;
-        }
-        .hero-anim.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
-
-        .badge-tag {
-            align-self: flex-start; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--bg-card-border);
-            padding: 7px 16px; border-radius: 20px; font-size: 0.85rem; color: var(--pure-white);
-            display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: 0.5px; backdrop-filter: blur(6px);
-        }
-        .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px #fff, 0 0 16px var(--glow-white); animation: livePulse 1.8s ease-in-out infinite; flex-shrink: 0; }
-        @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
-
-        .hero-title { font-family: var(--font-heading); font-size: clamp(2.3rem, 5.2vw, 3.7rem); font-weight: 800; line-height: 1.14; letter-spacing: -0.5px; }
-        .title-line { display: block; }
-        .title-line.gradient-text {
-            background: linear-gradient(180deg, #ffffff 0%, #cfd3de 45%, #7d8299 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        .nav-links button:hover, .nav-links button.active {
+            background: var(--accent-green);
+            color: #000;
+            border-color: var(--accent-green);
         }
 
-        .hero-desc { color: var(--text-silver); font-size: 1.05rem; line-height: 1.7; max-width: 92%; }
-        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-
-        .btn-primary, .btn-secondary {
-            position: relative; overflow: hidden; isolation: isolate; padding: 15px 30px; border-radius: 12px;
-            font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
-            transition: transform 0.4s var(--ease-soft), box-shadow 0.4s ease, background 0.3s ease; border: none;
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
         }
-        .btn-primary::before, .btn-secondary::before {
-            content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; transform: skewX(-20deg);
-            transition: left 0.7s ease; z-index: -1;
-        }
-        .btn-primary:hover::before, .btn-secondary:hover::before { left: 130%; }
-        .btn-primary { background: #ffffff; color: #000000; box-shadow: 0 0 20px var(--glow-white); }
-        .btn-primary::before { background: linear-gradient(120deg, transparent, rgba(0, 0, 0, 0.15), transparent); }
-        .btn-primary:hover { background: #e6e6e6; transform: translateY(-4px); box-shadow: 0 14px 34px rgba(255, 255, 255, 0.35); }
-        .btn-secondary { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--bg-card-border); color: var(--pure-white); }
-        .btn-secondary::before { background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.5), transparent); }
-        .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-4px); }
 
-        .tier-journey-card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 18px; padding: 24px; margin-top: 8px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); }
-        .tier-journey-card:hover { border-color: var(--bg-card-border-strong); }
-        .journey-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .journey-title { font-size: 0.95rem; font-weight: 700; }
-        .journey-subtitle { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .journey-badge { background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; color: var(--pure-white); font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.15); }
-
-        .chart-box { position: relative; width: 100%; height: 120px; margin-top: 10px; }
-        .chart-svg { width: 100%; height: 100%; overflow: visible; }
-        .chart-svg .chart-line { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)); }
-        .final-node-group { transform-box: fill-box; transform-origin: center; animation: finalPulse 1.8s ease-in-out infinite; }
-        @keyframes finalPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
-
-        .hero-right {
-            background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 22px; padding: 30px;
-            display: flex; flex-direction: column; gap: 28px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6); backdrop-filter: blur(18px);
-            position: relative; overflow: hidden;
-        }
-        .hero-right::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.05) 8%, transparent 18%);
-            animation: sheenRotate 9s linear infinite; pointer-events: none; z-index: 0;
-        }
-        .hero-right > * { position: relative; z-index: 1; }
-        @keyframes sheenRotate { to { transform: rotate(360deg); } }
-        .hero-right:hover { border-color: var(--bg-card-border-strong); }
-
-        .lb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .lb-title-group h3 { font-size: 1.3rem; font-weight: 700; }
-        .lb-title-group .live-tag { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-
-        .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
-        .overall-btn:hover { background: var(--pure-white); color: #000; }
-
-        .top-players-empty { position: relative; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 46px 20px; text-align: center; color: var(--text-silver); overflow: hidden; }
-        .empty-icon-wrap { width: 62px; height: 62px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%); animation: floatIcon 3.4s ease-in-out infinite; }
-        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .top-players-empty i { font-size: 1.8rem; color: #fff; opacity: 0.85; }
-        .scan-line { position: absolute; left: 0; right: 0; height: 55%; top: -55%; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent); animation: scanSweep 3.2s ease-in-out infinite; }
-        @keyframes scanSweep { 0% { top: -55%; } 100% { top: 100%; } }
-
-        /* ---------- LEADERBOARD PATCH CSS ---------- */
-        .top-players-list { display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; padding-right: 4px; }
-        .lb-player-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.3s ease; }
-        .lb-player-card:hover { border-color: var(--bg-card-border-strong); background: rgba(255, 255, 255, 0.06); }
-        .lb-player-main { display: flex; align-items: center; justify-content: space-between; }
-        .lb-player-left { display: flex; align-items: center; gap: 12px; }
-        .lb-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1rem; min-width: 28px; color: var(--text-silver); text-align: center; }
-        .lb-rank.rank-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .lb-rank.rank-2 { color: #e0e0e0; text-shadow: 0 0 10px rgba(224,224,224,0.5); }
-        .lb-rank.rank-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205,127,50,0.5); }
-        .lb-username { font-weight: 700; font-size: 0.95rem; color: #ffffff; }
-        .lb-total-points { font-weight: 800; font-size: 1rem; color: var(--gold); }
-        .lb-modes-list { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .lb-mode-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; }
-        .lb-mode-icon { width: 15px; height: 15px; object-fit: contain; }
-        .lb-tier-tag { font-weight: 700; color: #ffffff; }
-        .lb-pts-tag { color: var(--text-silver); }
-
-        .modes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .modes-header span { font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .modes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .mode-item {
-            position: relative; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--bg-card-border); border-radius: 14px;
-            padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
-            transition: transform 0.35s var(--ease-soft), border-color 0.35s ease, box-shadow 0.35s ease; overflow: hidden;
-        }
-        .mode-item::after {
-            content: ''; position: absolute; inset: 0; border-radius: 14px; padding: 1px;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.35s ease;
-        }
-        .mode-item:hover, .mode-item.active { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
-        .mode-item:hover::after, .mode-item.active::after { opacity: 1; }
-        .mode-item.pulse-select { animation: modeSelectPulse 0.5s ease; }
-        @keyframes modeSelectPulse { 0% { box-shadow: 0 0 0 rgba(255, 255, 255, 0.6); } 50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.5); } 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); } }
-
-        .mode-icon-box { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease; }
-        .mode-icon.img-broken { display: none; }
-        .mode-icon-box::after { content: '\f03e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: var(--text-dim); font-size: 1.2rem; }
-        .mode-icon-box:has(.mode-icon.img-broken)::after { display: flex; }
-        .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); }
-        .mode-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-silver); }
-        .mode-item.active .mode-name { color: var(--pure-white); }
-
-        /* ---------------- FULL RANKING SECTION (SPA SHOW/HIDE) ---------------- */
-        #fullRankingSection {
+        .section {
             display: none;
-            max-width: 1280px;
-            margin: 60px auto 0;
-            padding: 0 24px;
+            animation: fadeIn 0.3s ease;
         }
-        #fullRankingSection.active {
+
+        .section.active {
             display: block;
-            animation: fadeInSPA 0.5s var(--ease-cinema);
         }
-        @keyframes fadeInSPA {
-            from { opacity: 0; transform: translateY(20px); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .full-ranking-card {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 22px;
-            padding: 36px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(18px);
-        }
-
-        .full-ranking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--bg-card-border);
-            padding-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .full-ranking-title h2 {
-            font-family: var(--font-heading);
-            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-            font-weight: 800;
-        }
-
-        .btn-close-ranking {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-close-ranking:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .full-players-grid {
+        /* Top 3 Live Leaderboard Widget */
+        .top3-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
 
-        .full-player-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--bg-card-border);
+        .top-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 20px;
+            padding: 1.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 14px;
-            transition: all 0.35s var(--ease-soft);
-        }
-        .full-player-card:hover {
-            border-color: var(--bg-card-border-strong);
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .full-card-top {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 1.2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
-        .full-rank-badge {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.2rem;
-            min-width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
+        .top-card.rank-1 { border-color: rgba(245, 158, 11, 0.4); }
+        .top-card.rank-2 { border-color: rgba(156, 163, 175, 0.4); }
+        .top-card.rank-3 { border-color: rgba(217, 119, 6, 0.4); }
+
+        .rank-badge {
+            font-size: 1.5rem;
+            font-weight: 800;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--bg-card-border);
-            color: var(--text-silver);
-        }
-        .full-rank-badge.rank-1 { color: #ffd700; border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.1); }
-        .full-rank-badge.rank-2 { color: #e0e0e0; border-color: #e0e0e0; box-shadow: 0 0 15px rgba(224, 224, 224, 0.3); background: rgba(224, 224, 224, 0.1); }
-        .full-rank-badge.rank-3 { color: #cd7f32; border-color: #cd7f32; box-shadow: 0 0 15px rgba(205, 127, 50, 0.3); background: rgba(205, 127, 50, 0.1); }
-
-        .full-player-user {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .full-player-pts {
-            font-family: var(--font-heading);
+        .rank-1 .rank-badge { background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); }
+        .rank-2 .rank-badge { background: rgba(156, 163, 175, 0.2); color: var(--accent-silver); }
+        .rank-3 .rank-badge { background: rgba(217, 119, 6, 0.2); color: var(--accent-bronze); }
+
+        .player-info .name {
             font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
         }
 
-        .full-modes-detail {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        .player-info .pts {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
-        .full-mode-row {
+        /* Full Ranking Matrix */
+        .matrix-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow-x: auto;
+            backdrop-filter: blur(12px);
+            margin-top: 1.5rem;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 900px;
+        }
+
+        .matrix-table th {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem 1.2rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .matrix-table td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+
+        .matrix-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .mode-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            gap: 0.4rem;
+            justify-content: center;
         }
 
-        .full-mode-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .full-mode-icon {
+        .mode-header img {
             width: 20px;
             height: 20px;
             object-fit: contain;
         }
 
-        .full-mode-name {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #fff;
+        .mode-cell {
+            text-align: center;
         }
 
-        .full-mode-tier {
-            font-size: 0.85rem;
+        .tier-tag {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+        }
+
+        .tier-tag.ht {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .tier-tag.lt {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60A5FA;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .tier-none {
+            color: rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+        }
+
+        .pts-sub {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.1rem;
+        }
+
+        .rank-cell {
             font-weight: 800;
-            color: var(--gold);
-            margin-left: 6px;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            width: 70px;
         }
 
-        .full-mode-pts {
-            font-size: 0.85rem;
+        .player-cell {
             font-weight: 700;
-            color: var(--text-silver);
+            font-size: 1rem;
+            min-width: 180px;
         }
 
-        /* ---------------- STATS ---------------- */
-        .stats-section { max-width: 1280px; margin: 100px auto; padding: 0 24px; text-align: center; }
-        .stats-subtitle { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
-        .stats-title { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 54px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .stat-card { background: var(--bg-card); border: 1px solid var(--bg-card-border); padding: 44px 20px; border-radius: 18px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
-        .stat-card:hover { border-color: rgba(255, 255, 255, 0.4); }
-        .stat-number { font-family: var(--font-heading); font-size: clamp(2.6rem, 5vw, 3.7rem); font-weight: 800; color: var(--pure-white); text-shadow: 0 0 25px rgba(255, 255, 255, 0.35); margin-bottom: 10px; line-height: 1; }
-        .stat-label { font-size: 0.85rem; color: var(--text-silver); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
-
-        /* ---------------- TESTING FLOW ---------------- */
-        .flow-section { max-width: 1280px; margin: 110px auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-        .flow-card-display { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 20px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
-        .flow-card-display:hover { border-color: var(--bg-card-border-strong); }
-        .flow-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .flow-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-silver); font-weight: 700; }
-        .flow-counter { background: rgba(255, 255, 255, 0.1); padding: 4px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
-
-        .flow-main-content { text-align: center; padding: 30px 0; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.25s ease, transform 0.25s ease; }
-        .flow-icon { font-size: 3.5rem; color: var(--pure-white); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
-        .flow-step-num { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
-        .flow-step-title { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
-        .flow-step-desc { color: var(--text-silver); font-size: 0.95rem; max-width: 80%; margin: 0 auto; }
-
-        .flow-progress-bar { display: flex; gap: 8px; margin-top: 40px; }
-        .progress-segment { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; cursor: pointer; transition: all 0.3s ease; }
-        .progress-segment.active { background: var(--pure-white); box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
-
-        .flow-info-right { display: flex; flex-direction: column; gap: 20px; }
-        .flow-info-right h2 { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 800; line-height: 1.25; }
-        .flow-info-right h2 span { color: var(--text-silver); }
-        .flow-info-right p { color: var(--text-silver); line-height: 1.7; font-size: 1rem; }
-
-        .flow-tags-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
-        .tag-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); padding: 16px; border-radius: 12px; }
-        .tag-box-val { font-size: 1.2rem; font-weight: 800; color: var(--pure-white); margin-bottom: 4px; }
-        .tag-box-lbl { font-size: 0.7rem; color: var(--text-silver); text-transform: uppercase; font-weight: 700; }
-
-        /* ---------------- FAQ ---------------- */
-        .faq-section { max-width: 900px; margin: 110px auto; padding: 0 24px; }
-        .faq-header { text-align: center; margin-bottom: 50px; }
-        .faq-header h2 { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; }
-        .faq-header p { color: var(--text-silver); font-size: 0.95rem; line-height: 1.6; }
-
-        .faq-accordion { display: flex; flex-direction: column; gap: 16px; }
-        .faq-item { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; overflow: hidden; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
-        .faq-item.active { border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 10px 30px rgba(255, 255, 255, 0.06); }
-        .faq-question { padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 1.05rem; transition: color 0.3s ease; }
-        .faq-question:hover { color: #fff; }
-        .faq-answer-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease-soft); border-top: 0px solid rgba(255, 255, 255, 0.05); }
-        .faq-item.active .faq-answer-wrap { grid-template-rows: 1fr; }
-        .faq-answer { overflow: hidden; color: var(--text-silver); line-height: 1.7; font-size: 0.95rem; padding: 0 28px; transition: padding 0.4s ease; }
-        .faq-item.active .faq-answer { padding: 4px 28px 24px; }
-        .faq-icon { transition: transform 0.3s ease; color: var(--text-silver); flex-shrink: 0; margin-left: 12px; }
-        .faq-item.active .faq-icon { transform: rotate(180deg); }
-
-        /* ---------------- FOOTER ---------------- */
-        footer { position: relative; border-top: 1px solid var(--bg-card-border); padding: 44px 8%; text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 110px; }
-        footer::before { content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 140px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); }
-
-        /* ---------------- SCROLL REVEAL ---------------- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s var(--ease-cinema), transform 0.9s var(--ease-cinema); }
-        .reveal.in-view { opacity: 1; transform: translateY(0); }
-        .reveal-stagger > * { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease-cinema), transform 0.7s var(--ease-cinema); }
-        .reveal-stagger.in-view > * { opacity: 1; transform: translateY(0); }
-        .reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0.05s; }
-        .reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.15s; }
-        .reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.25s; }
-        .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.35s; }
-        .reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.45s; }
-        .reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.55s; }
-        .reveal-stagger.in-view > *:nth-child(7) { transition-delay: 0.65s; }
-        .reveal-stagger.in-view > *:nth-child(8) { transition-delay: 0.75s; }
-
-        /* MODAL TECH */
-        .tech-modal-overlay {
-            position: fixed; inset: 0; z-index: 500;
-            background: rgba(2, 2, 3, 0.82);
-            backdrop-filter: blur(10px);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.35s ease;
-            padding: 20px;
-        }
-        .tech-modal-overlay.show { opacity: 1; pointer-events: auto; }
-
-        .tech-modal {
-            width: min(480px, 100%);
-            background: var(--bg-card-solid);
-            border: 1px solid var(--bg-card-border-strong);
-            border-radius: 20px;
-            padding: 32px;
-            position: relative;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(255, 255, 255, 0.06);
-            transform: translateY(24px) scale(0.97);
-            transition: transform 0.4s var(--ease-cinema);
-        }
-        .tech-modal-overlay.show .tech-modal { transform: translateY(0) scale(1); }
-
-        .tech-modal-close {
-            position: absolute; top: 18px; right: 18px;
-            width: 32px; height: 32px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06); border: 1px solid var(--bg-card-border);
-            color: var(--text-silver); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.25s ease;
-        }
-        .tech-modal-close:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
-
-        .tech-modal-header { text-align: center; margin-bottom: 22px; }
-        .tech-modal-icon {
-            width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
-            border: 1px solid var(--bg-card-border-strong);
-            font-size: 1.4rem;
-            animation: haloPulse 2.4s ease-in-out infinite;
-        }
-        @keyframes haloPulse {
-            0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0.0); }
-            50% { box-shadow: 0 0 24px rgba(255,255,255,0.25); }
-        }
-        .tech-modal-header h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
-        .tech-modal-header p { color: var(--text-silver); font-size: 0.85rem; }
-
-        .tech-layers-progress { display: flex; gap: 8px; margin: 20px 0; }
-        .tech-layer-dot {
-            flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.1);
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-        }
-        .tech-layer-dot.done { background: var(--pure-white); box-shadow: 0 0 10px rgba(255,255,255,0.7); }
-        .tech-layer-dot.current { background: rgba(255,255,255,0.4); }
-
-        .tech-layer-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
-
-        .tech-input-group { position: relative; margin-bottom: 14px; }
-        .tech-input {
-            width: 100%; padding: 14px 16px; border-radius: 12px;
-            background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border);
-            color: #fff; font-size: 0.95rem; outline: none;
-            transition: border-color 0.3s ease, background 0.3s ease;
-        }
-        .tech-input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.07); }
-        .tech-input.error { border-color: var(--danger); animation: shakeInput 0.35s ease; }
-        @keyframes shakeInput { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-
-        .tech-feedback { min-height: 20px; font-size: 0.82rem; margin-bottom: 10px; }
-        .tech-feedback.error-text { color: var(--danger); }
-        .tech-feedback.success-text { color: var(--success); }
-
-        .tech-modal-actions { display: flex; gap: 12px; margin-top: 8px; }
-        .tech-btn-submit {
-            flex: 1; padding: 14px; border-radius: 12px; border: none; cursor: pointer;
-            background: #fff; color: #000; font-weight: 700; font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        .tech-btn-submit:hover { background: #e6e6e6; transform: translateY(-2px); }
-        .tech-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-        .tech-success-state { text-align: center; padding: 10px 0 4px; }
-        .tech-success-state i { font-size: 2.4rem; color: #fff; margin-bottom: 14px; animation: haloPulse 1.6s ease-in-out infinite; }
-        .tech-success-state p { color: var(--text-silver); font-size: 0.9rem; margin-bottom: 20px; }
-
-        /* ADMIN PANEL */
-        #adminPanel {
-            position: fixed; inset: 0; z-index: 600;
-            background: var(--bg-void);
-            overflow-y: auto;
-            padding: 28px 5%;
-            display: none;
-        }
-        #adminPanel.show { display: block; }
-
-        .admin-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-            margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bg-card-border);
-        }
-        .admin-title { display: flex; align-items: center; gap: 12px; }
-        .admin-title i { font-size: 1.6rem; }
-        .admin-title h1 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; }
-        .admin-title p { color: var(--text-silver); font-size: 0.8rem; }
-
-        .btn-logout {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border); color: var(--pure-white);
-            padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 8px; transition: all 0.25s ease;
-        }
-        .btn-logout:hover { background: rgba(255,80,80,0.15); border-color: rgba(255,80,80,0.4); color: var(--danger); }
-
-        .admin-stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
-        .admin-stat-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 20px; text-align: center; }
-        .admin-stat-box .val { font-family: var(--font-heading); font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; }
-        .admin-stat-box .lbl { font-size: 0.72rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .admin-stat-box.online .val { color: var(--success); }
-        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: adminPulse 1.6s infinite; }
-        @keyframes adminPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-        .admin-panel-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-        .admin-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
-        .admin-panel-header h2 { font-size: 1.1rem; font-weight: 800; }
-        .admin-panel-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .abtn { border: none; border-radius: 10px; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; }
-        .abtn-white { background: #fff; color: #000; }
-        .abtn-white:hover { background: #e6e6e6; transform: translateY(-1px); }
-        .abtn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--bg-card-border); color: #fff; }
-        .abtn-outline:hover { background: rgba(255,255,255,0.12); }
-
-        #playersTable { width: 100%; border-collapse: collapse; }
-        #playersTable thead th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-silver); padding: 10px 12px; border-bottom: 1px solid var(--bg-card-border); }
-        #playersTable tbody td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        #playersTable tbody tr:hover { background: rgba(255,255,255,0.02); }
-        .acell-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border); color: #fff; padding: 8px 10px; border-radius: 8px; font-size: 0.88rem; outline: none; }
-        .acell-input:focus { border-color: rgba(255,255,255,0.4); }
-        select.acell-input { appearance: none; cursor: pointer; }
-        .arow-delete { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; padding: 6px; }
-        .arow-delete:hover { color: var(--danger); }
-        .admin-empty-table { text-align: center; padding: 30px; color: var(--text-silver); font-size: 0.9rem; }
-
-        .admin-save-toast {
-            position: fixed; bottom: 24px; right: 24px; background: #111219; border: 1px solid rgba(255,255,255,0.2);
-            padding: 14px 20px; border-radius: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
-            transform: translateY(20px); opacity: 0; transition: all 0.35s ease; pointer-events: none; z-index: 610;
-        }
-        .admin-save-toast.show { transform: translateY(0); opacity: 1; }
-        .admin-save-toast.success i { color: var(--success); }
-        .admin-save-toast.error i { color: var(--danger); }
-
-        .player-avatar-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--bg-card-border); }
-
-        @media (max-width: 700px) {
-            #playersTable thead { display: none; }
-            #playersTable, #playersTable tbody, #playersTable tr, #playersTable td { display: block; width: 100%; }
-            #playersTable tbody tr { border: 1px solid var(--bg-card-border); border-radius: 10px; margin-bottom: 12px; padding: 8px; }
-            #playersTable tbody td { border: none; padding: 6px 4px; }
-            #playersTable tbody td::before { content: attr(data-label); display: block; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; }
-            .full-players-grid { grid-template-columns: 1fr; }
+        .points-cell {
+            font-weight: 800;
+            color: #F59E0B;
+            width: 110px;
         }
 
-        @media (max-width: 992px) {
-            .hero-container, .flow-section { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .hero-container { margin-top: 36px; }
-        }
-
-        @media (max-width: 640px) {
-            header { padding: 16px 6%; }
-            header.scrolled { padding: 10px 6%; }
-            .hero-container { padding: 0 18px; gap: 26px; }
-            .hero-right, .tier-journey-card, .flow-card-display, .full-ranking-card { padding: 22px; }
-            .stats-section, .flow-section, .faq-section { margin-top: 76px; margin-bottom: 76px; }
-            .flow-step-desc { max-width: 95%; }
-            .tech-modal { padding: 24px; }
-        }
-
-        @media (max-width: 480px) {
-            .modes-grid { grid-template-columns: repeat(2, 1fr); }
-            .btn-primary, .btn-secondary { padding: 13px 22px; font-size: 0.92rem; }
-            .flow-tags-grid { gap: 10px; }
-            .tag-box { padding: 12px 8px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
-            }
+        h2 {
+            font-weight: 800;
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="curtain curtain-left"></div>
-        <div class="curtain curtain-right"></div>
-        <div class="loader-mark"><i class="fa-solid fa-feather loader-wing" aria-hidden="true"></i>ANGEL TIER</div>
-    </div>
+    <nav class="navbar">
+        <div class="brand">MINECRAFT PVP TIER LIST</div>
+        <div class="nav-links">
+            <button id="btn-home" class="active" onclick="switchTab('home')">TRANG CHỦ</button>
+            <button id="btn-leaderboard" onclick="switchTab('leaderboard')">BẢNG XẾP HẠNG</button>
+        </div>
+    </nav>
 
-    <div class="aurora-layer" aria-hidden="true">
-        <div class="aurora-blob b1"></div>
-        <div class="aurora-blob b2"></div>
-        <div class="aurora-blob b3"></div>
-    </div>
-    <canvas id="particles" aria-hidden="true"></canvas>
-    <div class="feather-layer" id="featherLayer" aria-hidden="true"></div>
-
-    <header>
-        <a href="#" class="logo-wrapper">
-            <img class="logo-img" src="https://media.discordapp.net/attachments/1517832164979245117/1534765652017942670/1785585857892-removebg-preview.png?ex=6a755166&is=6a73ffe6&hm=ae33067e09d4d7cfc23d136b8e77527637b87ec336088f650843da76a0abdf4b&=&format=webp&quality=lossless" alt="ANGEL TIER Logo" onerror="this.classList.add('img-broken')">
-            <span class="logo-fallback-text">ANGEL TIER</span>
-        </a>
-
-        <nav class="nav-links" id="navLinks">
-            <a id="navRankingBtn" class="nav-link">Bảng Xếp Hạng</a>
-            <a href="#flow" class="nav-link">Quy Trình Test</a>
-            <a href="#faq" class="nav-link">FAQ</a>
-            <a href="https://discord.gg" target="_blank" rel="noopener" class="btn-discord">
-                <i class="fa-brands fa-discord" aria-hidden="true"></i> Discord
-            </a>
-            <button class="btn-tech" id="techOpenBtn" type="button" title="Khu vực Kỹ thuật viên" aria-label="Khu vực Kỹ thuật viên">
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            </button>
-        </nav>
-
-        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
-
-        <div class="nav-overlay" id="navOverlay"></div>
-    </header>
-
-    <!-- MAIN HOME SECTION -->
-    <section class="hero-container" id="leaderboard">
-        <div class="hero-left">
-            <div class="badge-tag hero-anim" data-delay="100">
-                <span class="badge-dot"></span>
-                Cộng Đồng Minecraft PvP Việt Nam
-            </div>
-
-            <h1 class="hero-title">
-                <span class="title-line hero-anim" data-delay="220">Bảng Xếp Hạng</span>
-                <span class="title-line gradient-text hero-anim" data-delay="380">ANGEL TIER</span>
-            </h1>
-
-            <p class="hero-desc hero-anim" data-delay="520">
-                Gặp gỡ các người chơi Minecraft PvP hàng đầu tại Việt Nam, khám phá BXH Tier ở nhiều Mode khác nhau và tham gia Test để đánh giá trình độ của bạn.
-            </p>
-
-            <div class="hero-actions hero-anim" data-delay="650">
-                <button id="heroRankingBtn" class="btn-primary" type="button">
-                    <i class="fa-solid fa-trophy" aria-hidden="true"></i> Bảng Xếp Hạng
-                </button>
-                <a href="#flow" class="btn-secondary">
-                    <i class="fa-solid fa-khanda" aria-hidden="true"></i> Tham gia ngay!
-                </a>
-            </div>
-
-            <div class="tier-journey-card tilt hero-anim" data-delay="780" data-tilt-strength="8">
-                <div class="journey-header">
-                    <div>
-                        <div class="journey-subtitle">HỆ THỐNG TIER</div>
-                        <div class="journey-title">Hành trình leo Rank</div>
+    <div class="container">
+        <!-- HOME SECTION -->
+        <div id="home" class="section active">
+            <h2>LIVE LEADERBOARD (TOP 3)</h2>
+            <div class="top3-grid">
+                {% for player in players[:3] %}
+                <div class="top-card rank-{{ player.rank }}">
+                    <div class="rank-badge">#{{ player.rank }}</div>
+                    <div class="player-info">
+                        <div class="name">{{ player.username }}</div>
+                        <div class="pts">{{ player.total_points }} POINTS</div>
                     </div>
-                    <div class="journey-badge">10 Cấp Bậc</div>
                 </div>
-
-                <div class="chart-box">
-                    <svg class="chart-svg" viewBox="0 0 400 100">
-                        <defs>
-                            <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0%" stop-color="#555555"/>
-                                <stop offset="50%" stop-color="#aaaaaa"/>
-                                <stop offset="100%" stop-color="#ffffff"/>
-                            </linearGradient>
-                            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
-                                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-                            </linearGradient>
-                        </defs>
-
-                        <path class="chart-area" d="M 20 80 Q 100 70, 180 50 T 380 20 L 380 100 L 20 100 Z" fill="url(#areaGradient)" stroke="none"/>
-                        <path class="chart-line" d="M 20 80 Q 100 70, 180 50 T 380 20" fill="none" stroke="url(#chartGradient)" stroke-width="3" stroke-linecap="round"/>
-
-                        <circle cx="20" cy="80" r="4" fill="#666666"/>
-                        <text x="14" y="96" fill="#888888" font-size="10" font-weight="bold">LT5</text>
-
-                        <circle cx="100" cy="72" r="4" fill="#808080"/>
-                        <text x="93" y="90" fill="#888888" font-size="10" font-weight="bold">HT4</text>
-
-                        <circle cx="180" cy="55" r="4" fill="#9a9a9a"/>
-                        <text x="173" y="73" fill="#888888" font-size="10" font-weight="bold">HT3</text>
-
-                        <circle cx="280" cy="35" r="4" fill="#cccccc"/>
-                        <text x="272" y="53" fill="#aaaaaa" font-size="10" font-weight="bold">LT2</text>
-
-                        <g class="final-node-group">
-                            <circle cx="380" cy="20" r="10" fill="#ffffff" opacity="0.18"/>
-                            <circle cx="380" cy="20" r="5" fill="#ffffff"/>
-                        </g>
-                        <text x="362" y="38" fill="#ffffff" font-size="10" font-weight="bold">HT1</text>
-                    </svg>
-                </div>
-                <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 15px;">
-                    Mỗi Mode có Tier riêng. Tier càng cao thì điểm tổng cộng tăng trên bảng xếp hạng.
-                </p>
+                {% endfor %}
             </div>
         </div>
 
-        <div class="hero-right tilt hero-anim" data-delay="500" data-tilt-strength="5">
-            <div>
-                <div class="lb-header">
-                    <div class="lb-title-group">
-                        <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
-                        <h3 id="lbModeTitle">Top 3 Players</h3>
-                    </div>
-                    <button class="overall-btn" id="overallBtn" type="button">Overall</button>
-                </div>
-
-                <!-- LIVE LEADERBOARD DATA CONTAINER (TOP 3 ONLY) -->
-                <div id="leaderboardContent">
-                    <div class="top-players-empty">
-                        <div class="scan-line"></div>
-                        <div class="empty-icon-wrap">
-                            <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
-                        </div>
-                        <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Đang tải dữ liệu...</p>
-                        <p style="font-size: 0.85rem;">Danh sách TOP 3 đang được đồng bộ.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="modes-header">
-                    <span>MODES LEADERBOARD</span>
-                    <span>8 Chế Độ</span>
-                </div>
-
-                <div class="modes-grid">
-                    <div class="mode-item" data-mode="Sword">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/yFmTKyXC/1533764260486844488.webp" alt="Sword" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SWORD</span>
-                    </div>
-                    <div class="mode-item" data-mode="NethOP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/G349PxWx/1533764316262826025.webp" alt="Nethop" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">NETHOP</span>
-                    </div>
-                    <div class="mode-item" data-mode="Pot">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/ynR4j8kp/1533764426941993140.webp" alt="Pot" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">POT</span>
-                    </div>
-                    <div class="mode-item" data-mode="SMP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/C3RjZR8v/1533764288055873638.webp" alt="SMP" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SMP</span>
-                    </div>
-                    <div class="mode-item" data-mode="UHC">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/nMSsgPcv/1533764468876771448.webp" alt="UHC" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">UHC</span>
-                    </div>
-                    <div class="mode-item" data-mode="Axe">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/zW8WcJKh/1533764227607560233.webp" alt="Axe" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">AXE</span>
-                    </div>
-                    <div class="mode-item" data-mode="Vanilla">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/5hPZXd0S/1533764503161012344.webp" alt="Vanilla" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">VANILLA</span>
-                    </div>
-                    <div class="mode-item" data-mode="Mace">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/cXcHtW5c/1533764190723113050.webp" alt="Mace" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">MACE</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FULL RANKING SECTION (SHOW/HIDE SPA) -->
-    <section id="fullRankingSection">
-        <div class="full-ranking-card">
-            <div class="full-ranking-header">
-                <div class="full-ranking-title">
-                    <h2>FULL RANKING (18 PLAYERS)</h2>
-                    <p style="color: var(--text-silver); font-size: 0.9rem; margin-top: 4px;">Danh sách toàn bộ cao thủ xếp hạng theo tổng điểm</p>
-                </div>
-                <button class="btn-close-ranking" id="closeRankingBtn" type="button">
-                    <i class="fa-solid fa-xmark"></i> Đóng Bảng Xếp Hạng
-                </button>
-            </div>
-            <div class="full-players-grid" id="fullRankingGrid">
-                <!-- Data rendered dynamically from Backend -->
-            </div>
-        </div>
-    </section>
-
-    <section class="stats-section">
-        <div class="stats-subtitle reveal">NHỮNG CON SỐ NỔI BẬT</div>
-        <h2 class="stats-title reveal">Thống kê hệ thống</h2>
-
-        <div class="stats-grid reveal-stagger">
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">12</div>
-                <div class="stat-label">TESTER HOẠT ĐỘNG</div>
-            </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">150</div>
-                <div class="stat-label">NGƯỜI CHƠI ĐÃ ĐƯỢC TEST</div>
-            </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">320</div>
-                <div class="stat-label">BÀI TEST ĐÃ HOÀN THÀNH</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="flow-section" id="flow">
-        <div class="flow-card-display tilt reveal" data-tilt-strength="7">
-            <div class="flow-card-header">
-                <span class="flow-badge">TESTING FLOW</span>
-                <span class="flow-counter" id="stepCounter">1/4</span>
-            </div>
-
-            <div class="flow-main-content">
-                <i class="fa-solid fa-gamepad flow-icon" id="flowIcon" aria-hidden="true"></i>
-                <div class="flow-step-num" id="flowStepNum">BƯỚC 01</div>
-                <div class="flow-step-title" id="flowStepTitle">Đăng Ký Test</div>
-                <div class="flow-step-desc" id="flowStepDesc">
-                    Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.
-                </div>
-            </div>
-
-            <div class="flow-progress-bar">
-                <div class="progress-segment active" data-index="0"></div>
-                <div class="progress-segment" data-index="1"></div>
-                <div class="progress-segment" data-index="2"></div>
-                <div class="progress-segment" data-index="3"></div>
-            </div>
-        </div>
-
-        <div class="flow-info-right reveal">
-            <h2>Quy trình <span>Test PvP</span> Minh Bạch</h2>
-            <p>Hệ thống đánh giá kỹ năng PvP tiêu chuẩn, đảm bảo công bằng cho mọi cựu binh lẫn người chơi mới.</p>
-            <div class="flow-tags-grid reveal-stagger">
-                <div class="tag-box">
-                    <div class="tag-box-val">100%</div>
-                    <div class="tag-box-lbl">Minh Bạch</div>
-                </div>
-                <div class="tag-box">
-                    <div class="tag-box-val">8+</div>
-                    <div class="tag-box-lbl">Chế Độ PvP</div>
-                </div>
-                <div class="tag-box">
-                    <div class="tag-box-val">24/7</div>
-                    <div class="tag-box-lbl">Hỗ Trợ</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="faq-section" id="faq">
-        <div class="faq-header reveal">
-            <h2>Câu Hỏi Thường Gặp</h2>
-            <p>Giải đáp các thắc mắc về hệ thống tính điểm và quy trình đăng ký xếp hạng.</p>
-        </div>
-
-        <div class="faq-accordion reveal-stagger">
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Làm thế nào để tham gia Test Tier?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Bạn chỉ cần tham gia Discord chính thức của ANGEL TIER, vào kênh #dang-ky-test và làm theo hướng dẫn từ Admin/Tester.
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Có bao nhiêu cấp bậc (Tier) trong hệ thống?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Hệ thống gồm 10 cấp bậc từ LT5 (Low Tier 5) đến HT1 (High Tier 1). Mỗi Mode thi đấu sẽ có xếp hạng Tier độc lập.
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Bao lâu thì bảng xếp hạng được cập nhật?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Bảng xếp hạng được cập nhật ngay lập tức sau khi trận Test hoàn tất và được Tester xác nhận kết quả.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        &copy; 2026 ANGEL TIER. Powered by Community. All rights reserved.
-    </footer>
-
-    <!-- MODAL KHU VỰC KỸ THUẬT VIÊN -->
-    <div class="tech-modal-overlay" id="techOverlay">
-        <div class="tech-modal">
-            <button class="tech-modal-close" id="techCloseBtn" type="button" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
-
-            <div class="tech-modal-header">
-                <div class="tech-modal-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
-                <h3>Khu Vực Kỹ Thuật Viên</h3>
-                <p>Vượt qua 4 lớp xác thực để vào bảng điều khiển</p>
-            </div>
-
-            <div class="tech-layers-progress" id="techProgress">
-                <div class="tech-layer-dot current" data-layer="1"></div>
-                <div class="tech-layer-dot" data-layer="2"></div>
-                <div class="tech-layer-dot" data-layer="3"></div>
-                <div class="tech-layer-dot" data-layer="4"></div>
-            </div>
-
-            <div id="techStepBody">
-                <div class="tech-layer-label" id="techLayerLabel">LỚP 1 / 4</div>
-                <div class="tech-input-group">
-                    <input type="text" class="tech-input" id="techAnswerInput" placeholder="Nhập đáp án lớp 1..." autocomplete="off" autocapitalize="off" spellcheck="false">
-                </div>
-                <div class="tech-feedback" id="techFeedback"></div>
-                <div class="tech-modal-actions">
-                    <button class="tech-btn-submit" id="techSubmitBtn" type="button">Xác nhận</button>
-                </div>
-            </div>
-
-            <div id="techSuccessBody" style="display:none;">
-                <div class="tech-success-state">
-                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                    <p style="color:#fff;font-weight:700;">Xác thực thành công!</p>
-                    <p>Đang chuyển đến bảng điều khiển kỹ thuật viên...</p>
-                </div>
+        <!-- FULL RANKING SECTION -->
+        <div id="leaderboard" class="section">
+            <h2>PLAYER RANKING MATRIX (FULL 18)</h2>
+            <div class="matrix-container">
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>RANK</th>
+                            <th>PLAYER</th>
+                            <th>TOTAL PTS</th>
+                            {% for m in all_modes %}
+                            <th style="text-align: center;">
+                                <div class="mode-header">
+                                    <img src="{{ mode_icons[m] }}" alt="{{ m }}">
+                                    <span>{{ m }}</span>
+                                </div>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in players %}
+                        <tr>
+                            <td class="rank-cell">#{{ player.rank }}</td>
+                            <td class="player-cell">{{ player.username }}</td>
+                            <td class="points-cell">{{ player.total_points }} PTS</td>
+                            {% for m in all_modes %}
+                            <td class="mode-cell">
+                                {% set mode_data = player.modes[m] %}
+                                {% if mode_data.tier != '-' %}
+                                    <span class="tier-tag {% if 'HT' in mode_data.tier %}ht{% else %}lt{% endif %}">
+                                        {{ mode_data.tier }}
+                                    </span>
+                                    <span class="pts-sub">+{{ mode_data.points }}</span>
+                                {% else %}
+                                    <span class="tier-none">-</span>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-
-    <!-- BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN -->
-    <div id="adminPanel">
-        <div class="admin-header">
-            <div class="admin-title">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                    <h1>Bảng Điều Khiển Kỹ Thuật Viên</h1>
-                    <p>ANGEL TIER — Quản lý dữ liệu & theo dõi truy cập</p>
-                </div>
-            </div>
-            <button class="btn-logout" id="adminLogoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-        </div>
-
-        <div class="admin-stats-row">
-            <div class="admin-stat-box online">
-                <div class="val"><span class="live-dot"></span><span id="adminStatOnline">1</span></div>
-                <div class="lbl">Đang truy cập (Real-time)</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatTotal">1</div>
-                <div class="lbl">Tổng lượt truy cập</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatPlayers">18</div>
-                <div class="lbl">Người chơi trong hệ thống</div>
-            </div>
-        </div>
-
-        <div class="admin-panel-box">
-            <div class="admin-panel-header">
-                <h2>Dữ Liệu Người Chơi</h2>
-                <div class="admin-panel-actions">
-                    <button class="abtn abtn-outline" id="adminReloadBtn" type="button"><i class="fa-solid fa-rotate"></i> Reload</button>
-                    <button class="abtn abtn-outline" id="adminAddRowBtn" type="button"><i class="fa-solid fa-plus"></i> Add Player</button>
-                    <button class="abtn abtn-white" id="adminSaveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-                </div>
-            </div>
-
-            <table id="playersTable">
-                <thead>
-                    <tr>
-                        <th style="width:12%">Avatar</th>
-                        <th style="width:28%">Name</th>
-                        <th style="width:20%">Tier</th>
-                        <th style="width:20%">Point</th>
-                        <th style="width:20%">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="adminPlayersBody"></tbody>
-            </table>
-            <div class="admin-empty-table" id="adminEmptyState" style="display:none;">Chưa có người chơi nào. Bấm "Add Player" để bắt đầu.</div>
-        </div>
-    </div>
-
-    <div class="admin-save-toast" id="adminSaveToast"><i class="fa-solid fa-circle-check"></i><span id="adminSaveToastText">Đã lưu thành công</span></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function switchTab(tabId) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
 
-            let globalPlayers = [];
-            let activeFilterMode = null;
-
-            // RENDER LIVE LEADERBOARD (TOP 3 ONLY)
-            function renderLiveLeaderboard(playersList, filterMode) {
-                const container = document.getElementById('leaderboardContent');
-                const lbTitle = document.getElementById('lbModeTitle');
-
-                if (lbTitle) {
-                    lbTitle.textContent = filterMode ? `Top 3 (${filterMode.toUpperCase()})` : "Top 3 Players";
-                }
-
-                let filtered = playersList.map(p => {
-                    let modes = p.modes || [];
-                    if (filterMode) {
-                        modes = modes.filter(m => m.mode.toLowerCase() === filterMode.toLowerCase());
-                    }
-                    let pts = modes.reduce((sum, m) => sum + (parseInt(m.points, 10) || 0), 0);
-                    return { ...p, modes, currentFilterPoints: pts };
-                }).filter(p => filterMode ? p.modes.length > 0 : true);
-
-                if (filterMode) {
-                    filtered.sort((a, b) => b.currentFilterPoints - a.currentFilterPoints);
-                }
-
-                // TOP 3 SLICE ONLY FOR LIVE LEADERBOARD
-                const top3 = filtered.slice(0, 3);
-
-                if (!top3 || top3.length === 0) {
-                    container.innerHTML = `
-                        <div class="top-players-empty">
-                            <div class="scan-line"></div>
-                            <div class="empty-icon-wrap">
-                                <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
-                            </div>
-                            <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Chưa có dữ liệu người chơi</p>
-                            <p style="font-size: 0.85rem;">Danh sách xếp hạng sẽ được cập nhật sau đợt Test tới.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '<div class="top-players-list">';
-                top3.forEach(p => {
-                    let rankClass = p.rank <= 3 ? `rank-${p.rank}` : '';
-                    let displayPts = filterMode ? p.currentFilterPoints : p.total_points;
-                    let modesHtml = p.modes.map(m => `
-                        <div class="lb-mode-badge">
-                            <img class="lb-mode-icon" src="${m.icon}" alt="${m.mode}">
-                            <span class="lb-tier-tag">${m.mode} ${m.tier}</span>
-                            <span class="lb-pts-tag">(${m.points}đ)</span>
-                        </div>
-                    `).join('');
-
-                    html += `
-                        <div class="lb-player-card">
-                            <div class="lb-player-main">
-                                <div class="lb-player-left">
-                                    <span class="lb-rank ${rankClass}">#${p.rank}</span>
-                                    <span class="lb-username">${p.username}</span>
-                                </div>
-                                <span class="lb-total-points">${displayPts} pts</span>
-                            </div>
-                            <div class="lb-modes-list">
-                                ${modesHtml}
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-
-                container.innerHTML = html;
+            document.getElementById(tabId).classList.add('active');
+            if(tabId === 'home') {
+                document.getElementById('btn-home').classList.add('active');
+            } else {
+                document.getElementById('btn-leaderboard').classList.add('active');
             }
-
-            // RENDER FULL RANKING (ALL 18 PLAYERS)
-            function renderFullRanking(playersList) {
-                const grid = document.getElementById('fullRankingGrid');
-                if (!grid) return;
-
-                if (!playersList || playersList.length === 0) {
-                    grid.innerHTML = '<p style="color:var(--text-silver);">Chưa có dữ liệu người chơi.</p>';
-                    return;
-                }
-
-                let html = '';
-                playersList.forEach(p => {
-                    let rankClass = p.rank <= 3 ? `rank-${p.rank}` : '';
-                    let modesHtml = p.modes.map(m => `
-                        <div class="full-mode-row">
-                            <div class="full-mode-left">
-                                <img class="full-mode-icon" src="${m.icon}" alt="${m.mode}">
-                                <span class="full-mode-name">${m.mode}</span>
-                                <span class="full-mode-tier">${m.tier}</span>
-                            </div>
-                            <span class="full-mode-pts">${m.points} pts</span>
-                        </div>
-                    `).join('');
-
-                    html += `
-                        <div class="full-player-card">
-                            <div class="full-card-top">
-                                <div style="display:flex; align-items:center; gap:12px;">
-                                    <div class="full-rank-badge ${rankClass}">#${p.rank}</div>
-                                    <div class="full-player-user">${p.username}</div>
-                                </div>
-                                <div class="full-player-pts">${p.total_points} PTS</div>
-                            </div>
-                            <div class="full-modes-detail">
-                                ${modesHtml}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                grid.innerHTML = html;
-            }
-
-            // FETCH DATA FROM BACKEND API
-            function fetchLeaderboardData() {
-                fetch('/api/leaderboard')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (Array.isArray(data) && data.length > 0) {
-                            globalPlayers = data;
-                            renderLiveLeaderboard(globalPlayers, activeFilterMode);
-                            renderFullRanking(globalPlayers);
-                            const statPlayers = document.getElementById('adminStatPlayers');
-                            if (statPlayers) statPlayers.innerText = globalPlayers.length;
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Lỗi kết nối API Leaderboard:", err);
-                    });
-            }
-
-            // FULL RANKING TOGGLE HANDLERS (SPA)
-            const fullRankingSection = document.getElementById('fullRankingSection');
-            const heroRankingBtn = document.getElementById('heroRankingBtn');
-            const navRankingBtn = document.getElementById('navRankingBtn');
-            const closeRankingBtn = document.getElementById('closeRankingBtn');
-
-            function openFullRanking() {
-                if (fullRankingSection) {
-                    fullRankingSection.classList.add('active');
-                    fullRankingSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-
-            function closeFullRanking() {
-                if (fullRankingSection) {
-                    fullRankingSection.classList.remove('active');
-                }
-            }
-
-            if (heroRankingBtn) heroRankingBtn.addEventListener('click', openFullRanking);
-            if (navRankingBtn) navRankingBtn.addEventListener('click', openFullRanking);
-            if (closeRankingBtn) closeRankingBtn.addEventListener('click', closeFullRanking);
-
-            const overallBtn = document.getElementById('overallBtn');
-            if (overallBtn) {
-                overallBtn.addEventListener('click', function() {
-                    activeFilterMode = null;
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
-                    renderLiveLeaderboard(globalPlayers, null);
-                });
-            }
-
-            document.querySelectorAll('.mode-item').forEach(function (modeEl) {
-                modeEl.addEventListener('click', function () {
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
-                    modeEl.classList.add('active');
-                    modeEl.classList.add('pulse-select');
-                    setTimeout(() => modeEl.classList.remove('pulse-select'), 500);
-
-                    activeFilterMode = modeEl.dataset.mode || modeEl.querySelector('.mode-name').innerText;
-                    renderLiveLeaderboard(globalPlayers, activeFilterMode);
-                });
-            });
-
-            fetchLeaderboardData();
-
-            /* ---------- UI HANDLERS ---------- */
-            const loader = document.getElementById('loader');
-            if (loader) {
-                if (reduceMotion) {
-                    loader.style.display = 'none';
-                } else {
-                    setTimeout(function () {
-                        loader.classList.add('hide');
-                        setTimeout(function () { loader.style.display = 'none'; }, 900);
-                    }, 350);
-                }
-            }
-
-            document.querySelectorAll('.hero-anim').forEach(function (el) {
-                const delay = parseInt(el.dataset.delay || '0', 10);
-                setTimeout(function () { el.classList.add('visible'); }, delay);
-            });
-
-            const header = document.querySelector('header');
-            window.addEventListener('scroll', function () {
-                if (window.scrollY > 40) header.classList.add('scrolled');
-                else header.classList.remove('scrolled');
-            }, { passive: true });
-
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const navOverlay = document.getElementById('navOverlay');
-            function closeMenu() {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('open');
-                navOverlay.classList.remove('show');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-            function openMenu() {
-                menuToggle.classList.add('active');
-                navLinks.classList.add('open');
-                navOverlay.classList.add('show');
-                menuToggle.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            }
-            if (menuToggle && navLinks && navOverlay) {
-                menuToggle.addEventListener('click', function () {
-                    if (navLinks.classList.contains('open')) closeMenu(); else openMenu();
-                });
-                navOverlay.addEventListener('click', closeMenu);
-                navLinks.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
-            }
-
-            const revealObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) { revealObserver.observe(el); });
-
-            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                document.querySelectorAll('.tilt').forEach(function (el) {
-                    const strength = parseFloat(el.dataset.tiltStrength) || 8;
-                    let rect = null;
-                    el.addEventListener('mouseenter', function () { rect = el.getBoundingClientRect(); el.style.transition = 'transform 0.1s ease'; });
-                    el.addEventListener('mousemove', function (e) {
-                        if (!rect) rect = el.getBoundingClientRect();
-                        const px = (e.clientX - rect.left) / rect.width;
-                        const py = (e.clientY - rect.top) / rect.height;
-                        const rx = (py - 0.5) * -strength;
-                        const ry = (px - 0.5) * strength;
-                        el.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
-                    });
-                    el.addEventListener('mouseleave', function () {
-                        el.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-                        el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
-                    });
-                });
-            }
-
-            function formatVN(num) { return num.toLocaleString('vi-VN'); }
-            function animateCounter(el) {
-                const raw = el.textContent.trim();
-                const numeric = parseInt(raw.replace(/[^\d]/g, ''), 10) || 0;
-                const suffix = raw.replace(/[\d.,]/g, '');
-                const duration = 1600;
-                let start = null;
-                function step(ts) {
-                    if (!start) start = ts;
-                    const progress = Math.min((ts - start) / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const current = Math.floor(eased * numeric);
-                    el.textContent = formatVN(current) + suffix;
-                    if (progress < 1) requestAnimationFrame(step);
-                    else el.textContent = formatVN(numeric) + suffix;
-                }
-                if (reduceMotion) { el.textContent = formatVN(numeric) + suffix; }
-                else requestAnimationFrame(step);
-            }
-            const counterObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); }
-                });
-            }, { threshold: 0.5 });
-            document.querySelectorAll('.stat-number').forEach(function (el) { counterObserver.observe(el); });
-
-            const flowSteps = [
-                { num: "BƯỚC 01", title: "Đăng Ký Test", desc: "Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.", icon: "fa-solid fa-gamepad" },
-                { num: "BƯỚC 02", title: "Xếp Lịch Với Tester", desc: "Đội ngũ Tester sẽ xác nhận thông tin và hẹn thời gian thi đấu phù hợp.", icon: "fa-solid fa-calendar-check" },
-                { num: "BƯỚC 03", title: "Thi Đấu & Đánh Giá", desc: "Thực hiện các trận solo ở Gamemode bạn đã chọn dưới sự giám sát trực tiếp.", icon: "fa-solid fa-swords" },
-                { num: "BƯỚC 04", title: "Nhận Tier & Cập Nhật BXH", desc: "Kết quả được chấm ngay lập tức và cấp Rank chính thức trên Bảng Xếp Hạng.", icon: "fa-solid fa-trophy" }
-            ];
-            let currentStep = 0;
-            let flowTimer = null;
-            const flowContent = document.querySelector('.flow-main-content');
-
-            function setStep(index) {
-                currentStep = index;
-                function apply() {
-                    document.getElementById("stepCounter").innerText = (index + 1) + "/" + flowSteps.length;
-                    document.getElementById("flowStepNum").innerText = flowSteps[index].num;
-                    document.getElementById("flowStepTitle").innerText = flowSteps[index].title;
-                    document.getElementById("flowStepDesc").innerText = flowSteps[index].desc;
-                    document.getElementById("flowIcon").className = flowSteps[index].icon + " flow-icon";
-                    if (flowContent) { flowContent.style.opacity = '1'; flowContent.style.transform = 'translateY(0)'; }
-                }
-                if (flowContent && !reduceMotion) {
-                    flowContent.style.opacity = '0';
-                    flowContent.style.transform = 'translateY(10px)';
-                    setTimeout(apply, 220);
-                } else { apply(); }
-                document.querySelectorAll(".progress-segment").forEach(function (seg, i) { seg.classList.toggle('active', i === index); });
-            }
-            function startFlowAutoplay() {
-                clearInterval(flowTimer);
-                if (reduceMotion) return;
-                flowTimer = setInterval(function () { setStep((currentStep + 1) % flowSteps.length); }, 4500);
-            }
-            document.querySelectorAll('.progress-segment').forEach(function (seg) {
-                seg.addEventListener('click', function () { setStep(parseInt(seg.dataset.index, 10)); startFlowAutoplay(); });
-            });
-            startFlowAutoplay();
-
-            document.querySelectorAll(".faq-item").forEach(function (item) {
-                const q = item.querySelector('.faq-question');
-                if (q) {
-                    q.addEventListener('click', function () {
-                        const isActive = item.classList.contains('active');
-                        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-                        if (!isActive) item.classList.add('active');
-                    });
-                }
-            });
-        });
+        }
     </script>
 </body>
 </html>
