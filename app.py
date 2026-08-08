@@ -23,7 +23,7 @@ ALL_MODES = ["Sword", "Axe", "UHC", "SMP", "NethOP", "Pot", "Mace", "Vanilla"]
 RAW_PLAYERS = [
     {
         "username": "anh5me27051",
-        "total_points": 55,
+        "total_points": 22,
         "modes": {"UHC": {"tier": "HT4", "points": 25}, "Axe": {"tier": "LT4", "points": 20}, "Sword": {"tier": "LT5", "points": 10}}
     },
     {
