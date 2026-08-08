@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft PvP Tier List</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-main: #0B0F19;
@@ -18,6 +19,7 @@
             --accent-bronze: #D97706;
             --text-main: #F3F4F6;
             --text-muted: #9CA3AF;
+            --discord-color: #5865F2;
         }
 
         * {
@@ -35,19 +37,22 @@
                 radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.12) 0%, transparent 40%);
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
+        /* Navbar UI */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
+            padding: 1.2rem 5%;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .brand {
@@ -57,35 +62,90 @@
             background: linear-gradient(135deg, #10B981, #3B82F6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .nav-links button {
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .nav-links button, .discord-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
             padding: 0.6rem 1.2rem;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-left: 0.5rem;
+            transition: all 0.25 ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
         }
 
         .nav-links button:hover, .nav-links button.active {
             background: var(--accent-green);
-            color: #000;
+            color: #0B0F19;
             border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
         }
 
+        .discord-btn {
+            background: var(--discord-color);
+            border-color: var(--discord-color);
+            color: #FFF;
+        }
+
+        .discord-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Container & Hero Section */
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
 
+        .hero-banner {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #FFF, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-banner p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sections Toggle */
         .section {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .section.active {
@@ -93,44 +153,99 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Top 3 Live Leaderboard Widget */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-header h2 {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        /* Search Bar */
+        .search-box {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.6rem 1rem 0.6rem 2.4rem;
+            border-radius: 10px;
+            color: #FFF;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Live Leaderboard Top 3 Widget */
         .top3-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.5rem;
         }
 
         .top-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 18px;
+            padding: 1.8rem 1.5rem;
             display: flex;
             align-items: center;
             gap: 1.2rem;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .top-card.rank-1 { border-color: rgba(245, 158, 11, 0.4); }
-        .top-card.rank-2 { border-color: rgba(156, 163, 175, 0.4); }
-        .top-card.rank-3 { border-color: rgba(217, 119, 6, 0.4); }
+        .top-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .top-card.rank-1 { border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.1); }
+        .top-card.rank-2 { border-color: rgba(156, 163, 175, 0.5); box-shadow: 0 8px 25px rgba(156, 163, 175, 0.1); }
+        .top-card.rank-3 { border-color: rgba(217, 119, 6, 0.5); box-shadow: 0 8px 25px rgba(217, 119, 6, 0.1); }
 
         .rank-badge {
             font-size: 1.5rem;
             font-weight: 800;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.05);
         }
 
@@ -138,63 +253,77 @@
         .rank-2 .rank-badge { background: rgba(156, 163, 175, 0.2); color: var(--accent-silver); }
         .rank-3 .rank-badge { background: rgba(217, 119, 6, 0.2); color: var(--accent-bronze); }
 
+        .player-info {
+            flex-grow: 1;
+        }
+
         .player-info .name {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            font-weight: 800;
             margin-bottom: 0.2rem;
+            word-break: break-all;
         }
 
         .player-info .pts {
             color: var(--accent-green);
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
-        /* Full Ranking Matrix */
-        .matrix-container {
+        /* Matrix / Tier List Table Layout */
+        .matrix-wrapper {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-responsive {
             overflow-x: auto;
-            backdrop-filter: blur(12px);
-            margin-top: 1.5rem;
+            width: 100%;
         }
 
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 900px;
+            min-width: 1050px;
         }
 
         .matrix-table th {
             background: rgba(255, 255, 255, 0.03);
-            padding: 1rem 1.2rem;
-            font-size: 0.85rem;
+            padding: 1.1rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--glass-border);
+            white-space: nowrap;
         }
 
         .matrix-table td {
-            padding: 1rem 1.2rem;
+            padding: 1rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             vertical-align: middle;
+            transition: background 0.2s ease;
         }
 
-        .matrix-table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
+        .matrix-table tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.025);
         }
 
-        .mode-header {
+        .mode-header-item {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
             justify-content: center;
+            gap: 0.4rem;
         }
 
-        .mode-header img {
+        .mode-header-item img {
             width: 20px;
             height: 20px;
             object-fit: contain;
@@ -202,143 +331,168 @@
 
         .mode-cell {
             text-align: center;
+            width: 105px;
         }
 
-        .tier-tag {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+        /* Tier Tags UI */
+        .tier-badge {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            min-width: 55px;
+            border: 1px solid transparent;
+            transition: transform 0.2s ease;
         }
 
-        .tier-tag.ht {
+        .tier-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .tier-badge.tier-ht {
             background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.35);
+        }
+
+        .tier-badge.tier-ht .tier-title {
             color: #EF4444;
-            border-color: rgba(239, 68, 68, 0.3);
+            font-weight: 800;
+            font-size: 0.85rem;
         }
 
-        .tier-tag.lt {
+        .tier-badge.tier-lt {
             background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .tier-badge.tier-lt .tier-title {
             color: #60A5FA;
-            border-color: rgba(59, 130, 246, 0.3);
+            font-weight: 800;
+            font-size: 0.85rem;
         }
 
-        .tier-none {
-            color: rgba(255, 255, 255, 0.2);
-            font-weight: 500;
-        }
-
-        .pts-sub {
-            display: block;
-            font-size: 0.7rem;
+        .tier-pts {
+            font-size: 0.68rem;
             color: var(--text-muted);
-            margin-top: 0.1rem;
+            font-weight: 600;
+            margin-top: -1px;
         }
 
-        .rank-cell {
+        .tier-empty {
+            color: rgba(255, 255, 255, 0.18);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .col-rank {
             font-weight: 800;
             font-size: 1.1rem;
             color: var(--accent-green);
-            width: 70px;
+            width: 80px;
+            text-align: center;
         }
 
-        .player-cell {
+        .col-player {
             font-weight: 700;
-            font-size: 1rem;
-            min-width: 180px;
+            font-size: 0.98rem;
+            min-width: 170px;
         }
 
-        .points-cell {
+        .col-total {
             font-weight: 800;
-            color: #F59E0B;
-            width: 110px;
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            width: 120px;
+            text-align: center;
         }
 
-        h2 {
-            font-weight: 800;
-            font-size: 1.6rem;
-            letter-spacing: -0.5px;
+        /* Responsive UI adjustments */
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem 1rem; }
+            .hero-banner { padding: 1.5rem; }
+            .hero-banner h1 { font-size: 1.6rem; }
+            .search-box { width: 100%; }
+            .col-player { min-width: 140px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- NAVBAR UI -->
     <nav class="navbar">
-        <div class="brand">MINECRAFT PVP TIER LIST</div>
+        <div class="brand">
+            <i class="fa-solid fa-trophy"></i>
+            <span>MINECRAFT PVP TIER LIST</span>
+        </div>
         <div class="nav-links">
-            <button id="btn-home" class="active" onclick="switchTab('home')">TRANG CHỦ</button>
-            <button id="btn-leaderboard" onclick="switchTab('leaderboard')">BẢNG XẾP HẠNG</button>
+            <button id="btn-home" class="active" onclick="switchTab('home')">
+                <i class="fa-solid fa-house"></i> TRANG CHỦ
+            </button>
+            <button id="btn-leaderboard" onclick="switchTab('leaderboard')">
+                <i class="fa-solid fa-list-ol"></i> BẢNG XẾP HẠNG
+            </button>
+            <a href="https://discord.gg" target="_blank" class="discord-btn">
+                <i class="fa-brands fa-discord"></i> DISCORD
+            </a>
         </div>
     </nav>
 
     <div class="container">
-        <!-- HOME SECTION -->
+        <!-- HERO BANNER -->
+        <div class="hero-banner">
+            <h1>BẢNG XẾP HẠNG TIER LIST MINECRAFT PVP</h1>
+            <p>Hệ thống xếp hạng bậc Tier chuyên nghiệp cho các chế độ PvP đỉnh cao. Cập nhật theo thời gian thực.</p>
+        </div>
+
+        <!-- HOME SECTION (TOP 3 LIVE LEADERBOARD WIDGET) -->
         <div id="home" class="section active">
-            <h2>LIVE LEADERBOARD (TOP 3)</h2>
-            <div class="top3-grid">
-                {% for player in players[:3] %}
-                <div class="top-card rank-{{ player.rank }}">
-                    <div class="rank-badge">#{{ player.rank }}</div>
-                    <div class="player-info">
-                        <div class="name">{{ player.username }}</div>
-                        <div class="pts">{{ player.total_points }} POINTS</div>
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="section-header">
+                <h2><i class="fa-solid fa-crown" style="color: var(--accent-gold);"></i> LIVE LEADERBOARD (TOP 3)</h2>
+            </div>
+            
+            <div class="top3-grid" id="top3-container">
+                <!-- Data rendered dynamically from API -->
             </div>
         </div>
 
-        <!-- FULL RANKING SECTION -->
+        <!-- FULL RANKING SECTION (TIER MATRIX) -->
         <div id="leaderboard" class="section">
-            <h2>PLAYER RANKING MATRIX (FULL 18)</h2>
-            <div class="matrix-container">
-                <table class="matrix-table">
-                    <thead>
-                        <tr>
-                            <th>RANK</th>
-                            <th>PLAYER</th>
-                            <th>TOTAL PTS</th>
-                            {% for m in all_modes %}
-                            <th style="text-align: center;">
-                                <div class="mode-header">
-                                    <img src="{{ mode_icons[m] }}" alt="{{ m }}">
-                                    <span>{{ m }}</span>
-                                </div>
-                            </th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for player in players %}
-                        <tr>
-                            <td class="rank-cell">#{{ player.rank }}</td>
-                            <td class="player-cell">{{ player.username }}</td>
-                            <td class="points-cell">{{ player.total_points }} PTS</td>
-                            {% for m in all_modes %}
-                            <td class="mode-cell">
-                                {% set mode_data = player.modes[m] %}
-                                {% if mode_data.tier != '-' %}
-                                    <span class="tier-tag {% if 'HT' in mode_data.tier %}ht{% else %}lt{% endif %}">
-                                        {{ mode_data.tier }}
-                                    </span>
-                                    <span class="pts-sub">+{{ mode_data.points }}</span>
-                                {% else %}
-                                    <span class="tier-none">-</span>
-                                {% endif %}
-                            </td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="section-header">
+                <h2><i class="fa-solid fa-cubes"></i> PLAYER RANKING MATRIX (FULL 18)</h2>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="player-search" placeholder="Tìm kiếm người chơi..." onkeyup="filterLeaderboard()">
+                </div>
+            </div>
+
+            <div class="matrix-wrapper">
+                <div class="table-responsive">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr id="matrix-header-row">
+                                <th style="text-align: center;">RANK</th>
+                                <th>PLAYER</th>
+                                <th style="text-align: center;">TOTAL PTS</th>
+                                <!-- Mode headers dynamically appended -->
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-body">
+                            <!-- Data rows rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Standard modes configuration array
+        const STANDARD_MODES = ["Sword", "Axe", "UHC", "SMP", "NethOP", "Pot", "Mace", "Vanilla"];
+        let rawPlayersData = [];
+
+        // Tab Switching logic
         function switchTab(tabId) {
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
@@ -350,6 +504,184 @@
                 document.getElementById('btn-leaderboard').classList.add('active');
             }
         }
+
+        // Fetch Data from Backend API Single Source of Truth
+        async function loadLeaderboardData() {
+            try {
+                const response = await fetch('/api/leaderboard');
+                if (!response.ok) throw new Error('API Response Error');
+                
+                const data = await response.json();
+                
+                // Flexible payload handler for both JSON list or Dict wrapper
+                if (Array.isArray(data)) {
+                    rawPlayersData = data;
+                } else if (data.players && Array.isArray(data.players)) {
+                    rawPlayersData = data.players;
+                } else {
+                    rawPlayersData = [];
+                }
+
+                renderTop3Widget(rawPlayersData);
+                renderMatrixHeader();
+                renderMatrixBody(rawPlayersData);
+            } catch (error) {
+                console.error("Lỗi kết nối API Leaderboard:", error);
+            }
+        }
+
+        // Render Top 3 Widget for Home
+        function renderTop3Widget(players) {
+            const container = document.getElementById('top3-container');
+            container.innerHTML = '';
+
+            const top3 = players.slice(0, 3);
+            top3.forEach(player => {
+                const rankNum = player.rank || 1;
+                const cardHtml = `
+                    <div class="top-card rank-${rankNum}">
+                        <div class="rank-badge">#${rankNum}</div>
+                        <div class="player-info">
+                            <div class="name">${escapeHtml(player.username)}</div>
+                            <div class="pts">${player.total_points} POINTS</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // Render Header Columns for Matrix Table
+        function renderMatrixHeader() {
+            const headerRow = document.getElementById('matrix-header-row');
+            // Keep first 3 static columns, append mode headers
+            headerRow.innerHTML = `
+                <th style="text-align: center;">RANK</th>
+                <th>PLAYER</th>
+                <th style="text-align: center;">TOTAL PTS</th>
+            `;
+
+            STANDARD_MODES.forEach(modeName => {
+                const iconUrl = getModeIconUrl(modeName);
+                const th = document.createElement('th');
+                th.style.textAlign = 'center';
+                th.innerHTML = `
+                    <div class="mode-header-item">
+                        ${iconUrl ? `<img src="${iconUrl}" alt="${modeName}">` : ''}
+                        <span>${modeName}</span>
+                    </div>
+                `;
+                headerRow.appendChild(th);
+            });
+        }
+
+        // Render Matrix Table Rows
+        function renderMatrixBody(players) {
+            const tbody = document.getElementById('matrix-body');
+            tbody.innerHTML = '';
+
+            players.forEach(player => {
+                const tr = document.createElement('tr');
+                tr.className = 'player-row';
+                tr.setAttribute('data-username', player.username.toLowerCase());
+
+                let modesMap = {};
+                if (Array.isArray(player.modes)) {
+                    player.modes.forEach(m => {
+                        modesMap[m.name] = m;
+                    });
+                } else if (typeof player.modes === 'object' && player.modes !== null) {
+                    modesMap = player.modes;
+                }
+
+                let modesCellsHtml = '';
+                STANDARD_MODES.forEach(modeName => {
+                    const modeObj = modesMap[modeName];
+                    let tierText = '-';
+                    let pointsVal = 0;
+
+                    if (modeObj) {
+                        if (typeof modeObj === 'object') {
+                            tierText = modeObj.tier || '-';
+                            pointsVal = modeObj.points || 0;
+                        } else if (typeof modeObj === 'string') {
+                            tierText = modeObj;
+                        }
+                    }
+
+                    if (tierText !== '-' && tierText !== '') {
+                        const isHT = tierText.toUpperCase().includes('HT');
+                        const tierClass = isHT ? 'tier-ht' : 'tier-lt';
+                        modesCellsHtml += `
+                            <td class="mode-cell">
+                                <div class="tier-badge ${tierClass}">
+                                    <span class="tier-title">${escapeHtml(tierText)}</span>
+                                    ${pointsVal > 0 ? `<span class="tier-pts">${pointsVal} pts</span>` : ''}
+                                </div>
+                            </td>
+                        `;
+                    } else {
+                        modesCellsHtml += `
+                            <td class="mode-cell">
+                                <span class="tier-empty">—</span>
+                            </td>
+                        `;
+                    }
+                });
+
+                tr.innerHTML = `
+                    <td class="col-rank">#${player.rank}</td>
+                    <td class="col-player">${escapeHtml(player.username)}</td>
+                    <td class="col-total">${player.total_points} PTS</td>
+                    ${modesCellsHtml}
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Helper: Mode Icon Mapping fallback
+        function getModeIconUrl(modeName) {
+            const defaultIcons = {
+                "Mace": "https://i.ibb.co/cXcHtW5c/1533764190723113050.webp",
+                "Axe": "https://i.ibb.co/zW8WcJKh/1533764227607560233.webp",
+                "Sword": "https://i.ibb.co/yFmTKyXC/1533764260486844488.webp",
+                "SMP": "https://i.ibb.co/C3RjZR8v/1533764288055873638.webp",
+                "NethOP": "https://i.ibb.co/G349PxWx/1533764316262826025.webp",
+                "Pot": "https://i.ibb.co/ynR4j8kp/1533764426941993140.webp",
+                "UHC": "https://i.ibb.co/nMSsgPcv/1533764468876771448.webp",
+                "Vanilla": "https://i.ibb.co/5hPZXd0S/1533764503161012344.webp"
+            };
+            return defaultIcons[modeName] || '';
+        }
+
+        // Search Filter for Leaderboard
+        function filterLeaderboard() {
+            const query = document.getElementById('player-search').value.toLowerCase().trim();
+            const rows = document.querySelectorAll('.player-row');
+
+            rows.forEach(row => {
+                const username = row.getAttribute('data-username');
+                if (username.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // HTML Escape utility
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', loadLeaderboardData);
     </script>
 </body>
 </html>
