@@ -1,10 +1,9 @@
-import os
 from flask import Flask, render_template, jsonify
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
+app = Flask(__name__)
 
 # ---------------------------------------------------------
-# 1. MODE ICONS MAPPING (SOURCE OF TRUTH)
+# 1. ICON MAPPING
 # ---------------------------------------------------------
 MODE_ICONS = {
     "Mace": "https://i.ibb.co/cXcHtW5c/1533764190723113050.webp",
@@ -24,176 +23,170 @@ RAW_PLAYERS = [
     {
         "username": "anh5me27051",
         "modes": [
-            {"mode": "UHC", "tier": "HT4", "points": 25},
-            {"mode": "Axe", "tier": "LT4", "points": 20},
-            {"mode": "Sword", "tier": "LT5", "points": 10}
+            {"name": "UHC", "tier": "HT4", "points": 25},
+            {"name": "Axe", "tier": "LT4", "points": 20},
+            {"name": "Sword", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "Vandekynang22",
         "modes": [
-            {"mode": "UHC", "tier": "HT4", "points": 25},
-            {"mode": "Axe", "tier": "HT5", "points": 15},
-            {"mode": "Sword", "tier": "LT5", "points": 10}
+            {"name": "UHC", "tier": "HT4", "points": 25},
+            {"name": "Axe", "tier": "HT5", "points": 15},
+            {"name": "Sword", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "LikedasMC",
         "modes": [
-            {"mode": "Sword", "tier": "HT5", "points": 15},
-            {"mode": "Axe", "tier": "HT5", "points": 15},
-            {"mode": "UHC", "tier": "LT5", "points": 10}
+            {"name": "Sword", "tier": "HT5", "points": 15},
+            {"name": "Axe", "tier": "HT5", "points": 15},
+            {"name": "UHC", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "CatRista",
         "modes": [
-            {"mode": "UHC", "tier": "LT4", "points": 20},
-            {"mode": "Axe", "tier": "LT4", "points": 20}
+            {"name": "UHC", "tier": "LT4", "points": 20},
+            {"name": "Axe", "tier": "LT4", "points": 20}
         ]
     },
     {
         "username": "Chuyenn",
         "modes": [
-            {"mode": "Sword", "tier": "LT4", "points": 20},
-            {"mode": "UHC", "tier": "HT5", "points": 15}
+            {"name": "Sword", "tier": "LT4", "points": 20},
+            {"name": "UHC", "tier": "HT5", "points": 15}
         ]
     },
     {
         "username": "rautrang3245",
         "modes": [
-            {"mode": "Sword", "tier": "LT3", "points": 30}
+            {"name": "Sword", "tier": "LT3", "points": 30}
         ]
     },
     {
         "username": "Uchiha_nho",
         "modes": [
-            {"mode": "Sword", "tier": "HT4", "points": 25}
+            {"name": "Sword", "tier": "HT4", "points": 25}
         ]
     },
     {
         "username": "gbaoz21",
         "modes": [
-            {"mode": "Sword", "tier": "HT4", "points": 25}
+            {"name": "Sword", "tier": "HT4", "points": 25}
         ]
     },
     {
         "username": "AGL_Mipp",
         "modes": [
-            {"mode": "Sword", "tier": "LT5", "points": 10},
-            {"mode": "SMP", "tier": "LT5", "points": 10}
+            {"name": "Sword", "tier": "LT5", "points": 10},
+            {"name": "SMP", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "Wai_VN",
         "modes": [
-            {"mode": "Sword", "tier": "LT4", "points": 20}
+            {"name": "Sword", "tier": "LT4", "points": 20}
         ]
     },
     {
         "username": "TD4T_",
         "modes": [
-            {"mode": "UHC", "tier": "LT4", "points": 20}
+            {"name": "UHC", "tier": "LT4", "points": 20}
         ]
     },
     {
         "username": "Lovuongdaide",
         "modes": [
-            {"mode": "UHC", "tier": "HT5", "points": 15}
+            {"name": "UHC", "tier": "HT5", "points": 15}
         ]
     },
     {
         "username": "Ag_qkhang",
         "modes": [
-            {"mode": "Sword", "tier": "LT5", "points": 10}
+            {"name": "Sword", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "MeoBeo_",
         "modes": [
-            {"mode": "UHC", "tier": "LT5", "points": 10}
+            {"name": "UHC", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "longskibidop_51321",
         "modes": [
-            {"mode": "UHC", "tier": "LT5", "points": 10}
+            {"name": "UHC", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "Khang",
         "modes": [
-            {"mode": "Vanilla", "tier": "LT5", "points": 10}
+            {"name": "Vanilla", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "mr.c0c0nut._91571",
         "modes": [
-            {"mode": "Sword", "tier": "LT5", "points": 10}
+            {"name": "Sword", "tier": "LT5", "points": 10}
         ]
     },
     {
         "username": "Lovundaide",
         "modes": [
-            {"mode": "UHC", "tier": "LT5", "points": 10}
+            {"name": "UHC", "tier": "LT5", "points": 10}
         ]
     }
 ]
 
 # ---------------------------------------------------------
-# 3. HELPER PROCESSOR (COMPETITION RANKING)
+# HELPER: TÍNH TỔNG ĐIỂM VÀ TÍNH COMPETITION RANKING
 # ---------------------------------------------------------
 def get_processed_leaderboard():
-    processed = []
-    
+    processed_players = []
+
     for p in RAW_PLAYERS:
-        total_pts = sum(m["points"] for m in p["modes"])
+        total_points = sum(m["points"] for m in p["modes"])
         
-        modes_with_icons = []
+        # Gắn icon URL trực tiếp vào từng mode
+        formatted_modes = []
         for m in p["modes"]:
-            modes_with_icons.append({
-                "mode": m["mode"],
+            formatted_modes.append({
+                "name": m["name"],
                 "tier": m["tier"],
                 "points": m["points"],
-                "icon": MODE_ICONS.get(m["mode"], "")
+                "icon": MODE_ICONS.get(m["name"], "")
             })
-            
-        processed.append({
+
+        processed_players.append({
             "username": p["username"],
-            "total_points": total_pts,
-            "modes": modes_with_icons
+            "total_points": total_points,
+            "modes": formatted_modes
         })
 
-    # Sort descending by total points, then alphabetically by username
-    processed.sort(key=lambda x: (-x["total_points"], x["username"].lower()))
+    # Sắp xếp giảm dần theo tổng điểm
+    processed_players.sort(key=lambda x: x["total_points"], reverse=True)
 
-    # Calculate Competition Ranking (1, 2, 3, 3, 5...)
+    # Tính Competition Ranking (#1, #2, #3, #3, #5, #6, #7, #7, #9,...)
     current_rank = 1
-    for i, player in enumerate(processed):
-        if i > 0 and player["total_points"] == processed[i - 1]["total_points"]:
-            player["rank"] = processed[i - 1]["rank"]
-        else:
-            player["rank"] = i + 1
+    for i in range(len(processed_players)):
+        if i > 0 and processed_players[i]["total_points"] < processed_players[i - 1]["total_points"]:
+            current_rank = i + 1
+        processed_players[i]["rank"] = current_rank
 
-    return processed
+    return processed_players
 
 # ---------------------------------------------------------
-# 4. ROUTES
+# ROUTES
 # ---------------------------------------------------------
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/api/leaderboard")
+@app.route("/api/leaderboard", methods=["GET"])
 def api_leaderboard():
     data = get_processed_leaderboard()
-    return jsonify({
-        "status": "success",
-        "total_players": len(data),
-        "data": data,
-        "mode_icons": MODE_ICONS
-    })
+    return jsonify(data)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(debug=True, port=5000)
