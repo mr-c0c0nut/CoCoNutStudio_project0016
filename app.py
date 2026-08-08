@@ -17,7 +17,7 @@ MODE_ICONS = {
 }
 
 # ---------------------------------------------------------
-# 2. RAW PLAYER DATA
+# 2. PLAYER DATA
 # ---------------------------------------------------------
 RAW_PLAYERS = [
     {
@@ -140,17 +140,16 @@ RAW_PLAYERS = [
 ]
 
 # ---------------------------------------------------------
-# HELPER: TÍNH TỔNG ĐIỂM VÀ TÍNH COMPETITION RANKING
+# 3. HELPER PROCESSOR
 # ---------------------------------------------------------
-def get_processed_leaderboard():
-    processed_players = []
+def calculate_leaderboard():
+    processed = []
 
-    for p in RAW_PLAYERS:
-        total_points = sum(m["points"] for m in p["modes"])
+    for player in RAW_PLAYERS:
+        total_points = sum(m["points"] for m in player["modes"])
         
-        # Gắn icon URL trực tiếp vào từng mode
         formatted_modes = []
-        for m in p["modes"]:
+        for m in player["modes"]:
             formatted_modes.append({
                 "name": m["name"],
                 "tier": m["tier"],
@@ -158,35 +157,41 @@ def get_processed_leaderboard():
                 "icon": MODE_ICONS.get(m["name"], "")
             })
 
-        processed_players.append({
-            "username": p["username"],
+        processed.append({
+            "username": player["username"],
             "total_points": total_points,
             "modes": formatted_modes
         })
 
-    # Sắp xếp giảm dần theo tổng điểm
-    processed_players.sort(key=lambda x: x["total_points"], reverse=True)
+    # Sắp xếp giảm dần theo điểm
+    processed.sort(key=lambda x: x["total_points"], reverse=True)
 
-    # Tính Competition Ranking (#1, #2, #3, #3, #5, #6, #7, #7, #9,...)
+    # Tính Competition Rank (#1, #2, #3, #3, #5, #6, #7, #7, #9,...)
     current_rank = 1
-    for i in range(len(processed_players)):
-        if i > 0 and processed_players[i]["total_points"] < processed_players[i - 1]["total_points"]:
+    for i in range(len(processed)):
+        if i > 0 and processed[i]["total_points"] < processed[i - 1]["total_points"]:
             current_rank = i + 1
-        processed_players[i]["rank"] = current_rank
+        processed[i]["rank"] = current_rank
 
-    return processed_players
+    return processed
 
 # ---------------------------------------------------------
-# ROUTES
+# 4. ROUTES & API ENDPOINTS
 # ---------------------------------------------------------
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/api/leaderboard", methods=["GET"])
-def api_leaderboard():
-    data = get_processed_leaderboard()
-    return jsonify(data)
+@app.route("/api/players", methods=["GET"])
+@app.route("/api/rankings", methods=["GET"])
+def get_leaderboard():
+    data = calculate_leaderboard()
+    return jsonify({
+        "status": "success",
+        "players": data,
+        "data": data
+    })
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
