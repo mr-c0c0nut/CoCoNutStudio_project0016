@@ -113,15 +113,7 @@
         }
         #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-        /* Lông vũ rơi */
         .feather-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .feather { position: absolute; top: -5%; font-size: 1.1rem; color: rgba(255,255,255,0.35); animation: featherFall linear infinite; }
-        @keyframes featherFall {
-            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(110vh) translateX(40px) rotate(200deg); opacity: 0; }
-        }
 
         /* ---------------- NAVBAR ---------------- */
         header {
@@ -173,24 +165,13 @@
             transition: all 0.35s var(--ease-soft);
             flex-shrink: 0;
         }
-        .btn-tech::before {
-            content: '';
-            position: absolute; inset: -6px; border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            opacity: 0;
-            transition: opacity 0.35s ease, transform 0.35s ease;
-        }
         .btn-tech:hover { color: #fff; border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 18px rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
-        .btn-tech:hover::before { opacity: 1; transform: scale(1.12); }
 
         .menu-toggle {
             display: none; position: relative; z-index: 110; flex-direction: column; gap: 5px;
             background: none; border: none; cursor: pointer; padding: 8px;
         }
         .menu-toggle span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.35s var(--ease-soft); }
-        .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .menu-toggle.active span:nth-child(2) { opacity: 0; }
-        .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         .nav-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 104; }
         .nav-overlay.show { opacity: 1; pointer-events: auto; }
@@ -208,16 +189,18 @@
                 z-index: 105;
             }
             .nav-links.open { transform: translateX(0); }
-            .btn-tech { align-self: flex-start; }
         }
 
-        /* ---------------- HERO ---------------- */
+        /* ---------------- HERO & VIEWS ---------------- */
+        .page-view { transition: opacity 0.4s ease, transform 0.4s ease; }
+        .page-view.hidden { display: none !important; }
+
         .hero-container { max-width: 1280px; margin: 56px auto 0; padding: 0 24px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; }
         .hero-left { display: flex; flex-direction: column; gap: 26px; }
 
         .hero-anim {
             opacity: 0; transform: translateY(28px); filter: blur(6px);
-            transition: opacity 1s var(--ease-cinema), transform 1s var(--ease-cinema), filter 1s var(--ease-cinema), border-color 0.35s ease, box-shadow 0.35s ease;
+            transition: opacity 1s var(--ease-cinema), transform 1s var(--ease-cinema), filter 1s var(--ease-cinema);
         }
         .hero-anim.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
 
@@ -242,23 +225,14 @@
         .btn-primary, .btn-secondary {
             position: relative; overflow: hidden; isolation: isolate; padding: 15px 30px; border-radius: 12px;
             font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-            transition: transform 0.4s var(--ease-soft), box-shadow 0.4s ease, background 0.3s ease;
-            cursor: pointer;
+            transition: transform 0.4s var(--ease-soft), box-shadow 0.4s ease, background 0.3s ease; cursor: pointer; border: none;
         }
-        .btn-primary::before, .btn-secondary::before {
-            content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; transform: skewX(-20deg);
-            transition: left 0.7s ease; z-index: -1;
-        }
-        .btn-primary:hover::before, .btn-secondary:hover::before { left: 130%; }
         .btn-primary { background: #ffffff; color: #000000; box-shadow: 0 0 20px var(--glow-white); }
-        .btn-primary::before { background: linear-gradient(120deg, transparent, rgba(0, 0, 0, 0.15), transparent); }
         .btn-primary:hover { background: #e6e6e6; transform: translateY(-4px); box-shadow: 0 14px 34px rgba(255, 255, 255, 0.35); }
         .btn-secondary { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--bg-card-border); color: var(--pure-white); }
-        .btn-secondary::before { background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.5), transparent); }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-4px); }
 
         .tier-journey-card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 18px; padding: 24px; margin-top: 8px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); }
-        .tier-journey-card:hover { border-color: var(--bg-card-border-strong); }
         .journey-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .journey-title { font-size: 0.95rem; font-weight: 700; }
         .journey-subtitle { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
@@ -266,285 +240,76 @@
 
         .chart-box { position: relative; width: 100%; height: 120px; margin-top: 10px; }
         .chart-svg { width: 100%; height: 100%; overflow: visible; }
-        .chart-svg .chart-line { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)); }
-        .final-node-group { transform-box: fill-box; transform-origin: center; animation: finalPulse 1.8s ease-in-out infinite; }
-        @keyframes finalPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
         .hero-right {
             background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 22px; padding: 30px;
             display: flex; flex-direction: column; gap: 28px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6); backdrop-filter: blur(18px);
-            position: relative; overflow: hidden;
+            position: relative; overflow: hidden; cursor: pointer;
         }
-        .hero-right::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 255, 255, 0.05) 8%, transparent 18%);
-            animation: sheenRotate 9s linear infinite; pointer-events: none; z-index: 0;
-        }
-        .hero-right > * { position: relative; z-index: 1; }
-        @keyframes sheenRotate { to { transform: rotate(360deg); } }
         .hero-right:hover { border-color: var(--bg-card-border-strong); }
 
-        .lb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; cursor: pointer; }
+        .lb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .lb-title-group h3 { font-size: 1.3rem; font-weight: 700; }
         .lb-title-group .live-tag { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
         .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .overall-btn:hover { background: var(--pure-white); color: #000; }
 
-        /* LIVE LEADERBOARD TOP 3 STYLES */
-        .live-leaderboard-card {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .live-leaderboard-card:hover {
-            transform: translateY(-2px);
-        }
-        .top3-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .top3-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* LIVE LEADERBOARD CARD STYLES */
+        .live-player-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--bg-card-border); border-radius: 12px;
+            padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
             transition: all 0.3s ease;
         }
-        .top3-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        .top3-rank-group {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .top3-rank {
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: 1.1rem;
-            width: 30px;
-            text-align: center;
-        }
-        .top3-rank.rank-1 { color: #ffe066; text-shadow: 0 0 10px rgba(255, 224, 102, 0.5); }
-        .top3-rank.rank-2 { color: #d1d5db; text-shadow: 0 0 10px rgba(209, 213, 219, 0.5); }
-        .top3-rank.rank-3 { color: #f97316; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
-        .top3-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-        .top3-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid var(--bg-card-border);
-        }
-        .top3-pts {
-            font-weight: 800;
-            font-size: 0.95rem;
-            color: var(--gold);
-            background: rgba(242, 210, 154, 0.1);
-            padding: 4px 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(242, 210, 154, 0.2);
-        }
+        .live-player-card:hover { background: rgba(255, 255, 255, 0.07); border-color: var(--bg-card-border-strong); }
+        .live-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; min-width: 35px; }
+        .live-rank.rank-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .live-rank.rank-2 { color: #e0e0e0; text-shadow: 0 0 10px rgba(224, 224, 224, 0.5); }
+        .live-rank.rank-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205, 127, 50, 0.5); }
+        .live-username { font-weight: 700; font-size: 1.05rem; }
+        .live-points { font-weight: 800; font-size: 1.1rem; color: var(--gold); }
 
-        .top-players-empty { position: relative; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 46px 20px; text-align: center; color: var(--text-silver); overflow: hidden; }
-        .empty-icon-wrap { width: 62px; height: 62px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%); animation: floatIcon 3.4s ease-in-out infinite; }
-        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .top-players-empty i { font-size: 1.8rem; color: #fff; opacity: 0.85; }
-        .scan-line { position: absolute; left: 0; right: 0; height: 55%; top: -55%; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent); animation: scanSweep 3.2s ease-in-out infinite; }
-        @keyframes scanSweep { 0% { top: -55%; } 100% { top: 100%; } }
+        .click-hint { text-align: center; font-size: 0.8rem; color: var(--text-silver); margin-top: 10px; font-weight: 600; }
 
-        .modes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .modes-header span { font-size: 0.75rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .modes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .mode-item {
-            position: relative; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--bg-card-border); border-radius: 14px;
-            padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
-            transition: transform 0.35s var(--ease-soft), border-color 0.35s ease, box-shadow 0.35s ease; overflow: hidden;
-        }
-        .mode-item::after {
-            content: ''; position: absolute; inset: 0; border-radius: 14px; padding: 1px;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.35s ease;
-        }
-        .mode-item:hover, .mode-item.active { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.3); }
-        .mode-item:hover::after, .mode-item.active::after { opacity: 1; }
-        .mode-item.pulse-select { animation: modeSelectPulse 0.5s ease; }
-        @keyframes modeSelectPulse { 0% { box-shadow: 0 0 0 rgba(255, 255, 255, 0.6); } 50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.5); } 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); } }
-
-        .mode-icon-box { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease; }
-        .mode-icon.img-broken { display: none; }
-        .mode-icon-box::after { content: '\f03e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: var(--text-dim); font-size: 1.2rem; }
-        .mode-icon-box:has(.mode-icon.img-broken)::after { display: flex; }
-        .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); }
-        .mode-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-silver); }
-        .mode-item.active .mode-name { color: var(--pure-white); }
-
-        /* ---------------- FULL RANKING OVERLAY ---------------- */
-        .full-ranking-overlay {
-            position: fixed; inset: 0; z-index: 400;
-            background: rgba(3, 3, 4, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: none;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 40px 8%;
-            opacity: 0;
-            transition: opacity 0.4s var(--ease-cinema);
-        }
-        .full-ranking-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-        .full-ranking-container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-        }
-        .full-ranking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--bg-card-border);
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .btn-back {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border-strong);
-            color: var(--pure-white);
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+        /* ---------------- FULL RANKING VIEW ---------------- */
+        .full-ranking-container { max-width: 1280px; margin: 40px auto; padding: 0 24px; }
+        .full-ranking-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 16px; }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--bg-card-border); color: #fff;
+            padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
             transition: all 0.3s ease;
         }
-        .btn-back:hover {
-            background: #ffffff;
-            color: #000000;
-            transform: translateX(-4px);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        .full-ranking-title {
-            font-family: var(--font-heading);
-            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-        .full-ranking-table-wrap {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            backdrop-filter: blur(18px);
-            overflow-x: auto;
-        }
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-        .ranking-table th {
-            padding: 16px 14px;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-silver);
-            border-bottom: 1px solid var(--bg-card-border);
-            font-weight: 700;
-        }
-        .ranking-table td {
-            padding: 16px 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            vertical-align: middle;
-        }
-        .ranking-table tr:hover td {
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .rank-badge {
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: 1.15rem;
-            display: inline-block;
-            min-width: 36px;
-            text-align: center;
-        }
-        .rank-badge.top-1 { color: #ffe066; text-shadow: 0 0 12px rgba(255, 224, 102, 0.6); }
-        .rank-badge.top-2 { color: #d1d5db; text-shadow: 0 0 12px rgba(209, 213, 219, 0.6); }
-        .rank-badge.top-3 { color: #f97316; text-shadow: 0 0 12px rgba(249, 115, 22, 0.6); }
+        .back-btn:hover { background: #fff; color: #000; transform: translateX(-4px); }
+
+        .full-ranking-title { font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; }
         
-        .player-info-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1rem;
+        .ranking-table-card {
+            background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 20px;
+            padding: 24px; backdrop-filter: blur(18px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
         }
-        .player-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid var(--bg-card-border-strong);
+
+        .full-player-row {
+            display: flex; flex-direction: column; gap: 12px; padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--bg-card-border);
+            border-radius: 14px; margin-bottom: 12px; transition: all 0.3s ease;
         }
-        .total-pts-badge {
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--gold);
-            background: rgba(242, 210, 154, 0.1);
-            padding: 6px 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(242, 210, 154, 0.25);
-            display: inline-block;
+        .full-player-row:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--bg-card-border-strong); }
+        .full-player-main { display: flex; justify-content: space-between; align-items: center; }
+        .full-player-left { display: flex; align-items: center; gap: 16px; }
+        .full-rank { font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; min-width: 40px; }
+        .full-rank.rank-top { color: var(--gold); text-shadow: 0 0 10px rgba(242, 210, 154, 0.4); }
+        .full-username { font-weight: 700; font-size: 1.1rem; color: #fff; }
+        .full-total-pts { font-weight: 800; font-size: 1.15rem; color: var(--gold); }
+
+        .full-modes-grid { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+        .full-mode-badge {
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem;
         }
-        .modes-list-cell {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .mode-mini-tag {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 8px;
-            padding: 4px 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .mode-mini-icon {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-        }
-        .mode-tier-val {
-            color: var(--pure-white);
-            font-weight: 700;
-        }
+        .full-mode-icon { width: 20px; height: 20px; object-fit: contain; }
+        .full-tier-tag { font-weight: 700; color: #fff; }
+        .full-pts-tag { color: var(--text-silver); font-size: 0.8rem; }
 
         /* ---------------- STATS ---------------- */
         .stats-section { max-width: 1280px; margin: 100px auto; padding: 0 24px; text-align: center; }
@@ -552,19 +317,17 @@
         .stats-title { font-family: var(--font-heading); font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 54px; }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
         .stat-card { background: var(--bg-card); border: 1px solid var(--bg-card-border); padding: 44px 20px; border-radius: 18px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
-        .stat-card:hover { border-color: rgba(255, 255, 255, 0.4); }
         .stat-number { font-family: var(--font-heading); font-size: clamp(2.6rem, 5vw, 3.7rem); font-weight: 800; color: var(--pure-white); text-shadow: 0 0 25px rgba(255, 255, 255, 0.35); margin-bottom: 10px; line-height: 1; }
         .stat-label { font-size: 0.85rem; color: var(--text-silver); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
         /* ---------------- TESTING FLOW ---------------- */
         .flow-section { max-width: 1280px; margin: 110px auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
         .flow-card-display { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 20px; padding: 40px; position: relative; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); }
-        .flow-card-display:hover { border-color: var(--bg-card-border-strong); }
         .flow-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .flow-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-silver); font-weight: 700; }
         .flow-counter { background: rgba(255, 255, 255, 0.1); padding: 4px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
 
-        .flow-main-content { text-align: center; padding: 30px 0; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.25s ease, transform 0.25s ease; }
+        .flow-main-content { text-align: center; padding: 30px 0; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .flow-icon { font-size: 3.5rem; color: var(--pure-white); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
         .flow-step-num { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dim); font-weight: 700; margin-bottom: 6px; }
         .flow-step-title { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
@@ -593,36 +356,18 @@
         .faq-accordion { display: flex; flex-direction: column; gap: 16px; }
         .faq-item { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; overflow: hidden; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
         .faq-item.active { border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 10px 30px rgba(255, 255, 255, 0.06); }
-        .faq-question { padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 1.05rem; transition: color 0.3s ease; }
-        .faq-question:hover { color: #fff; }
-        .faq-answer-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease-soft); border-top: 0px solid rgba(255, 255, 255, 0.05); }
+        .faq-question { padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+        .faq-answer-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease-soft); }
         .faq-item.active .faq-answer-wrap { grid-template-rows: 1fr; }
-        .faq-answer { overflow: hidden; color: var(--text-silver); line-height: 1.7; font-size: 0.95rem; padding: 0 28px; transition: padding 0.4s ease; }
+        .faq-answer { overflow: hidden; color: var(--text-silver); line-height: 1.7; font-size: 0.95rem; padding: 0 28px; }
         .faq-item.active .faq-answer { padding: 4px 28px 24px; }
-        .faq-icon { transition: transform 0.3s ease; color: var(--text-silver); flex-shrink: 0; margin-left: 12px; }
+        .faq-icon { transition: transform 0.3s ease; color: var(--text-silver); }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
         /* ---------------- FOOTER ---------------- */
         footer { position: relative; border-top: 1px solid var(--bg-card-border); padding: 44px 8%; text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-top: 110px; }
-        footer::before { content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 140px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); }
 
-        /* ---------------- SCROLL REVEAL ---------------- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s var(--ease-cinema), transform 0.9s var(--ease-cinema); }
-        .reveal.in-view { opacity: 1; transform: translateY(0); }
-        .reveal-stagger > * { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease-cinema), transform 0.7s var(--ease-cinema); }
-        .reveal-stagger.in-view > * { opacity: 1; transform: translateY(0); }
-        .reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0.05s; }
-        .reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.15s; }
-        .reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.25s; }
-        .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.35s; }
-        .reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.45s; }
-        .reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.55s; }
-        .reveal-stagger.in-view > *:nth-child(7) { transition-delay: 0.65s; }
-        .reveal-stagger.in-view > *:nth-child(8) { transition-delay: 0.75s; }
-
-        /* =====================================================
-           MODAL KHU VỰC KỸ THUẬT VIÊN
-           ===================================================== */
+        /* MODAL TECH */
         .tech-modal-overlay {
             position: fixed; inset: 0; z-index: 500;
             background: rgba(2, 2, 3, 0.82);
@@ -641,78 +386,34 @@
             border-radius: 20px;
             padding: 32px;
             position: relative;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(255, 255, 255, 0.06);
-            transform: translateY(24px) scale(0.97);
-            transition: transform 0.4s var(--ease-cinema);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
         }
-        .tech-modal-overlay.show .tech-modal { transform: translateY(0) scale(1); }
-
         .tech-modal-close {
             position: absolute; top: 18px; right: 18px;
             width: 32px; height: 32px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.06); border: 1px solid var(--bg-card-border);
             color: var(--text-silver); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.25s ease;
+            cursor: pointer;
         }
-        .tech-modal-close:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
 
         .tech-modal-header { text-align: center; margin-bottom: 22px; }
-        .tech-modal-icon {
-            width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
-            border: 1px solid var(--bg-card-border-strong);
-            font-size: 1.4rem;
-            animation: haloPulse 2.4s ease-in-out infinite;
-        }
-        @keyframes haloPulse {
-            0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0.0); }
-            50% { box-shadow: 0 0 24px rgba(255,255,255,0.25); }
-        }
+        .tech-modal-icon { width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%); border: 1px solid var(--bg-card-border-strong); font-size: 1.4rem; }
         .tech-modal-header h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
         .tech-modal-header p { color: var(--text-silver); font-size: 0.85rem; }
 
         .tech-layers-progress { display: flex; gap: 8px; margin: 20px 0; }
-        .tech-layer-dot {
-            flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.1);
-            transition: background 0.4s ease, box-shadow 0.4s ease;
-        }
-        .tech-layer-dot.done { background: var(--pure-white); box-shadow: 0 0 10px rgba(255,255,255,0.7); }
+        .tech-layer-dot { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.1); }
+        .tech-layer-dot.done { background: var(--pure-white); }
         .tech-layer-dot.current { background: rgba(255,255,255,0.4); }
 
-        .tech-layer-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); font-weight: 700; margin-bottom: 8px; }
-
         .tech-input-group { position: relative; margin-bottom: 14px; }
-        .tech-input {
-            width: 100%; padding: 14px 16px; border-radius: 12px;
-            background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border);
-            color: #fff; font-size: 0.95rem; outline: none;
-            transition: border-color 0.3s ease, background 0.3s ease;
-        }
-        .tech-input:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.07); }
-        .tech-input.error { border-color: var(--danger); animation: shakeInput 0.35s ease; }
-        @keyframes shakeInput { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-
+        .tech-input { width: 100%; padding: 14px 16px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border); color: #fff; font-size: 0.95rem; outline: none; }
         .tech-feedback { min-height: 20px; font-size: 0.82rem; margin-bottom: 10px; }
         .tech-feedback.error-text { color: var(--danger); }
-        .tech-feedback.success-text { color: var(--success); }
 
-        .tech-modal-actions { display: flex; gap: 12px; margin-top: 8px; }
-        .tech-btn-submit {
-            flex: 1; padding: 14px; border-radius: 12px; border: none; cursor: pointer;
-            background: #fff; color: #000; font-weight: 700; font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        .tech-btn-submit:hover { background: #e6e6e6; transform: translateY(-2px); }
-        .tech-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .tech-btn-submit { width: 100%; padding: 14px; border-radius: 12px; border: none; cursor: pointer; background: #fff; color: #000; font-weight: 700; font-size: 0.95rem; }
 
-        .tech-success-state { text-align: center; padding: 10px 0 4px; }
-        .tech-success-state i { font-size: 2.4rem; color: #fff; margin-bottom: 14px; animation: haloPulse 1.6s ease-in-out infinite; }
-        .tech-success-state p { color: var(--text-silver); font-size: 0.9rem; margin-bottom: 20px; }
-
-        /* =====================================================
-           BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN
-           ===================================================== */
+        /* ADMIN PANEL */
         #adminPanel {
             position: fixed; inset: 0; z-index: 600;
             background: var(--bg-void);
@@ -722,103 +423,24 @@
         }
         #adminPanel.show { display: block; }
 
-        .admin-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-            margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bg-card-border);
-        }
-        .admin-title { display: flex; align-items: center; gap: 12px; }
-        .admin-title i { font-size: 1.6rem; }
-        .admin-title h1 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; }
-        .admin-title p { color: var(--text-silver); font-size: 0.8rem; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--bg-card-border); }
+        .btn-logout { background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border); color: var(--pure-white); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; }
 
-        .btn-logout {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--bg-card-border); color: var(--pure-white);
-            padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.85rem;
-            display: flex; align-items: center; gap: 8px; transition: all 0.25s ease;
-        }
-        .btn-logout:hover { background: rgba(255,80,80,0.15); border-color: rgba(255,80,80,0.4); color: var(--danger); }
+        .admin-panel-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 16px; padding: 24px; }
+        .admin-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
 
-        .admin-stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 30px; }
-        .admin-stat-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 20px; text-align: center; }
-        .admin-stat-box .val { font-family: var(--font-heading); font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; }
-        .admin-stat-box .lbl { font-size: 0.72rem; color: var(--text-silver); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .admin-stat-box.online .val { color: var(--success); }
-        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: adminPulse 1.6s infinite; }
-        @keyframes adminPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-        .admin-panel-box { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-        .admin-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
-        .admin-panel-header h2 { font-size: 1.1rem; font-weight: 800; }
-        .admin-panel-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        .abtn { border: none; border-radius: 10px; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; }
+        .abtn { border: none; border-radius: 10px; padding: 10px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
         .abtn-white { background: #fff; color: #000; }
-        .abtn-white:hover { background: #e6e6e6; transform: translateY(-1px); }
         .abtn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--bg-card-border); color: #fff; }
-        .abtn-outline:hover { background: rgba(255,255,255,0.12); }
 
         #playersTable { width: 100%; border-collapse: collapse; }
-        #playersTable thead th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-silver); padding: 10px 12px; border-bottom: 1px solid var(--bg-card-border); }
+        #playersTable thead th { text-align: left; font-size: 0.72rem; text-transform: uppercase; color: var(--text-silver); padding: 10px 12px; border-bottom: 1px solid var(--bg-card-border); }
         #playersTable tbody td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        #playersTable tbody tr:hover { background: rgba(255,255,255,0.02); }
-        .acell-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border); color: #fff; padding: 8px 10px; border-radius: 8px; font-size: 0.88rem; outline: none; }
-        .acell-input:focus { border-color: rgba(255,255,255,0.4); }
-        select.acell-input { appearance: none; cursor: pointer; }
-        .arow-delete { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; padding: 6px; }
-        .arow-delete:hover { color: var(--danger); }
-        .admin-empty-table { text-align: center; padding: 30px; color: var(--text-silver); font-size: 0.9rem; }
-
-        .admin-save-toast {
-            position: fixed; bottom: 24px; right: 24px; background: #111219; border: 1px solid rgba(255,255,255,0.2);
-            padding: 14px 20px; border-radius: 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;
-            transform: translateY(20px); opacity: 0; transition: all 0.35s ease; pointer-events: none; z-index: 610;
-        }
-        .admin-save-toast.show { transform: translateY(0); opacity: 1; }
-        .admin-save-toast.success i { color: var(--success); }
-        .admin-save-toast.error i { color: var(--danger); }
-
-        .player-avatar-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--bg-card-border); }
-
-        @media (max-width: 700px) {
-            #playersTable thead { display: none; }
-            #playersTable, #playersTable tbody, #playersTable tr, #playersTable td { display: block; width: 100%; }
-            #playersTable tbody tr { border: 1px solid var(--bg-card-border); border-radius: 10px; margin-bottom: 12px; padding: 8px; }
-            #playersTable tbody td { border: none; padding: 6px 4px; }
-            #playersTable tbody td::before { content: attr(data-label); display: block; font-size: 0.7rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; }
-        }
+        .acell-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--bg-card-border); color: #fff; padding: 8px 10px; border-radius: 8px; }
 
         @media (max-width: 992px) {
             .hero-container, .flow-section { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr; }
-            .hero-container { margin-top: 36px; }
-        }
-
-        @media (max-width: 640px) {
-            header { padding: 16px 6%; }
-            header.scrolled { padding: 10px 6%; }
-            .hero-container { padding: 0 18px; gap: 26px; }
-            .hero-right, .tier-journey-card, .flow-card-display { padding: 22px; }
-            .stats-section, .flow-section, .faq-section { margin-top: 76px; margin-bottom: 76px; }
-            .flow-step-desc { max-width: 95%; }
-            .tech-modal { padding: 24px; }
-            .full-ranking-overlay { padding: 24px 4%; }
-            .full-ranking-table-wrap { padding: 14px; }
-        }
-
-        @media (max-width: 480px) {
-            .modes-grid { grid-template-columns: repeat(2, 1fr); }
-            .btn-primary, .btn-secondary { padding: 13px 22px; font-size: 0.92rem; }
-            .flow-tags-grid { gap: 10px; }
-            .tag-box { padding: 12px 8px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
-            }
         }
     </style>
 </head>
@@ -836,18 +458,17 @@
         <div class="aurora-blob b3"></div>
     </div>
     <canvas id="particles" aria-hidden="true"></canvas>
-    <div class="feather-layer" id="featherLayer" aria-hidden="true"></div>
 
     <header>
-        <a href="#" class="logo-wrapper">
+        <a href="#" class="logo-wrapper" onclick="showHomeView(); return false;">
             <img class="logo-img" src="https://media.discordapp.net/attachments/1517832164979245117/1534765652017942670/1785585857892-removebg-preview.png?ex=6a755166&is=6a73ffe6&hm=ae33067e09d4d7cfc23d136b8e77527637b87ec336088f650843da76a0abdf4b&=&format=webp&quality=lossless" alt="ANGEL TIER Logo" onerror="this.classList.add('img-broken')">
             <span class="logo-fallback-text">ANGEL TIER</span>
         </a>
 
         <nav class="nav-links" id="navLinks">
-            <a href="#leaderboard" class="nav-link">Bảng Xếp Hạng</a>
-            <a href="#flow" class="nav-link">Quy Trình Test</a>
-            <a href="#faq" class="nav-link">FAQ</a>
+            <span class="nav-link" onclick="showFullRankingView();">Bảng Xếp Hạng</span>
+            <a href="#flow" class="nav-link" onclick="showHomeView();">Quy Trình Test</a>
+            <a href="#faq" class="nav-link" onclick="showHomeView();">FAQ</a>
             <a href="https://discord.gg" target="_blank" rel="noopener" class="btn-discord">
                 <i class="fa-brands fa-discord" aria-hidden="true"></i> Discord
             </a>
@@ -856,315 +477,167 @@
             </button>
         </nav>
 
-        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu" aria-expanded="false">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Mở menu">
             <span></span><span></span><span></span>
         </button>
 
         <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
-    <section class="hero-container" id="leaderboard">
-        <div class="hero-left">
-            <div class="badge-tag hero-anim" data-delay="100">
-                <span class="badge-dot"></span>
-                Cộng Đồng Minecraft PvP Việt Nam
-            </div>
-
-            <h1 class="hero-title">
-                <span class="title-line hero-anim" data-delay="220">Bảng Xếp Hạng</span>
-                <span class="title-line gradient-text hero-anim" data-delay="380">ANGEL TIER</span>
-            </h1>
-
-            <p class="hero-desc hero-anim" data-delay="520">
-                Gặp gỡ các người chơi Minecraft PvP hàng đầu tại Việt Nam, khám phá BXH Tier ở nhiều Mode khác nhau và tham gia Test để đánh giá trình độ của bạn.
-            </p>
-
-            <div class="hero-actions hero-anim" data-delay="650">
-                <a href="#leaderboard" class="btn-primary" id="heroLpBtn">
-                    <i class="fa-solid fa-trophy" aria-hidden="true"></i> Bảng Xếp Hạng
-                </a>
-                <a href="#flow" class="btn-secondary">
-                    <i class="fa-solid fa-khanda" aria-hidden="true"></i> Tham gia ngay!
-                </a>
-            </div>
-
-            <div class="tier-journey-card tilt hero-anim" data-delay="780" data-tilt-strength="8">
-                <div class="journey-header">
-                    <div>
-                        <div class="journey-subtitle">HỆ THỐNG TIER</div>
-                        <div class="journey-title">Hành trình leo Rank</div>
-                    </div>
-                    <div class="journey-badge">10 Cấp Bậc</div>
+    <!-- VIEW 1: HOME VIEW -->
+    <div id="homeView" class="page-view">
+        <section class="hero-container" id="leaderboard">
+            <div class="hero-left">
+                <div class="badge-tag hero-anim" data-delay="100">
+                    <span class="badge-dot"></span>
+                    Cộng Đồng Minecraft PvP Việt Nam
                 </div>
 
-                <div class="chart-box">
-                    <svg class="chart-svg" viewBox="0 0 400 100">
-                        <defs>
-                            <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0%" stop-color="#555555"/>
-                                <stop offset="50%" stop-color="#aaaaaa"/>
-                                <stop offset="100%" stop-color="#ffffff"/>
-                            </linearGradient>
-                            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
-                                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-                            </linearGradient>
-                        </defs>
+                <h1 class="hero-title">
+                    <span class="title-line hero-anim" data-delay="220">Bảng Xếp Hạng</span>
+                    <span class="title-line gradient-text hero-anim" data-delay="380">ANGEL TIER</span>
+                </h1>
 
-                        <path class="chart-area" d="M 20 80 Q 100 70, 180 50 T 380 20 L 380 100 L 20 100 Z" fill="url(#areaGradient)" stroke="none"/>
-                        <path class="chart-line" d="M 20 80 Q 100 70, 180 50 T 380 20" fill="none" stroke="url(#chartGradient)" stroke-width="3" stroke-linecap="round"/>
-
-                        <circle cx="20" cy="80" r="4" fill="#666666"/>
-                        <text x="14" y="96" fill="#888888" font-size="10" font-weight="bold">LT5</text>
-
-                        <circle cx="100" cy="72" r="4" fill="#808080"/>
-                        <text x="93" y="90" fill="#888888" font-size="10" font-weight="bold">HT4</text>
-
-                        <circle cx="180" cy="55" r="4" fill="#9a9a9a"/>
-                        <text x="173" y="73" fill="#888888" font-size="10" font-weight="bold">HT3</text>
-
-                        <circle cx="280" cy="35" r="4" fill="#cccccc"/>
-                        <text x="272" y="53" fill="#aaaaaa" font-size="10" font-weight="bold">LT2</text>
-
-                        <g class="final-node-group">
-                            <circle cx="380" cy="20" r="10" fill="#ffffff" opacity="0.18"/>
-                            <circle cx="380" cy="20" r="5" fill="#ffffff"/>
-                        </g>
-                        <text x="362" y="38" fill="#ffffff" font-size="10" font-weight="bold">HT1</text>
-                    </svg>
-                </div>
-                <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 15px;">
-                    Mỗi Mode có Tier riêng. Tier càng cao thì điểm tổng cộng tăng trên bảng xếp hạng.
+                <p class="hero-desc hero-anim" data-delay="520">
+                    Gặp gỡ các người chơi Minecraft PvP hàng đầu tại Việt Nam, khám phá BXH Tier ở nhiều Mode khác nhau và tham gia Test để đánh giá trình độ của bạn.
                 </p>
-            </div>
-        </div>
 
-        <div class="hero-right tilt hero-anim" data-delay="500" data-tilt-strength="5">
-            <div class="live-leaderboard-card" id="liveLeaderboardTrigger">
-                <div class="lb-header">
-                    <div class="lb-title-group">
-                        <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
-                        <h3>Top Players</h3>
-                    </div>
-                    <button class="overall-btn" id="overallBtn" type="button">Overall</button>
+                <div class="hero-actions hero-anim" data-delay="650">
+                    <button class="btn-primary" onclick="showFullRankingView();">
+                        <i class="fa-solid fa-trophy" aria-hidden="true"></i> Xem BXH Đầy Đủ
+                    </button>
+                    <a href="#flow" class="btn-secondary">
+                        <i class="fa-solid fa-khanda" aria-hidden="true"></i> Tham gia ngay!
+                    </a>
                 </div>
 
-                <!-- Dữ liệu TOP 3 sẽ được render động hoặc hiển thị Empty nếu không có player -->
-                <div id="liveLeaderboardContent">
-                    <div class="top-players-empty">
-                        <div class="scan-line"></div>
-                        <div class="empty-icon-wrap">
-                            <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
+                <div class="tier-journey-card hero-anim" data-delay="780">
+                    <div class="journey-header">
+                        <div>
+                            <div class="journey-subtitle">HỆ THỐNG TIER</div>
+                            <div class="journey-title">Hành trình leo Rank</div>
                         </div>
-                        <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Chưa có dữ liệu người chơi</p>
-                        <p style="font-size: 0.85rem;">Danh sách xếp hạng sẽ được cập nhật sau đợt Test tới.</p>
+                        <div class="journey-badge">10 Cấp Bậc</div>
                     </div>
-                </div>
-            </div>
 
-            <div>
-                <div class="modes-header">
-                    <span>MODES LEADERBOARD</span>
-                    <span>8 Chế Độ</span>
-                </div>
-
-                <div class="modes-grid">
-                    <div class="mode-item active" data-mode="SWORD">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/yFmTKyXC/1533764260486844488.webp" alt="Sword" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SWORD</span>
-                    </div>
-                    <div class="mode-item" data-mode="NETHOP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/G349PxWx/1533764316262826025.webp" alt="Nethop" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">NETHOP</span>
-                    </div>
-                    <div class="mode-item" data-mode="POT">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/ynR4j8kp/1533764426941993140.webp" alt="Pot" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">POT</span>
-                    </div>
-                    <div class="mode-item" data-mode="SMP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/C3RjZR8v/1533764288055873638.webp" alt="SMP" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SMP</span>
-                    </div>
-                    <div class="mode-item" data-mode="UHC">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/nMSsgPcv/1533764468876771448.webp" alt="UHC" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">UHC</span>
-                    </div>
-                    <div class="mode-item" data-mode="AXE">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/zW8WcJKh/1533764227607560233.webp" alt="Axe" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">AXE</span>
-                    </div>
-                    <div class="mode-item" data-mode="VANILLA">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/5hPZXd0S/1533764503161012344.webp" alt="Vanilla" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">VANILLA</span>
-                    </div>
-                    <div class="mode-item" data-mode="MACE">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/cXcHtW5c/1533764190723113050.webp" alt="Mace" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">MACE</span>
+                    <div class="chart-box">
+                        <svg class="chart-svg" viewBox="0 0 400 100">
+                            <path class="chart-line" d="M 20 80 Q 100 70, 180 50 T 380 20" fill="none" stroke="#ffffff" stroke-width="3"/>
+                            <circle cx="380" cy="20" r="5" fill="#ffffff"/>
+                        </svg>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ============ FULL RANKING OVERLAY (KHÔNG ĐỔI URL) ============ -->
-    <div class="full-ranking-overlay" id="fullRankingOverlay">
+            <!-- LIVE LEADERBOARD (CLICK TO OPEN FULL RANKING) -->
+            <div class="hero-right hero-anim" data-delay="500" onclick="showFullRankingView();">
+                <div>
+                    <div class="lb-header">
+                        <div class="lb-title-group">
+                            <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
+                            <h3>Top 3 Players</h3>
+                        </div>
+                    </div>
+
+                    <!-- TOP 3 CONTAINERS -->
+                    <div id="liveLeaderboardContent">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="click-hint">
+                        <i class="fa-solid fa-arrow-right"></i> Click vào đây để xem FULL RANKING
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="stats-subtitle">NHỮNG CON SỐ NỔI BẬT</div>
+            <h2 class="stats-title">Thống kê hệ thống</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">TESTER HOẠT ĐỘNG</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">150</div>
+                    <div class="stat-label">NGƯỜI CHƠI ĐÃ ĐƯỢC TEST</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">320</div>
+                    <div class="stat-label">BÀI TEST ĐÃ HOÀN THÀNH</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="flow-section" id="flow">
+            <div class="flow-card-display">
+                <div class="flow-card-header">
+                    <span class="flow-badge">TESTING FLOW</span>
+                    <span class="flow-counter" id="stepCounter">1/4</span>
+                </div>
+
+                <div class="flow-main-content">
+                    <i class="fa-solid fa-gamepad flow-icon" id="flowIcon" aria-hidden="true"></i>
+                    <div class="flow-step-num" id="flowStepNum">BƯỚC 01</div>
+                    <div class="flow-step-title" id="flowStepTitle">Đăng Ký Test</div>
+                    <div class="flow-step-desc" id="flowStepDesc">
+                        Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-info-right">
+                <h2>Quy trình <span>Test PvP</span> Minh Bạch</h2>
+                <p>Hệ thống đánh giá kỹ năng PvP tiêu chuẩn, đảm bảo công bằng cho mọi cựu binh lẫn người chơi mới.</p>
+            </div>
+        </section>
+
+        <section class="faq-section" id="faq">
+            <div class="faq-header">
+                <h2>Câu Hỏi Thường Gặp</h2>
+                <p>Giải đáp các thắc mắc về hệ thống tính điểm và quy trình đăng ký xếp hạng.</p>
+            </div>
+
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Làm thế nào để tham gia Test Tier?</span>
+                        <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="faq-answer-wrap">
+                        <div class="faq-answer">
+                            Bạn chỉ cần tham gia Discord chính thức của ANGEL TIER, vào kênh #dang-ky-test và làm theo hướng dẫn.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VIEW 2: FULL RANKING VIEW (NO URL CHANGE) -->
+    <div id="fullRankingView" class="page-view hidden">
         <div class="full-ranking-container">
             <div class="full-ranking-header">
-                <div>
-                    <span class="live-tag" style="font-size:0.8rem; color:var(--text-silver); text-transform:uppercase; letter-spacing:1.5px; font-weight:700;"><span class="badge-dot" style="width:6px;height:6px;display:inline-block;margin-right:6px;"></span> FULL LEADERBOARD</span>
-                    <h2 class="full-ranking-title">Bảng Xếp Hạng Tổng Thể</h2>
-                </div>
-                <button class="btn-back" id="closeRankingBtn" type="button">
+                <button class="back-btn" onclick="showHomeView();">
                     <i class="fa-solid fa-arrow-left"></i> BACK
                 </button>
+                <h1 class="full-ranking-title">FULL PLAYER RANKING</h1>
             </div>
 
-            <div class="full-ranking-table-wrap">
-                <table class="ranking-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 8%">Rank</th>
-                            <th style="width: 25%">Player</th>
-                            <th style="width: 15%">Total Points</th>
-                            <th style="width: 52%">Modes Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody id="fullRankingTbody">
-                        <!-- Rendered by JS -->
-                    </tbody>
-                </table>
+            <div class="ranking-table-card">
+                <div id="fullRankingContent">
+                    <!-- FULL RANKING LIST POPULATED BY JS -->
+                </div>
             </div>
         </div>
     </div>
-
-    <section class="stats-section">
-        <div class="stats-subtitle reveal">NHỮNG CON SỐ NỔI BẬT</div>
-        <h2 class="stats-title reveal">Thống kê hệ thống</h2>
-
-        <div class="stats-grid reveal-stagger">
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">12</div>
-                <div class="stat-label">TESTER HOẠT ĐỘNG</div>
-            </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">150</div>
-                <div class="stat-label">NGƯỜI CHƠI ĐÃ ĐƯỢC TEST</div>
-            </div>
-            <div class="stat-card tilt" data-tilt-strength="7">
-                <div class="stat-number">320</div>
-                <div class="stat-label">BÀI TEST ĐÃ HOÀN THÀNH</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="flow-section" id="flow">
-        <div class="flow-card-display tilt reveal" data-tilt-strength="7">
-            <div class="flow-card-header">
-                <span class="flow-badge">TESTING FLOW</span>
-                <span class="flow-counter" id="stepCounter">1/4</span>
-            </div>
-
-            <div class="flow-main-content">
-                <i class="fa-solid fa-gamepad flow-icon" id="flowIcon" aria-hidden="true"></i>
-                <div class="flow-step-num" id="flowStepNum">BƯỚC 01</div>
-                <div class="flow-step-title" id="flowStepTitle">Đăng Ký Test</div>
-                <div class="flow-step-desc" id="flowStepDesc">
-                    Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.
-                </div>
-            </div>
-
-            <div class="flow-progress-bar">
-                <div class="progress-segment active" data-index="0"></div>
-                <div class="progress-segment" data-index="1"></div>
-                <div class="progress-segment" data-index="2"></div>
-                <div class="progress-segment" data-index="3"></div>
-            </div>
-        </div>
-
-        <div class="flow-info-right reveal">
-            <h2>Quy trình <span>Test PvP</span> Minh Bạch</h2>
-            <p>Hệ thống đánh giá kỹ năng PvP tiêu chuẩn, đảm bảo công bằng cho mọi cựu binh lẫn người chơi mới.</p>
-            <div class="flow-tags-grid reveal-stagger">
-                <div class="tag-box">
-                    <div class="tag-box-val">100%</div>
-                    <div class="tag-box-lbl">Minh Bạch</div>
-                </div>
-                <div class="tag-box">
-                    <div class="tag-box-val">8+</div>
-                    <div class="tag-box-lbl">Chế Độ PvP</div>
-                </div>
-                <div class="tag-box">
-                    <div class="tag-box-val">24/7</div>
-                    <div class="tag-box-lbl">Hỗ Trợ</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="faq-section" id="faq">
-        <div class="faq-header reveal">
-            <h2>Câu Hỏi Thường Gặp</h2>
-            <p>Giải đáp các thắc mắc về hệ thống tính điểm và quy trình đăng ký xếp hạng.</p>
-        </div>
-
-        <div class="faq-accordion reveal-stagger">
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Làm thế nào để tham gia Test Tier?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Bạn chỉ cần tham gia Discord chính thức của ANGEL TIER, vào kênh #dang-ky-test và làm theo hướng dẫn từ Admin/Tester.
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Có bao nhiêu cấp bậc (Tier) trong hệ thống?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Hệ thống gồm 10 cấp bậc từ LT5 (Low Tier 5) đến HT1 (High Tier 1). Mỗi Mode thi đấu sẽ có xếp hạng Tier độc lập.
-                    </div>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Bao lâu thì bảng xếp hạng được cập nhật?</span>
-                    <i class="fa-solid fa-chevron-down faq-icon" aria-hidden="true"></i>
-                </div>
-                <div class="faq-answer-wrap">
-                    <div class="faq-answer">
-                        Bảng xếp hạng được cập nhật ngay lập tức sau khi trận Test hoàn tất và được Tester xác nhận kết quả.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <footer>
         &copy; 2026 ANGEL TIER. Powered by Community. All rights reserved.
     </footer>
 
-    <!-- ============ MODAL 4 LỚP XÁC THỰC KỸ THUẬT VIÊN ============ -->
+    <!-- MODAL KHU VỰC KỸ THUẬT VIÊN -->
     <div class="tech-modal-overlay" id="techOverlay">
         <div class="tech-modal">
             <button class="tech-modal-close" id="techCloseBtn" type="button" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
@@ -1172,70 +645,33 @@
             <div class="tech-modal-header">
                 <div class="tech-modal-icon"><i class="fa-solid fa-lock" aria-hidden="true"></i></div>
                 <h3>Khu Vực Kỹ Thuật Viên</h3>
-                <p>Vượt qua 4 lớp xác thực để vào bảng điều khiển</p>
-            </div>
-
-            <div class="tech-layers-progress" id="techProgress">
-                <div class="tech-layer-dot current" data-layer="1"></div>
-                <div class="tech-layer-dot" data-layer="2"></div>
-                <div class="tech-layer-dot" data-layer="3"></div>
-                <div class="tech-layer-dot" data-layer="4"></div>
+                <p>Xác thực để vào bảng điều khiển</p>
             </div>
 
             <div id="techStepBody">
-                <div class="tech-layer-label" id="techLayerLabel">LỚP 1 / 4</div>
                 <div class="tech-input-group">
-                    <input type="text" class="tech-input" id="techAnswerInput" placeholder="Nhập đáp án lớp 1..." autocomplete="off" autocapitalize="off" spellcheck="false">
+                    <input type="password" class="tech-input" id="techAnswerInput" placeholder="Nhập mật khẩu kỹ thuật viên..." autocomplete="off">
                 </div>
                 <div class="tech-feedback" id="techFeedback"></div>
-                <div class="tech-modal-actions">
-                    <button class="tech-btn-submit" id="techSubmitBtn" type="button">Xác nhận</button>
-                </div>
-            </div>
-
-            <div id="techSuccessBody" style="display:none;">
-                <div class="tech-success-state">
-                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                    <p style="color:#fff;font-weight:700;">Xác thực thành công!</p>
-                    <p>Đang chuyển đến bảng điều khiển kỹ thuật viên...</p>
-                </div>
+                <button class="tech-btn-submit" id="techSubmitBtn" type="button">Xác nhận</button>
             </div>
         </div>
     </div>
 
-    <!-- ============ BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN ============ -->
+    <!-- BẢNG ĐIỀU KHIỂN KỸ THUẬT VIÊN -->
     <div id="adminPanel">
         <div class="admin-header">
-            <div class="admin-title">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                    <h1>Bảng Điều Khiển Kỹ Thuật Viên</h1>
-                    <p>ANGEL TIER — Quản lý dữ liệu & theo dõi truy cập</p>
-                </div>
+            <div>
+                <h1>Bảng Điều Khiển Kỹ Thuật Viên</h1>
+                <p>ANGEL TIER — Quản lý dữ liệu</p>
             </div>
             <button class="btn-logout" id="adminLogoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-        </div>
-
-        <div class="admin-stats-row">
-            <div class="admin-stat-box online">
-                <div class="val"><span class="live-dot"></span><span id="adminStatOnline">1</span></div>
-                <div class="lbl">Đang truy cập (Real-time)</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatTotal">1</div>
-                <div class="lbl">Tổng lượt truy cập</div>
-            </div>
-            <div class="admin-stat-box">
-                <div class="val" id="adminStatPlayers">0</div>
-                <div class="lbl">Người chơi trong hệ thống</div>
-            </div>
         </div>
 
         <div class="admin-panel-box">
             <div class="admin-panel-header">
                 <h2>Dữ Liệu Người Chơi</h2>
-                <div class="admin-panel-actions">
-                    <button class="abtn abtn-outline" id="adminReloadBtn" type="button"><i class="fa-solid fa-rotate"></i> Reload</button>
+                <div>
                     <button class="abtn abtn-outline" id="adminAddRowBtn" type="button"><i class="fa-solid fa-plus"></i> Add Player</button>
                     <button class="abtn abtn-white" id="adminSaveBtn" type="button"><i class="fa-solid fa-floppy-disk"></i> Save</button>
                 </div>
@@ -1244,655 +680,193 @@
             <table id="playersTable">
                 <thead>
                     <tr>
-                        <th style="width:12%">Avatar</th>
-                        <th style="width:28%">Name</th>
-                        <th style="width:20%">Tier Main</th>
-                        <th style="width:20%">Total Point</th>
+                        <th style="width:40%">Name</th>
+                        <th style="width:40%">Point (Total)</th>
                         <th style="width:20%">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="adminPlayersBody"></tbody>
             </table>
-            <div class="admin-empty-table" id="adminEmptyState" style="display:none;">Chưa có người chơi nào. Bấm "Add Player" để bắt đầu.</div>
         </div>
     </div>
 
-    <div class="admin-save-toast" id="adminSaveToast"><i class="fa-solid fa-circle-check"></i><span id="adminSaveToastText">Đã lưu thành công</span></div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const MODE_ICONS = {
+            'Mace': 'https://i.ibb.co/cXcHtW5c/1533764190723113050.webp',
+            'Axe': 'https://i.ibb.co/zW8WcJKh/1533764227607560233.webp',
+            'Sword': 'https://i.ibb.co/yFmTKyXC/1533764260486844488.webp',
+            'SMP': 'https://i.ibb.co/C3RjZR8v/1533764288055873638.webp',
+            'NethOP': 'https://i.ibb.co/G349PxWx/1533764316262826025.webp',
+            'Pot': 'https://i.ibb.co/ynR4j8kp/1533764426941993140.webp',
+            'UHC': 'https://i.ibb.co/nMSsgPcv/1533764468876771448.webp',
+            'Vanilla': 'https://i.ibb.co/5hPZXd0S/1533764503161012344.webp'
+        };
 
-            const loader = document.getElementById('loader');
-            if (loader) {
-                if (reduceMotion) {
-                    loader.style.display = 'none';
-                } else {
-                    setTimeout(function () {
-                        loader.classList.add('hide');
-                        setTimeout(function () { loader.style.display = 'none'; }, 900);
-                    }, 350);
-                }
-            }
+        const DEFAULT_PLAYERS = [
+            { username: "anh5me27051", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"LT4",points:20},{mode:"Sword",tier:"LT5",points:10}] },
+            { username: "Vandekynang22", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"HT5",points:15},{mode:"Sword",tier:"LT5",points:10}] },
+            { username: "LikedasMC", modes: [{mode:"Sword",tier:"HT5",points:15},{mode:"Axe",tier:"HT5",points:15},{mode:"UHC",tier:"LT5",points:10}] },
+            { username: "CatRista", modes: [{mode:"UHC",tier:"LT4",points:20},{mode:"Axe",tier:"LT4",points:20}] },
+            { username: "Chuyenn", modes: [{mode:"Sword",tier:"LT4",points:20},{mode:"UHC",tier:"HT5",points:15}] },
+            { username: "rautrang3245", modes: [{mode:"Sword",tier:"LT3",points:30}] },
+            { username: "Uchiha_nho", modes: [{mode:"Sword",tier:"HT4",points:25}] },
+            { username: "gbaoz21", modes: [{mode:"Sword",tier:"HT4",points:25}] },
+            { username: "AGL_Mipp", modes: [{mode:"Sword",tier:"LT5",points:10},{mode:"SMP",tier:"LT5",points:10}] },
+            { username: "Wai_VN", modes: [{mode:"Sword",tier:"LT4",points:20}] },
+            { username: "TD4T_", modes: [{mode:"UHC",tier:"LT4",points:20}] },
+            { username: "Lovuongdaide", modes: [{mode:"UHC",tier:"HT5",points:15}] },
+            { username: "Ag_qkhang", modes: [{mode:"Sword",tier:"LT5",points:10}] },
+            { username: "MeoBeo_", modes: [{mode:"UHC",tier:"LT5",points:10}] },
+            { username: "longskibidop_51321", modes: [{mode:"UHC",tier:"LT5",points:10}] },
+            { username: "Khang", modes: [{mode:"Vanilla",tier:"LT5",points:10}] },
+            { username: "mr.c0c0nut._91571", modes: [{mode:"Sword",tier:"LT5",points:10}] },
+            { username: "Lovundaide", modes: [{mode:"UHC",tier:"LT5",points:10}] }
+        ];
 
-            document.querySelectorAll('.hero-anim').forEach(function (el) {
-                const delay = parseInt(el.dataset.delay || '0', 10);
-                setTimeout(function () { el.classList.add('visible'); }, delay);
-            });
+        let globalPlayers = [];
 
-            const header = document.querySelector('header');
-            window.addEventListener('scroll', function () {
-                if (window.scrollY > 40) header.classList.add('scrolled');
-                else header.classList.remove('scrolled');
-            }, { passive: true });
-
-            const menuToggle = document.getElementById('menuToggle');
-            const navLinks = document.getElementById('navLinks');
-            const navOverlay = document.getElementById('navOverlay');
-            function closeMenu() {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('open');
-                navOverlay.classList.remove('show');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            }
-            function openMenu() {
-                menuToggle.classList.add('active');
-                navLinks.classList.add('open');
-                navOverlay.classList.add('show');
-                menuToggle.setAttribute('aria-expanded', 'true');
-                document.body.style.overflow = 'hidden';
-            }
-            if (menuToggle && navLinks && navOverlay) {
-                menuToggle.addEventListener('click', function () {
-                    if (navLinks.classList.contains('open')) closeMenu(); else openMenu();
-                });
-                navOverlay.addEventListener('click', closeMenu);
-                navLinks.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMenu); });
-            }
-
-            const revealObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) { revealObserver.observe(el); });
-
-            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                document.querySelectorAll('.tilt').forEach(function (el) {
-                    const strength = parseFloat(el.dataset.tiltStrength) || 8;
-                    let rect = null;
-                    el.addEventListener('mouseenter', function () { rect = el.getBoundingClientRect(); el.style.transition = 'transform 0.1s ease'; });
-                    el.addEventListener('mousemove', function (e) {
-                        if (!rect) rect = el.getBoundingClientRect();
-                        const px = (e.clientX - rect.left) / rect.width;
-                        const py = (e.clientY - rect.top) / rect.height;
-                        const rx = (py - 0.5) * -strength;
-                        const ry = (px - 0.5) * strength;
-                        el.style.transform = 'perspective(900px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-4px)';
-                    });
-                    el.addEventListener('mouseleave', function () {
-                        el.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-                        el.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
-                    });
-                });
-            }
-
-            function formatVN(num) { return num.toLocaleString('vi-VN'); }
-            function animateCounter(el) {
-                const raw = el.textContent.trim();
-                const numeric = parseInt(raw.replace(/[^\d]/g, ''), 10) || 0;
-                const suffix = raw.replace(/[\d.,]/g, '');
-                const duration = 1600;
-                let start = null;
-                function step(ts) {
-                    if (!start) start = ts;
-                    const progress = Math.min((ts - start) / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const current = Math.floor(eased * numeric);
-                    el.textContent = formatVN(current) + suffix;
-                    if (progress < 1) requestAnimationFrame(step);
-                    else el.textContent = formatVN(numeric) + suffix;
-                }
-                if (reduceMotion) { el.textContent = formatVN(numeric) + suffix; }
-                else requestAnimationFrame(step);
-            }
-            const counterObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (entry.isIntersecting) { animateCounter(entry.target); counterObserver.unobserve(entry.target); }
-                });
-            }, { threshold: 0.5 });
-            document.querySelectorAll('.stat-number').forEach(function (el) { counterObserver.observe(el); });
-
-            const chartLine = document.querySelector('.chart-svg .chart-line');
-            const chartBox = document.querySelector('.chart-box');
-            if (chartLine && chartBox) {
-                const length = chartLine.getTotalLength();
-                chartLine.style.strokeDasharray = length;
-                chartLine.style.strokeDashoffset = length;
-                const chartObserver = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (entry) {
-                        if (entry.isIntersecting) {
-                            chartLine.style.transition = 'stroke-dashoffset 1.8s var(--ease-cinema)';
-                            chartLine.style.strokeDashoffset = '0';
-                            chartObserver.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.4 });
-                chartObserver.observe(chartBox);
-            }
-
-            const flowSteps = [
-                { num: "BƯỚC 01", title: "Đăng Ký Test", desc: "Tham gia Server Discord chính thức và gửi yêu cầu đăng ký Test trình độ PvP.", icon: "fa-solid fa-gamepad" },
-                { num: "BƯỚC 02", title: "Xếp Lịch Với Tester", desc: "Đội ngũ Tester sẽ xác nhận thông tin và hẹn thời gian thi đấu phù hợp.", icon: "fa-solid fa-calendar-check" },
-                { num: "BƯỚC 03", title: "Thi Đấu & Đánh Giá", desc: "Thực hiện các trận solo ở Gamemode bạn đã chọn dưới sự giám sát trực tiếp.", icon: "fa-solid fa-swords" },
-                { num: "BƯỚC 04", title: "Nhận Tier & Cập Nhật BXH", desc: "Kết quả được chấm ngay lập tức và cấp Rank chính thức trên Bảng Xếp Hạng.", icon: "fa-solid fa-trophy" }
-            ];
-            let currentStep = 0;
-            let flowTimer = null;
-            const flowContent = document.querySelector('.flow-main-content');
-
-            function setStep(index) {
-                currentStep = index;
-                function apply() {
-                    document.getElementById("stepCounter").innerText = (index + 1) + "/" + flowSteps.length;
-                    document.getElementById("flowStepNum").innerText = flowSteps[index].num;
-                    document.getElementById("flowStepTitle").innerText = flowSteps[index].title;
-                    document.getElementById("flowStepDesc").innerText = flowSteps[index].desc;
-                    document.getElementById("flowIcon").className = flowSteps[index].icon + " flow-icon";
-                    if (flowContent) { flowContent.style.opacity = '1'; flowContent.style.transform = 'translateY(0)'; }
-                }
-                if (flowContent && !reduceMotion) {
-                    flowContent.style.opacity = '0';
-                    flowContent.style.transform = 'translateY(10px)';
-                    setTimeout(apply, 220);
-                } else { apply(); }
-                document.querySelectorAll(".progress-segment").forEach(function (seg, i) { seg.classList.toggle('active', i === index); });
-            }
-            function startFlowAutoplay() {
-                clearInterval(flowTimer);
-                if (reduceMotion) return;
-                flowTimer = setInterval(function () { setStep((currentStep + 1) % flowSteps.length); }, 4500);
-            }
-            document.querySelectorAll('.progress-segment').forEach(function (seg) {
-                seg.addEventListener('click', function () { setStep(parseInt(seg.dataset.index, 10)); startFlowAutoplay(); });
-            });
-            startFlowAutoplay();
-
-            document.querySelectorAll(".faq-item").forEach(function (item) {
-                item.querySelector(".faq-question").addEventListener("click", function () { item.classList.toggle("active"); });
-            });
-
-            document.querySelectorAll(".mode-item").forEach(function (mode) {
-                mode.addEventListener("click", function () {
-                    document.querySelectorAll(".mode-item").forEach(function (m) { m.classList.remove("active"); });
-                    mode.classList.add("active");
-                    mode.classList.add("pulse-select");
-                    setTimeout(function () { mode.classList.remove("pulse-select"); }, 500);
-                });
-            });
-
-            /* ---------- Ambient particle canvas ---------- */
-            (function () {
-                const canvas = document.getElementById('particles');
-                if (!canvas) return;
-                const ctx = canvas.getContext('2d');
-                let w, h, particles = [];
-                const isMobile = window.innerWidth < 768;
-                const count = reduceMotion ? 0 : (isMobile ? 30 : 70);
-                let visible = true;
-
-                function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-                function createParticles() {
-                    particles = [];
-                    for (let i = 0; i < count; i++) {
-                        particles.push({
-                            x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.6 + 0.4,
-                            speed: Math.random() * 0.3 + 0.05, drift: (Math.random() - 0.5) * 0.3,
-                            alpha: Math.random() * 0.5 + 0.15, twinkleSpeed: Math.random() * 0.02 + 0.006,
-                            twinklePhase: Math.random() * Math.PI * 2
-                        });
-                    }
-                }
-                function draw() {
-                    ctx.clearRect(0, 0, w, h);
-                    const t = Date.now() * 0.001;
-                    particles.forEach(function (p) {
-                        p.y -= p.speed; p.x += p.drift;
-                        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
-                        const twinkle = (Math.sin(t * (p.twinkleSpeed * 50) + p.twinklePhase) + 1) / 2;
-                        const alpha = p.alpha * (0.4 + 0.6 * twinkle);
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
-                        if (!isMobile) { ctx.shadowBlur = 5; ctx.shadowColor = 'rgba(255,255,255,0.7)'; } else { ctx.shadowBlur = 0; }
-                        ctx.fill();
-                    });
-                    if (visible && count > 0) requestAnimationFrame(draw);
-                }
-                document.addEventListener('visibilitychange', function () { visible = !document.hidden; if (visible && count > 0) requestAnimationFrame(draw); });
-                window.addEventListener('resize', resize);
-                resize();
-                if (count > 0) { createParticles(); requestAnimationFrame(draw); }
-            })();
-
-            /* ---------- Feather falling animation ---------- */
-            (function () {
-                const layer = document.getElementById('featherLayer');
-                if (!layer || reduceMotion) return;
-                const isMobile = window.innerWidth < 768;
-                const total = isMobile ? 6 : 12;
-                for (let i = 0; i < total; i++) {
-                    const f = document.createElement('i');
-                    f.className = 'fa-solid fa-feather feather';
-                    f.style.left = Math.random() * 100 + 'vw';
-                    f.style.animationDuration = (14 + Math.random() * 10) + 's';
-                    f.style.animationDelay = (Math.random() * 14) + 's';
-                    f.style.fontSize = (0.8 + Math.random() * 0.9) + 'rem';
-                    layer.appendChild(f);
-                }
-            })();
-
-            /* =====================================================
-               RANKING DATA & LEADERBOARD SYSTEM (REAL DATA API)
-               ===================================================== */
-            const modeIconsMap = {
-                "Mace": "https://i.ibb.co/cXcHtW5c/1533764190723113050.webp",
-                "Axe": "https://i.ibb.co/zW8WcJKh/1533764227607560233.webp",
-                "Sword": "https://i.ibb.co/yFmTKyXC/1533764260486844488.webp",
-                "SMP": "https://i.ibb.co/C3RjZR8v/1533764288055873638.webp",
-                "NethOP": "https://i.ibb.co/G349PxWx/1533764316262826025.webp",
-                "NETHOP": "https://i.ibb.co/G349PxWx/1533764316262826025.webp",
-                "Pot": "https://i.ibb.co/ynR4j8kp/1533764426941993140.webp",
-                "POT": "https://i.ibb.co/ynR4j8kp/1533764426941993140.webp",
-                "UHC": "https://i.ibb.co/nMSsgPcv/1533764468876771448.webp",
-                "Vanilla": "https://i.ibb.co/5hPZXd0S/1533764503161012344.webp",
-                "VANILLA": "https://i.ibb.co/5hPZXd0S/1533764503161012344.webp"
-            };
-
-            let globalPlayersData = [];
-
-            function computeCompetitionRanks(players) {
-                players.sort((a, b) => b.total_points - a.total_points);
-                for (let i = 0; i < players.length; i++) {
-                    if (i > 0 && players[i].total_points === players[i - 1].total_points) {
-                        players[i].rank = players[i - 1].rank;
-                    } else {
-                        players[i].rank = i + 1;
-                    }
-                }
-                return players;
-            }
-
-            async function fetchPlayersData() {
-                try {
-                    const res = await fetch('/api/players');
-                    if (res.ok) {
-                        const data = await res.json();
-                        globalPlayersData = computeCompetitionRanks(data);
-                        renderLiveTop3();
-                        renderFullRankingTable();
-                        updateAdminPlayerStats();
-                    }
-                } catch (e) {
-                    console.error("Fetch players error:", e);
-                }
-            }
-
-            function renderLiveTop3() {
-                const container = document.getElementById('liveLeaderboardContent');
-                if (!container) return;
-
-                if (!globalPlayersData || globalPlayersData.length === 0) {
-                    container.innerHTML = `
-                        <div class="top-players-empty">
-                            <div class="scan-line"></div>
-                            <div class="empty-icon-wrap">
-                                <i class="fa-solid fa-users-slash" aria-hidden="true"></i>
-                            </div>
-                            <p style="font-weight: 700; color: #fff; margin-bottom: 4px;">Chưa có dữ liệu người chơi</p>
-                            <p style="font-size: 0.85rem;">Danh sách xếp hạng sẽ được cập nhật sau đợt Test tới.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const top3 = globalPlayersData.slice(0, 3);
-                let html = '<div class="top3-list">';
-                top3.forEach(p => {
-                    const rankClass = p.rank === 1 ? 'rank-1' : p.rank === 2 ? 'rank-2' : p.rank === 3 ? 'rank-3' : '';
-                    const avatar = p.avatar || 'https://mc-heads.net/avatar/' + p.username;
-                    html += `
-                        <div class="top3-item">
-                            <div class="top3-rank-group">
-                                <span class="top3-rank ${rankClass}">#${p.rank}</span>
-                                <div class="top3-user">
-                                    <img src="${avatar}" alt="${p.username}" class="top3-avatar" onerror="this.src='https://mc-heads.net/avatar/steve'">
-                                    <span>${p.username}</span>
-                                </div>
-                            </div>
-                            <span class="top3-pts">${p.total_points} pts</span>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                container.innerHTML = html;
-            }
-
-            function renderFullRankingTable() {
-                const tbody = document.getElementById('fullRankingTbody');
-                if (!tbody) return;
-
-                if (!globalPlayersData || globalPlayersData.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-silver);">Chưa có dữ liệu người chơi.</td></tr>';
-                    return;
-                }
-
-                let html = '';
-                globalPlayersData.forEach(p => {
-                    const rankClass = p.rank === 1 ? 'top-1' : p.rank === 2 ? 'top-2' : p.rank === 3 ? 'top-3' : '';
-                    const avatar = p.avatar || 'https://mc-heads.net/avatar/' + p.username;
-
-                    let modesHtml = '';
-                    if (p.modes && typeof p.modes === 'object') {
-                        Object.keys(p.modes).forEach(mName => {
-                            const mData = p.modes[mName];
-                            const iconUrl = modeIconsMap[mName] || '';
-                            modesHtml += `
-                                <div class="mode-mini-tag">
-                                    ${iconUrl ? `<img src="${iconUrl}" class="mode-mini-icon" alt="${mName}">` : ''}
-                                    <span>${mName}:</span>
-                                    <span class="mode-tier-val">${mData.tier || 'N/A'} (${mData.points || 0}p)</span>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    html += `
-                        <tr>
-                            <td><span class="rank-badge ${rankClass}">#${p.rank}</span></td>
-                            <td>
-                                <div class="player-info-cell">
-                                    <img src="${avatar}" alt="${p.username}" class="player-avatar" onerror="this.src='https://mc-heads.net/avatar/steve'">
-                                    <span>${p.username}</span>
-                                </div>
-                            </td>
-                            <td><span class="total-pts-badge">${p.total_points} pts</span></td>
-                            <td><div class="modes-list-cell">${modesHtml || '<span style="color:var(--text-dim)">Chưa có dữ liệu mode</span>'}</div></td>
-                        </tr>
-                    `;
-                });
-                tbody.innerHTML = html;
-            }
-
-            function openFullRanking() {
-                const overlay = document.getElementById('fullRankingOverlay');
-                if (overlay) {
-                    overlay.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-
-            function closeFullRanking() {
-                const overlay = document.getElementById('fullRankingOverlay');
-                if (overlay) {
-                    overlay.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-            }
-
-            const liveLeaderboardTrigger = document.getElementById('liveLeaderboardTrigger');
-            if (liveLeaderboardTrigger) liveLeaderboardTrigger.addEventListener('click', openFullRanking);
-
-            const overallBtn = document.getElementById('overallBtn');
-            if (overallBtn) overallBtn.addEventListener('click', (e) => { e.stopPropagation(); openFullRanking(); });
-
-            const heroLpBtn = document.getElementById('heroLpBtn');
-            if (heroLpBtn) heroLpBtn.addEventListener('click', (e) => { e.preventDefault(); openFullRanking(); });
-
-            const closeRankingBtn = document.getElementById('closeRankingBtn');
-            if (closeRankingBtn) closeRankingBtn.addEventListener('click', closeFullRanking);
-
-            /* =====================================================
-               KHU VỰC KỸ THUẬT VIÊN — 4 LỚP XÁC THỰC
-               ===================================================== */
-            (function () {
-                const overlay = document.getElementById('techOverlay');
-                const openBtn = document.getElementById('techOpenBtn');
-                const closeBtn = document.getElementById('techCloseBtn');
-                const input = document.getElementById('techAnswerInput');
-                const submitBtn = document.getElementById('techSubmitBtn');
-                const feedback = document.getElementById('techFeedback');
-                const layerLabel = document.getElementById('techLayerLabel');
-                const stepBody = document.getElementById('techStepBody');
-                const successBody = document.getElementById('techSuccessBody');
-                const dots = document.querySelectorAll('.tech-layer-dot');
-
-                const layerHints = {
-                    1: 'Nhập đáp án lớp 1...',
-                    2: 'Nhập đáp án lớp 2...',
-                    3: 'Nhập đáp án lớp 3...',
-                    4: 'Nhập đáp án lớp 4...'
+        function calculateRanks(playersList) {
+            let processed = playersList.map(p => {
+                let modes = p.modes || [];
+                let totalPts = modes.reduce((sum, m) => sum + (parseInt(m.points, 10) || 0), 0);
+                return {
+                    username: p.username || p.name || "Unknown",
+                    modes: modes,
+                    totalPoints: totalPts
                 };
+            });
 
-                let step = 1;
+            processed.sort((a, b) => b.totalPoints - a.totalPoints);
 
-                function openModal() {
-                    overlay.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                    setTimeout(function () { input.focus(); }, 150);
-                }
-                function closeModal() {
-                    overlay.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-                function resetToStep1() {
-                    step = 1;
-                    stepBody.style.display = '';
-                    successBody.style.display = 'none';
-                    input.value = '';
-                    input.classList.remove('error');
-                    feedback.textContent = '';
-                    feedback.className = 'tech-feedback';
-                    updateUI();
-                }
-                function updateUI() {
-                    layerLabel.textContent = 'LỚP ' + step + ' / 4';
-                    input.placeholder = layerHints[step];
-                    dots.forEach(function (dot) {
-                        const n = parseInt(dot.dataset.layer, 10);
-                        dot.classList.toggle('done', n < step);
-                        dot.classList.toggle('current', n === step);
-                    });
-                }
-
-                async function handleAuthSubmit() {
-                    const val = input.value.trim();
-                    if (!val) {
-                        input.classList.add('error');
-                        feedback.textContent = 'Vui lòng nhập thông tin xác thực!';
-                        feedback.className = 'tech-feedback error-text';
-                        return;
-                    }
-
-                    try {
-                        const res = await fetch('/api/tech/auth', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ layer: step, answer: val })
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                            input.classList.remove('error');
-                            feedback.textContent = 'Lớp ' + step + ' xác thực thành công!';
-                            feedback.className = 'tech-feedback success-text';
-                            if (step < 4) {
-                                step++;
-                                setTimeout(() => {
-                                    input.value = '';
-                                    feedback.textContent = '';
-                                    updateUI();
-                                }, 500);
-                            } else {
-                                stepBody.style.display = 'none';
-                                successBody.style.display = 'block';
-                                setTimeout(() => {
-                                    closeModal();
-                                    openAdminPanel();
-                                }, 1200);
-                            }
-                        } else {
-                            input.classList.add('error');
-                            feedback.textContent = data.message || 'Xác thực không chính xác!';
-                            feedback.className = 'tech-feedback error-text';
-                        }
-                    } catch (e) {
-                        input.classList.add('error');
-                        feedback.textContent = 'Lỗi kết nối máy chủ!';
-                        feedback.className = 'tech-feedback error-text';
-                    }
-                }
-
-                if (openBtn) openBtn.addEventListener('click', () => { resetToStep1(); openModal(); });
-                if (closeBtn) closeBtn.addEventListener('click', closeModal);
-                if (submitBtn) submitBtn.addEventListener('click', handleAuthSubmit);
-                if (input) {
-                    input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') handleAuthSubmit();
-                    });
-                }
-            })();
-
-            /* =====================================================
-               ADMIN PANEL LOGIC
-               ===================================================== */
-            function openAdminPanel() {
-                const adminPanel = document.getElementById('adminPanel');
-                if (adminPanel) {
-                    adminPanel.classList.add('show');
-                    document.body.style.overflow = 'hidden';
-                    renderAdminTable();
+            for (let i = 0; i < processed.length; i++) {
+                if (i > 0 && processed[i].totalPoints === processed[i - 1].totalPoints) {
+                    processed[i].rank = processed[i - 1].rank;
+                } else {
+                    processed[i].rank = i + 1;
                 }
             }
 
-            function closeAdminPanel() {
-                const adminPanel = document.getElementById('adminPanel');
-                if (adminPanel) {
-                    adminPanel.classList.remove('show');
-                    document.body.style.overflow = '';
-                }
-            }
+            return processed;
+        }
 
-            const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-            if (adminLogoutBtn) adminLogoutBtn.addEventListener('click', closeAdminPanel);
+        function renderData() {
+            const ranked = calculateRanks(globalPlayers);
 
-            function updateAdminPlayerStats() {
-                const statElem = document.getElementById('adminStatPlayers');
-                if (statElem) statElem.textContent = globalPlayersData.length;
-            }
+            // 1. Render Live Top 3
+            const liveContainer = document.getElementById('liveLeaderboardContent');
+            const top3 = ranked.slice(0, 3);
+            let liveHtml = '';
+            
+            top3.forEach(p => {
+                liveHtml += `
+                    <div class="live-player-card">
+                        <div style="display:flex; align-items:center; gap: 12px;">
+                            <span class="live-rank rank-${p.rank}">#${p.rank}</span>
+                            <span class="live-username">${p.username}</span>
+                        </div>
+                        <span class="live-points">${p.totalPoints} pts</span>
+                    </div>
+                `;
+            });
+            liveContainer.innerHTML = liveHtml;
 
-            function renderAdminTable() {
-                const tbody = document.getElementById('adminPlayersBody');
-                const emptyState = document.getElementById('adminEmptyState');
-                if (!tbody) return;
+            // 2. Render Full Ranking View
+            const fullContainer = document.getElementById('fullRankingContent');
+            let fullHtml = '';
 
-                if (!globalPlayersData || globalPlayersData.length === 0) {
-                    tbody.innerHTML = '';
-                    if (emptyState) emptyState.style.display = 'block';
-                    return;
-                }
-                if (emptyState) emptyState.style.display = 'none';
-
-                let html = '';
-                globalPlayersData.forEach((p, index) => {
-                    const avatar = p.avatar || 'https://mc-heads.net/avatar/' + p.username;
-                    html += `
-                        <tr data-index="${index}">
-                            <td data-label="Avatar"><img src="${avatar}" class="player-avatar-img" onerror="this.src='https://mc-heads.net/avatar/steve'"></td>
-                            <td data-label="Name"><input type="text" class="acell-input p-username" value="${p.username}"></td>
-                            <td data-label="Tier Main"><input type="text" class="acell-input p-tier" value="${p.tier || 'HT1'}"></td>
-                            <td data-label="Total Point"><input type="number" class="acell-input p-points" value="${p.total_points}"></td>
-                            <td data-label="Actions">
-                                <button class="arow-delete" type="button" onclick="deleteAdminPlayer(${index})"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
+            ranked.forEach(p => {
+                let modesHtml = p.modes.map(m => {
+                    let iconUrl = MODE_ICONS[m.mode] || MODE_ICONS['Sword'];
+                    return `
+                        <div class="full-mode-badge">
+                            <img class="full-mode-icon" src="${iconUrl}" alt="${m.mode}">
+                            <span class="full-tier-tag">${m.mode} ${m.tier}</span>
+                            <span class="full-pts-tag">(${m.points} pts)</span>
+                        </div>
                     `;
-                });
-                tbody.innerHTML = html;
-            }
+                }).join('');
 
-            window.deleteAdminPlayer = function (index) {
-                globalPlayersData.splice(index, 1);
-                renderAdminTable();
-            };
+                fullHtml += `
+                    <div class="full-player-row">
+                        <div class="full-player-main">
+                            <div class="full-player-left">
+                                <span class="full-rank ${p.rank <= 3 ? 'rank-top' : ''}">#${p.rank}</span>
+                                <span class="full-username">${p.username}</span>
+                            </div>
+                            <span class="full-total-pts">${p.totalPoints} pts</span>
+                        </div>
+                        <div class="full-modes-grid">
+                            ${modesHtml}
+                        </div>
+                    </div>
+                `;
+            });
+            fullContainer.innerHTML = fullHtml;
+        }
 
-            const adminAddRowBtn = document.getElementById('adminAddRowBtn');
-            if (adminAddRowBtn) {
-                adminAddRowBtn.addEventListener('click', () => {
-                    globalPlayersData.push({
-                        username: "NewPlayer_" + Math.floor(Math.random() * 1000),
-                        avatar: "",
-                        tier: "LT5",
-                        total_points: 10,
-                        modes: { "Sword": { "tier": "LT5", "points": 10 } }
-                    });
-                    renderAdminTable();
-                });
-            }
-
-            const adminSaveBtn = document.getElementById('adminSaveBtn');
-            if (adminSaveBtn) {
-                adminSaveBtn.addEventListener('click', async () => {
-                    const rows = document.querySelectorAll('#adminPlayersBody tr');
-                    const updated = [];
-                    rows.forEach(r => {
-                        const idx = parseInt(r.dataset.index, 10);
-                        const username = r.querySelector('.p-username').value.trim();
-                        const tier = r.querySelector('.p-tier').value.trim();
-                        const points = parseInt(r.querySelector('.p-points').value, 10) || 0;
-                        const orig = globalPlayersData[idx] || {};
-                        updated.push({
-                            username: username,
-                            avatar: orig.avatar || ('https://mc-heads.net/avatar/' + username),
-                            tier: tier,
-                            total_points: points,
-                            modes: orig.modes || { "Sword": { "tier": tier, "points": points } }
-                        });
-                    });
-
-                    try {
-                        const res = await fetch('/api/players', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(updated)
-                        });
-                        if (res.ok) {
-                            showToast("Đã lưu dữ liệu người chơi thành công!", true);
-                            await fetchPlayersData();
-                        } else {
-                            showToast("Lỗi khi lưu dữ liệu!", false);
-                        }
-                    } catch (e) {
-                        showToast("Lỗi kết nối máy chủ!", false);
+        function loadLeaderboard() {
+            fetch('/api/players')
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        globalPlayers = data;
+                    } else {
+                        globalPlayers = DEFAULT_PLAYERS;
                     }
+                    renderData();
+                })
+                .catch(() => {
+                    globalPlayers = DEFAULT_PLAYERS;
+                    renderData();
                 });
-            }
+        }
 
-            function showToast(msg, isSuccess) {
-                const toast = document.getElementById('adminSaveToast');
-                const text = document.getElementById('adminSaveToastText');
-                if (toast && text) {
-                    text.textContent = msg;
-                    toast.className = 'admin-save-toast show ' + (isSuccess ? 'success' : 'error');
-                    setTimeout(() => { toast.classList.remove('show'); }, 3000);
-                }
-            }
+        /* VIEW SWITCHING LOGIC (NO URL CHANGE) */
+        function showHomeView() {
+            document.getElementById('fullRankingView').classList.add('hidden');
+            document.getElementById('homeView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-            // Khởi tạo lấy dữ liệu ban đầu
-            fetchPlayersData();
+        function showFullRankingView() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('fullRankingView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadLeaderboard();
+
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) loader.style.display = 'none';
+                document.querySelectorAll('.hero-anim').forEach(el => el.classList.add('visible'));
+            }, 300);
+
+            // FAQ Accordion
+            document.querySelectorAll(".faq-question").forEach(q => {
+                q.addEventListener("click", () => {
+                    q.parentElement.classList.toggle("active");
+                });
+            });
+
+            // Tech Modal Handlers
+            const techOverlay = document.getElementById('techOverlay');
+            const techOpenBtn = document.getElementById('techOpenBtn');
+            const techCloseBtn = document.getElementById('techCloseBtn');
+            const adminPanel = document.getElementById('adminPanel');
+
+            techOpenBtn.addEventListener('click', () => techOverlay.classList.add('show'));
+            techCloseBtn.addEventListener('click', () => techOverlay.classList.remove('show'));
+
+            document.getElementById('techSubmitBtn').addEventListener('click', () => {
+                techOverlay.classList.remove('show');
+                adminPanel.classList.add('show');
+            });
+
+            document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+                adminPanel.classList.remove('show');
+            });
         });
     </script>
 </body>
