@@ -1,9 +1,10 @@
+import os
 from flask import Flask, render_template, jsonify
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 # ---------------------------------------------------------
-# 1. ICON MAPPING
+# 1. ICON MAPPING (SOURCE OF TRUTH)
 # ---------------------------------------------------------
 MODE_ICONS = {
     "Mace": "https://i.ibb.co/cXcHtW5c/1533764190723113050.webp",
@@ -17,7 +18,7 @@ MODE_ICONS = {
 }
 
 # ---------------------------------------------------------
-# 2. PLAYER DATA
+# 2. RAW PLAYER DATA (18 PLAYERS)
 # ---------------------------------------------------------
 RAW_PLAYERS = [
     {
@@ -140,10 +141,10 @@ RAW_PLAYERS = [
 ]
 
 # ---------------------------------------------------------
-# 3. HELPER PROCESSOR
+# 3. COMPETITION RANKING CALCULATION
 # ---------------------------------------------------------
-def calculate_leaderboard():
-    processed = []
+def get_processed_leaderboard():
+    processed_players = []
 
     for player in RAW_PLAYERS:
         total_points = sum(m["points"] for m in player["modes"])
@@ -157,41 +158,36 @@ def calculate_leaderboard():
                 "icon": MODE_ICONS.get(m["name"], "")
             })
 
-        processed.append({
+        processed_players.append({
             "username": player["username"],
             "total_points": total_points,
             "modes": formatted_modes
         })
 
-    # Sắp xếp giảm dần theo điểm
-    processed.sort(key=lambda x: x["total_points"], reverse=True)
+    # Sắp xếp giảm dần theo tổng điểm
+    processed_players.sort(key=lambda x: x["total_points"], reverse=True)
 
-    # Tính Competition Rank (#1, #2, #3, #3, #5, #6, #7, #7, #9,...)
+    # Tính Competition Ranking (#1, #2, #3, #3, #5, #6, #7, #7, #9,...)
     current_rank = 1
-    for i in range(len(processed)):
-        if i > 0 and processed[i]["total_points"] < processed[i - 1]["total_points"]:
+    for i in range(len(processed_players)):
+        if i > 0 and processed_players[i]["total_points"] < processed_players[i - 1]["total_points"]:
             current_rank = i + 1
-        processed[i]["rank"] = current_rank
+        processed_players[i]["rank"] = current_rank
 
-    return processed
+    return processed_players
 
 # ---------------------------------------------------------
-# 4. ROUTES & API ENDPOINTS
+# 4. ROUTES & ENDPOINTS
 # ---------------------------------------------------------
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/api/leaderboard", methods=["GET"])
-@app.route("/api/players", methods=["GET"])
-@app.route("/api/rankings", methods=["GET"])
-def get_leaderboard():
-    data = calculate_leaderboard()
-    return jsonify({
-        "status": "success",
-        "players": data,
-        "data": data
-    })
+def api_leaderboard():
+    data = get_processed_leaderboard()
+    return jsonify(data)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
