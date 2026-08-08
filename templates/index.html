@@ -289,6 +289,7 @@
 
         .overall-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: var(--pure-white); padding: 6px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .overall-btn:hover { background: var(--pure-white); color: #000; }
+        .overall-btn.active { background: var(--pure-white); color: #000; box-shadow: 0 0 14px rgba(255,255,255,0.4); }
 
         .top-players-empty { position: relative; background: rgba(0, 0, 0, 0.4); border: 1px dashed rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 46px 20px; text-align: center; color: var(--text-silver); overflow: hidden; }
         .empty-icon-wrap { width: 62px; height: 62px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 70%); animation: floatIcon 3.4s ease-in-out infinite; }
@@ -328,6 +329,7 @@
 
         .tier-table th.th-mode {
             width: 72px;
+            transition: color 0.25s ease;
         }
 
         .tier-table th .th-mode-header {
@@ -342,11 +344,21 @@
             height: 20px;
             object-fit: contain;
             filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+            transition: transform 0.3s var(--ease-soft), filter 0.3s ease;
         }
+
+        .tier-table th.th-mode:hover { color: #fff; }
+        .tier-table th.th-mode:hover .th-mode-icon { transform: scale(1.18) translateY(-1px); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.75)); }
 
         .tier-row {
             background: rgba(255, 255, 255, 0.02);
-            transition: all 0.25s var(--ease-soft);
+            transition: background 0.25s var(--ease-soft), transform 0.25s var(--ease-soft), box-shadow 0.25s var(--ease-soft);
+            animation: rowReveal 0.55s var(--ease-cinema) both;
+        }
+
+        @keyframes rowReveal {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .tier-row:hover {
@@ -423,7 +435,10 @@
             letter-spacing: 0.5px;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
             box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
+            transition: transform 0.25s var(--ease-soft), box-shadow 0.25s ease;
         }
+
+        .tier-row:hover .pvp-tier-badge { transform: translateY(-2px); box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.25), 0 6px 14px rgba(0,0,0,0.35); }
 
         /* Tier Colors */
         .tier-ht1, .tier-lt1 { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; box-shadow: 0 0 10px rgba(255, 65, 108, 0.5); }
@@ -489,11 +504,11 @@
         @keyframes modeSelectPulse { 0% { box-shadow: 0 0 0 rgba(255, 255, 255, 0.6); } 50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.5); } 100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); } }
 
         .mode-icon-box { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease; }
+        .mode-icon { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(1.2); transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s var(--ease-soft); }
         .mode-icon.img-broken { display: none; }
         .mode-icon-box::after { content: '\f03e'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: var(--text-dim); font-size: 1.2rem; }
         .mode-icon-box:has(.mode-icon.img-broken)::after { display: flex; }
-        .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); }
+        .mode-item:hover .mode-icon, .mode-item.active .mode-icon { filter: grayscale(0%) brightness(1); transform: scale(1.08); }
         .mode-name { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-silver); }
         .mode-item.active .mode-name { color: var(--pure-white); }
 
@@ -769,6 +784,18 @@
 </head>
 <body>
 
+    <!--
+        ================================================================
+        DATA FLOW NOTE:
+        app.py truyền 3 biến Jinja: players, all_modes, mode_icons
+        (đã được build_leaderboard() chuẩn hoá đủ 8 mode + rank + icon).
+        Toàn bộ dữ liệu này được nhúng NGUYÊN VẸN vào JSON bên dưới để
+        JavaScript đọc và render UI. Không có player/tier/point/icon nào
+        được hard-code trong file này.
+        ================================================================
+    -->
+    <script id="app-data" type="application/json">{{ {"players": players, "all_modes": all_modes, "mode_icons": mode_icons} | tojson }}</script>
+
     <div id="loader">
         <div class="curtain curtain-left"></div>
         <div class="curtain curtain-right"></div>
@@ -891,10 +918,10 @@
                         <span class="live-tag"><span class="badge-dot" style="width:6px;height:6px;"></span> LIVE LEADERBOARD</span>
                         <h3 id="lbModeTitle">Top 3 Players</h3>
                     </div>
-                    <button class="overall-btn" id="overallBtn" type="button">Overall</button>
+                    <button class="overall-btn active" id="overallBtn" type="button">Overall</button>
                 </div>
 
-                <!-- LIVE LEADERBOARD (TOP 3 CHÍNH) -->
+                <!-- LIVE LEADERBOARD (TOP 3, render động từ app.py qua id="app-data") -->
                 <div id="leaderboardContent">
                     <div class="top-players-empty">
                         <div class="scan-line"></div>
@@ -910,58 +937,19 @@
             <div>
                 <div class="modes-header">
                     <span>MODES LEADERBOARD</span>
-                    <span>8 Chế Độ</span>
+                    <span>{{ all_modes|length }} Chế Độ</span>
                 </div>
 
+                <!-- Modes grid render động từ all_modes / mode_icons do app.py cung cấp -->
                 <div class="modes-grid">
-                    <div class="mode-item" data-mode="Sword">
+                    {% for m in all_modes %}
+                    <div class="mode-item" data-mode="{{ m }}">
                         <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/yFmTKyXC/1533764260486844488.webp" alt="Sword" onerror="this.classList.add('img-broken')">
+                            <img class="mode-icon" src="{{ mode_icons[m] }}" alt="{{ m }}" onerror="this.classList.add('img-broken')">
                         </div>
-                        <span class="mode-name">SWORD</span>
+                        <span class="mode-name">{{ m|upper }}</span>
                     </div>
-                    <div class="mode-item" data-mode="NethOP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/G349PxWx/1533764316262826025.webp" alt="Nethop" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">NETHOP</span>
-                    </div>
-                    <div class="mode-item" data-mode="Pot">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/ynR4j8kp/1533764426941993140.webp" alt="Pot" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">POT</span>
-                    </div>
-                    <div class="mode-item" data-mode="SMP">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/C3RjZR8v/1533764288055873638.webp" alt="SMP" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">SMP</span>
-                    </div>
-                    <div class="mode-item" data-mode="UHC">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/nMSsgPcv/1533764468876771448.webp" alt="UHC" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">UHC</span>
-                    </div>
-                    <div class="mode-item" data-mode="Axe">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/zW8WcJKh/1533764227607560233.webp" alt="Axe" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">AXE</span>
-                    </div>
-                    <div class="mode-item" data-mode="Vanilla">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/5hPZXd0S/1533764503161012344.webp" alt="Vanilla" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">VANILLA</span>
-                    </div>
-                    <div class="mode-item" data-mode="Mace">
-                        <div class="mode-icon-box">
-                            <img class="mode-icon" src="https://i.ibb.co/cXcHtW5c/1533764190723113050.webp" alt="Mace" onerror="this.classList.add('img-broken')">
-                        </div>
-                        <span class="mode-name">MACE</span>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -1193,85 +1181,57 @@
         document.addEventListener('DOMContentLoaded', function () {
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const ALL_MODES = ["Sword", "Axe", "UHC", "SMP", "NethOP", "Pot", "Mace", "Vanilla"];
+            /* =====================================================================
+               DATA FLOW: đọc DUY NHẤT từ script#app-data (được app.py render qua
+               Jinja: players, all_modes, mode_icons). Không có player/tier/point/
+               icon nào được hard-code ở đây.
+            ===================================================================== */
+            const APP_DATA = JSON.parse(document.getElementById('app-data').textContent);
+            const ALL_MODES = APP_DATA.all_modes;
+            const MODE_ICONS = APP_DATA.mode_icons;
+            const globalPlayers = APP_DATA.players; // đã có: username, total_points, modes{tier,points,icon}, rank
 
-            const MODE_ICONS = {
-                'Mace': 'https://i.ibb.co/cXcHtW5c/1533764190723113050.webp',
-                'Axe': 'https://i.ibb.co/zW8WcJKh/1533764227607560233.webp',
-                'Sword': 'https://i.ibb.co/yFmTKyXC/1533764260486844488.webp',
-                'SMP': 'https://i.ibb.co/C3RjZR8v/1533764288055873638.webp',
-                'NethOP': 'https://i.ibb.co/G349PxWx/1533764316262826025.webp',
-                'Nethop': 'https://i.ibb.co/G349PxWx/1533764316262826025.webp',
-                'Pot': 'https://i.ibb.co/ynR4j8kp/1533764426941993140.webp',
-                'UHC': 'https://i.ibb.co/nMSsgPcv/1533764468876771448.webp',
-                'Vanilla': 'https://i.ibb.co/5hPZXd0S/1533764503161012344.webp'
-            };
-
-            const DEFAULT_PLAYERS = [
-                { username: "anh5me27051", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"LT4",points:20},{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "Vandekynang22", modes: [{mode:"UHC",tier:"HT4",points:25},{mode:"Axe",tier:"HT5",points:15},{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "LikedasMC", modes: [{mode:"Sword",tier:"HT5",points:15},{mode:"Axe",tier:"HT5",points:15},{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "CatRista", modes: [{mode:"UHC",tier:"LT4",points:20},{mode:"Axe",tier:"LT4",points:20}] },
-                { username: "Chuyenn", modes: [{mode:"Sword",tier:"LT4",points:20},{mode:"UHC",tier:"HT5",points:15}] },
-                { username: "rautrang3245", modes: [{mode:"Sword",tier:"LT3",points:30}] },
-                { username: "Uchiha_nho", modes: [{mode:"Sword",tier:"HT4",points:25}] },
-                { username: "gbaoz21", modes: [{mode:"Sword",tier:"HT4",points:25}] },
-                { username: "AGL_Mipp", modes: [{mode:"Sword",tier:"LT5",points:10},{mode:"SMP",tier:"LT5",points:10}] },
-                { username: "Wai_VN", modes: [{mode:"Sword",tier:"LT4",points:20}] },
-                { username: "TD4T_", modes: [{mode:"UHC",tier:"LT4",points:20}] },
-                { username: "Lovuongdaide", modes: [{mode:"UHC",tier:"HT5",points:15}] },
-                { username: "Ag_qkhang", modes: [{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "MeoBeo_", modes: [{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "longskibidop_51321", modes: [{mode:"UHC",tier:"LT5",points:10}] },
-                { username: "Khang", modes: [{mode:"Vanilla",tier:"LT5",points:10}] },
-                { username: "mr.c0c0nut._91571", modes: [{mode:"Sword",tier:"LT5",points:10}] },
-                { username: "Lovundaide", modes: [{mode:"UHC",tier:"LT5",points:10}] }
-            ];
-
-            let globalPlayers = [];
             let activeFilterMode = null;
 
-            function processRawPlayers(playersList, filterMode) {
-                let processed = playersList.map(p => {
-                    let modesRaw = p.modes || [];
-                    let modesMap = {};
-                    let totalPts = 0;
+            /**
+             * Trả về danh sách đã xếp hạng.
+             * - Không filterMode: dùng total_points + rank có sẵn từ app.py (đã tính theo competition ranking).
+             * - Có filterMode: chỉ lấy player thực sự có tier ở mode đó, sắp xếp theo điểm của MODE đó
+             *   (vẫn lấy nguyên field tier/points/icon từ dữ liệu backend, không tạo dữ liệu mới).
+             */
+            function getRankedList(filterMode) {
+                if (!filterMode) {
+                    return globalPlayers.map(function (p) {
+                        return {
+                            username: p.username,
+                            totalPoints: p.total_points,
+                            rank: p.rank,
+                            modes: p.modes
+                        };
+                    });
+                }
 
-                    modesRaw.forEach(m => {
-                        let mName = m.mode;
-                        if (mName.toLowerCase() === 'nethop') mName = 'NethOP';
-                        modesMap[mName] = {
-                            tier: m.tier || "-",
-                            points: parseInt(m.points, 10) || 0
+                let filtered = globalPlayers
+                    .filter(function (p) {
+                        return p.modes[filterMode] && p.modes[filterMode].tier !== "-";
+                    })
+                    .map(function (p) {
+                        return {
+                            username: p.username,
+                            totalPoints: p.modes[filterMode].points,
+                            modes: p.modes
                         };
                     });
 
-                    if (filterMode) {
-                        let match = modesRaw.find(m => m.mode.toLowerCase() === filterMode.toLowerCase());
-                        totalPts = match ? (parseInt(match.points, 10) || 0) : 0;
-                    } else {
-                        totalPts = modesRaw.reduce((sum, m) => sum + (parseInt(m.points, 10) || 0), 0);
-                    }
+                filtered.sort(function (a, b) { return b.totalPoints - a.totalPoints; });
 
-                    return {
-                        username: p.username || p.name || "Unknown",
-                        modesMap: modesMap,
-                        totalPoints: totalPts,
-                        hasMode: filterMode ? !!modesMap[filterMode] : true
-                    };
-                }).filter(p => filterMode ? p.hasMode : true);
+                let currentRank = 1;
+                filtered.forEach(function (p, i) {
+                    if (i > 0 && p.totalPoints < filtered[i - 1].totalPoints) currentRank = i + 1;
+                    p.rank = currentRank;
+                });
 
-                processed.sort((a, b) => b.totalPoints - a.totalPoints);
-
-                for (let i = 0; i < processed.length; i++) {
-                    if (i > 0 && processed[i].totalPoints === processed[i - 1].totalPoints) {
-                        processed[i].rank = processed[i - 1].rank;
-                    } else {
-                        processed[i].rank = i + 1;
-                    }
-                }
-
-                return processed;
+                return filtered;
             }
 
             function generateTierTableHTML(rankedList) {
@@ -1296,28 +1256,30 @@
                                     <th style="width: 50px;">Rank</th>
                                     <th style="text-align: left; padding-left: 12px;">Username</th>
                                     <th style="width: 100px;">Total Points</th>
-                                    ${ALL_MODES.map(m => `
+                                    ${ALL_MODES.map(function (m) {
+                                        return `
                                         <th class="th-mode">
                                             <div class="th-mode-header">
-                                                <img class="th-mode-icon" src="${MODE_ICONS[m]}" alt="${m}">
+                                                <img class="th-mode-icon" src="${MODE_ICONS[m]}" alt="${m}" onerror="this.style.display='none'">
                                                 <span>${m}</span>
                                             </div>
-                                        </th>
-                                    `).join('')}
+                                        </th>`;
+                                    }).join('')}
                                 </tr>
                             </thead>
                             <tbody>
                 `;
 
-                rankedList.forEach(p => {
+                rankedList.forEach(function (p, idx) {
                     let rankClass = p.rank === 1 ? 'top-1' : (p.rank === 2 ? 'top-2' : (p.rank === 3 ? 'top-3' : ''));
+                    let delay = Math.min(idx * 40, 320);
                     html += `
-                        <tr class="tier-row">
+                        <tr class="tier-row" style="animation-delay:${delay}ms">
                             <td><span class="pvp-rank ${rankClass}">#${p.rank}</span></td>
                             <td class="pvp-user">${p.username}</td>
-                            <td class="pvp-pts">${p.totalPoints}</td>
-                            ${ALL_MODES.map(m => {
-                                let mData = p.modesMap[m];
+                            <td><span class="pvp-pts" data-value="${p.totalPoints}">0</span></td>
+                            ${ALL_MODES.map(function (m) {
+                                let mData = p.modes ? p.modes[m] : null;
                                 if (!mData || !mData.tier || mData.tier === "-") {
                                     return `<td><span class="tier-none">-</span></td>`;
                                 }
@@ -1336,7 +1298,29 @@
                 return html;
             }
 
-            function renderLeaderboard(playersList, filterMode) {
+            function animatePointsReveal(container) {
+                const els = container.querySelectorAll('.pvp-pts[data-value]');
+                els.forEach(function (el, i) {
+                    const target = parseInt(el.dataset.value, 10) || 0;
+                    if (reduceMotion) { el.textContent = target; return; }
+                    const duration = 650;
+                    const delay = Math.min(i * 40, 320);
+                    setTimeout(function () {
+                        let start = null;
+                        function step(ts) {
+                            if (!start) start = ts;
+                            const progress = Math.min((ts - start) / duration, 1);
+                            const eased = 1 - Math.pow(1 - progress, 3);
+                            el.textContent = Math.floor(eased * target);
+                            if (progress < 1) requestAnimationFrame(step);
+                            else el.textContent = target;
+                        }
+                        requestAnimationFrame(step);
+                    }, delay);
+                });
+            }
+
+            function renderLeaderboard(filterMode) {
                 const container = document.getElementById('leaderboardContent');
                 const lbTitle = document.getElementById('lbModeTitle');
 
@@ -1344,55 +1328,45 @@
                     lbTitle.textContent = filterMode ? `Top 3 (${filterMode.toUpperCase()})` : "Top 3 Players";
                 }
 
-                const ranked = processRawPlayers(playersList, filterMode);
+                const ranked = getRankedList(filterMode);
                 const top3 = ranked.slice(0, 3);
 
                 container.innerHTML = generateTierTableHTML(top3);
+                animatePointsReveal(container);
             }
 
             function renderFullRankingModal() {
                 const modalBody = document.getElementById('fullRankingContent');
-                const ranked = processRawPlayers(globalPlayers, activeFilterMode);
+                const ranked = getRankedList(activeFilterMode);
                 modalBody.innerHTML = generateTierTableHTML(ranked);
+                animatePointsReveal(modalBody);
             }
 
-            function loadLeaderboard() {
-                fetch('/api/players')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (Array.isArray(data) && data.length > 0) {
-                            globalPlayers = data;
-                        } else {
-                            globalPlayers = DEFAULT_PLAYERS;
-                        }
-                        renderLeaderboard(globalPlayers, activeFilterMode);
-                        document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
-                    })
-                    .catch(() => {
-                        globalPlayers = DEFAULT_PLAYERS;
-                        renderLeaderboard(globalPlayers, activeFilterMode);
-                        document.getElementById('adminStatPlayers').innerText = globalPlayers.length;
-                    });
-            }
+            /* Render lần đầu ngay khi trang tải (dữ liệu đã có sẵn từ Jinja, không cần fetch) */
+            renderLeaderboard(activeFilterMode);
+            const adminStatPlayersEl = document.getElementById('adminStatPlayers');
+            if (adminStatPlayersEl) adminStatPlayersEl.innerText = globalPlayers.length;
 
             const overallBtn = document.getElementById('overallBtn');
             if (overallBtn) {
-                overallBtn.addEventListener('click', function() {
+                overallBtn.addEventListener('click', function () {
                     activeFilterMode = null;
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
-                    renderLeaderboard(globalPlayers, null);
+                    overallBtn.classList.add('active');
+                    document.querySelectorAll('.mode-item').forEach(function (m) { m.classList.remove('active'); });
+                    renderLeaderboard(null);
                 });
             }
 
             document.querySelectorAll('.mode-item').forEach(function (modeEl) {
                 modeEl.addEventListener('click', function () {
-                    document.querySelectorAll('.mode-item').forEach(m => m.classList.remove('active'));
+                    document.querySelectorAll('.mode-item').forEach(function (m) { m.classList.remove('active'); });
                     modeEl.classList.add('active');
                     modeEl.classList.add('pulse-select');
-                    setTimeout(() => modeEl.classList.remove('pulse-select'), 500);
+                    setTimeout(function () { modeEl.classList.remove('pulse-select'); }, 500);
+                    if (overallBtn) overallBtn.classList.remove('active');
 
-                    activeFilterMode = modeEl.dataset.mode || modeEl.querySelector('.mode-name').innerText;
-                    renderLeaderboard(globalPlayers, activeFilterMode);
+                    activeFilterMode = modeEl.dataset.mode;
+                    renderLeaderboard(activeFilterMode);
                 });
             });
 
@@ -1416,9 +1390,7 @@
             if (openFullRankingBtn) openFullRankingBtn.addEventListener('click', openRankingModal);
             if (navRankingBtn) navRankingBtn.addEventListener('click', openRankingModal);
             if (rankingCloseBtn) rankingCloseBtn.addEventListener('click', closeRankingModal);
-            if (rankingOverlay) rankingOverlay.addEventListener('click', (e) => { if (e.target === rankingOverlay) closeRankingModal(); });
-
-            loadLeaderboard();
+            if (rankingOverlay) rankingOverlay.addEventListener('click', function (e) { if (e.target === rankingOverlay) closeRankingModal(); });
 
             /* ---------- UI HANDLERS ---------- */
             const loader = document.getElementById('loader');
@@ -1580,7 +1552,7 @@
 
             let step = 1;
 
-            function openModal() { overlay.classList.add('show'); document.body.style.overflow = 'hidden'; setTimeout(() => input.focus(), 150); }
+            function openModal() { overlay.classList.add('show'); document.body.style.overflow = 'hidden'; setTimeout(function () { input.focus(); }, 150); }
             function closeModal() { overlay.classList.remove('show'); document.body.style.overflow = ''; }
             function resetToStep1() {
                 step = 1; stepBody.style.display = ''; successBody.style.display = 'none'; input.value = '';
@@ -1588,7 +1560,7 @@
             }
             function updateUI() {
                 layerLabel.textContent = 'LỚP ' + step + ' / 4';
-                dots.forEach(dot => {
+                dots.forEach(function (dot) {
                     const n = parseInt(dot.dataset.layer, 10);
                     dot.classList.remove('done', 'current');
                     if (n < step) dot.classList.add('done');
@@ -1596,9 +1568,9 @@
                 });
             }
 
-            if (openBtn) openBtn.addEventListener('click', () => { resetToStep1(); openModal(); });
+            if (openBtn) openBtn.addEventListener('click', function () { resetToStep1(); openModal(); });
             if (closeBtn) closeBtn.addEventListener('click', closeModal);
-            if (overlay) overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+            if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
 
             function submitAnswer() {
                 const val = input.value.trim();
@@ -1611,10 +1583,10 @@
                 if (step < 4) {
                     step++; input.value = ''; updateUI(); input.focus();
                 } else {
-                    dots.forEach(dot => dot.classList.add('done'));
+                    dots.forEach(function (dot) { dot.classList.add('done'); });
                     stepBody.style.display = 'none';
                     successBody.style.display = '';
-                    setTimeout(() => {
+                    setTimeout(function () {
                         closeModal();
                         document.getElementById('adminPanel').classList.add('show');
                     }, 800);
@@ -1622,12 +1594,12 @@
             }
 
             if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
-            if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAnswer(); });
+            if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitAnswer(); });
 
             /* Admin Panel Exit */
             const adminLogoutBtn = document.getElementById('adminLogoutBtn');
             if (adminLogoutBtn) {
-                adminLogoutBtn.addEventListener('click', () => {
+                adminLogoutBtn.addEventListener('click', function () {
                     document.getElementById('adminPanel').classList.remove('show');
                 });
             }
